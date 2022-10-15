@@ -1,15 +1,20 @@
-import { Response, NextFunction } from 'express';
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Response, NextFunction } from 'express';
+import { Repository } from 'typeorm';
 
-import * as I from '@interface/index';
-import * as M from '@model/index';
-import * as U from '@util/index';
-import { HttpException } from '@exception/index';
-import { JWTService } from '@service/index';
+import * as E from '../entities';
+import * as I from '../interfaces';
+import { HttpException } from '../exceptions';
+import { JWTService } from '../services';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly jwtService: JWTService) {}
+  constructor(
+    @InjectRepository(E.User)
+    private readonly user: Repository<E.User>,
+    private readonly jwtService: JWTService,
+  ) {}
 
   async use(req: I.RequestWithUser, res: Response, next: NextFunction) {
     const bearer: string = req.headers['authorization'];
@@ -19,20 +24,17 @@ export class AuthMiddleware implements NestMiddleware {
     const [, token] = bearer.split(' ');
     const [verificationResponse, verifyError] = this.jwtService.verifyToken(token);
     if (verifyError) throw verifyError;
-    const { id: userId, isSupervisor } = verificationResponse;
+    const { id: userId } = verificationResponse;
 
-    if (!userId || isSupervisor) throw new HttpException('INVALID_TOKEN');
+    if (!userId) throw new HttpException('INVALID_TOKEN');
 
-    const user = await M.User.findByPk(userId, {
-      include: [{ model: M.CareApplication }, { model: M.CareGiverRegistration }],
-    }).catch((reason) => {
-      U.logger.error(reason);
-      throw new HttpException('USER_VALIDATION');
+    const user = await this.user.findOne({
+      where: { id: userId },
     });
 
     if (!user) throw new HttpException('USER_VALIDATION');
 
-    if (user.type === I.UserType.NoType) throw new HttpException('USER_NO_TYPE');
+    if (user.type === I.UserType.None) throw new HttpException('USER_NO_TYPE');
 
     req.user = user;
 

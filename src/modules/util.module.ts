@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 
-import * as S from '@service/index';
+import * as S from '../services';
 
 @Module({
-  providers: [S.JWTService, S.SMSService],
-  exports: [S.JWTService, S.SMSService],
+  providers: [S.JWTService],
+  exports: [S.JWTService],
 })
 export class UtilModule {}

@@ -4,4 +4,3 @@ export * from './cluster.service';
 export * from './file.service';
 export * from './jwt.service';
 export * from './user.service';
-export * from './verifyCode.service';

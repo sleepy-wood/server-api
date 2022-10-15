@@ -3,22 +3,28 @@ import moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
+import { InjectRepository } from '@nestjs/typeorm';
 import { path } from 'app-root-path';
 import { join } from 'path';
+import { Repository } from 'typeorm';
 
-import * as M from '../entities';
+import * as E from '../entities';
 import * as U from '../utils';
 
 /**
  * @author PIYoung
- * @createdAt 2021-12-04
+ * @createdAt 2022-10-15
  * @description 업로드 파일 삭제 스케쥴러
  * @runTime every day at 01:00
  * https://crontab.cronhub.io/
  */
 @Injectable()
 export class UploadsScheduler {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    @InjectRepository(E.AttachFile)
+    private readonly attachFile: Repository<E.AttachFile>,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Cron('0 1 * * *')
   handleCron() {
@@ -55,10 +61,7 @@ export class UploadsScheduler {
               return;
             }
 
-            M.AttachFile.destroy({
-              where: { path: dbpPath },
-              force: true,
-            }).catch((reason) => {
+            this.attachFile.delete({ path: dbpPath }).catch((reason) => {
               U.logger.error(reason);
             });
 

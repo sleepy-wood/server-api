@@ -1,6 +1,5 @@
 import * as core from 'express-serve-static-core';
 import { Request } from 'express';
-import { Transaction } from 'sequelize';
 
 import { User } from '../entities';
 
@@ -12,5 +11,4 @@ export interface RequestWithUser<
   Locals extends Record<string, any> = Record<string, any>,
 > extends Request<P, ResBody, ReqBody, ReqQuery, Locals> {
   user?: User;
-  transaction?: Transaction;
 }

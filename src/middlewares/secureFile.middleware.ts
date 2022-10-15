@@ -1,15 +1,20 @@
-import { Response, NextFunction, Request } from 'express';
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { WhereOptions } from 'sequelize';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Request, Response, NextFunction } from 'express';
+import { Repository } from 'typeorm';
 
-import * as M from '../entities';
+import * as E from '../entities';
 import * as U from '../utils';
 import { HttpException } from '../exceptions';
 import { JWTService } from '../services';
 
 @Injectable()
 export class SecureFileMiddleware implements NestMiddleware {
-  constructor(private readonly jwtService: JWTService) {}
+  constructor(
+    @InjectRepository(E.AttachFile)
+    private readonly attachFile: Repository<E.AttachFile>,
+    private readonly jwtService: JWTService,
+  ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
     const bearer = req.headers['authorization'] as string;
@@ -20,21 +25,21 @@ export class SecureFileMiddleware implements NestMiddleware {
     const [verificationResponse, verifyError] = this.jwtService.verifyToken(token);
     if (verifyError) throw verifyError;
 
-    const { id: userId, isSupervisor } = verificationResponse;
+    const { id: userId } = verificationResponse;
 
-    if (!isSupervisor && !userId) throw new HttpException('INVALID_TOKEN');
+    if (!userId) throw new HttpException('INVALID_TOKEN');
 
-    const where: WhereOptions<M.AttachFile> = {
-      fileName: `${req.params.filename || req.params.path}`,
-      ...(isSupervisor ? {} : { userId }),
-    };
-
-    const file = await M.AttachFile.findOne({
-      where,
-    }).catch((reason) => {
-      U.logger.error(reason);
-      throw new HttpException('ATTACH_FILE_FAIL');
-    });
+    const file = await this.attachFile
+      .findOne({
+        where: {
+          filename: `${req.params.filename || req.params.path}`,
+          userId,
+        },
+      })
+      .catch((reason: Error) => {
+        U.logger.error(reason);
+        throw new HttpException('COMMON_ERROR');
+      });
 
     if (!file) throw new HttpException('NOT_FOUND_DATA');
 
