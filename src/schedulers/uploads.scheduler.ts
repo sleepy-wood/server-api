@@ -6,8 +6,8 @@ import { Cron } from '@nestjs/schedule';
 import { path } from 'app-root-path';
 import { join } from 'path';
 
-import * as M from '@model/index';
-import * as U from '@util/index';
+import * as M from '../entities';
+import * as U from '../utils';
 
 /**
  * @author PIYoung

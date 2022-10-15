@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-import * as I from '@interface/index';
-import * as M from '@model/index';
+import * as I from '../interfaces';
+import * as M from '../entities';
 
 export interface File {
   fieldname: string;
@@ -21,7 +21,7 @@ export class FileService {
     private readonly attachFile: typeof M.AttachFile,
   ) {}
 
-  async upload(req: I.RequestWithUser | I.RequestWithSupervisor, files: Array<Express.Multer.File>) {
+  async upload(req: I.RequestWithUser, files: Array<Express.Multer.File>) {
     const fileList: Partial<M.AttachFile>[] = files.map((file) => ({
       fileName: file.filename,
       originalName: file.originalname,

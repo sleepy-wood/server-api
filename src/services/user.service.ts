@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
 
-import * as D from '@dto/index';
-import * as I from '@interface/index';
-import * as M from '@model/index';
-import * as U from '@util/index';
-import { HttpException } from '@exception/index';
+import * as D from '../dtos';
+import * as I from '../interfaces';
+import * as M from '../entities';
+import * as U from '../utils';
+import { HttpException } from '../exceptions';
 
 const exclude = ['password', 'createdAt', 'updatedAt', 'deletedAt'];
 
@@ -54,45 +52,5 @@ export class UserService {
       });
 
     return user;
-  }
-
-  async findByHP(hp: string): Promise<M.User> {
-    return this.user
-      .findOne({
-        where: { hp },
-        attributes: { exclude },
-      })
-      .catch((reason) => {
-        U.logger.error(reason);
-        throw new HttpException('USER_FAIL');
-      });
-  }
-
-  async countBySupervisor(req: I.RequestWithSupervisor): Promise<number> {
-    if (!(req.supervisor instanceof M.Supervisor)) throw new HttpException('SUPERVISOR_VALIDATION');
-
-    return this.user
-      .count({
-        where: {
-          type: I.UserType.CareGiver,
-          status: I.UserStatus.Authorized,
-        },
-        include: {
-          model: M.CareGiverRegistration,
-          where: {
-            status: {
-              [Op.or]: [
-                I.CareGiverRegistration.STATUS.APPROVED,
-                I.CareGiverRegistration.STATUS.PROFESSIONAL_APPROVED,
-                I.CareGiverRegistration.STATUS.KOREAN_CHINESE,
-              ],
-            },
-          },
-        },
-      })
-      .catch((reason) => {
-        U.logger.error(reason);
-        throw new HttpException('USER_FAIL');
-      });
   }
 }

@@ -2,8 +2,8 @@ import fs from 'fs';
 import { path } from 'app-root-path';
 import { join } from 'path';
 
-import * as U from '@util/index';
-import { HttpException } from '@exception/index';
+import * as U from '../utils';
+import { HttpException } from '../exceptions';
 
 // move file
 export const moveFile = (from: string | string[], to: string | string[]) => {

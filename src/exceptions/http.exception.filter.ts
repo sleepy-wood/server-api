@@ -1,14 +1,8 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { Request, Response } from 'express';
 
-import * as U from '@util/index';
+import * as U from '../utils';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -24,10 +18,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const headers = request.headers;
 
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
     const message =
       exception instanceof HttpException
         ? Array.isArray(exception.getResponse()['message'])
@@ -53,9 +44,5 @@ export class HttpExceptionFilter implements ExceptionFilter {
   }
 
   private eToK = (strArr: string[]) =>
-    strArr.map((str) =>
-      str
-        .replace('property ', '')
-        .replace(' should not exist', ' 속성을(를) 포함해선 안돼요.'),
-    );
+    strArr.map((str) => str.replace('property ', '').replace(' should not exist', ' 속성을(를) 포함해선 안돼요.'));
 }

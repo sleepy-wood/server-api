@@ -3,8 +3,8 @@ import { InjectConnection } from '@nestjs/sequelize';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Sequelize } from 'sequelize-typescript';
 
-import * as I from '@interface/index';
-import * as U from '@util/index';
+import * as I from '../interfaces';
+import * as U from '../utils';
 
 @Injectable()
 export class TransactionInterceptor implements NestInterceptor {
@@ -20,14 +20,14 @@ export class TransactionInterceptor implements NestInterceptor {
     switch (contextType) {
       case 'http':
         const httpContext = context.switchToHttp();
-        const req = httpContext.getRequest<I.RequestWithSupervisor | I.RequestWithUser>();
+        const req = httpContext.getRequest<I.RequestWithUser>();
         req.transaction = transaction;
         break;
 
       case 'ws':
         const wsContext = context.switchToWs();
-        const client = wsContext.getClient<I.WebSocketWithSupervisor | I.WebSocketWithUser>();
-        client.transaction = transaction;
+        // const client = wsContext.getClient<I.WebSocketWithUser>();
+        // client.transaction = transaction;
         break;
 
       case 'rpc':

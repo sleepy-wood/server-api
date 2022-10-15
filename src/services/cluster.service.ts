@@ -2,7 +2,7 @@ import * as os from 'os';
 import cluster from 'cluster';
 import { Injectable } from '@nestjs/common';
 
-import * as U from '@util/index';
+import * as U from '../utils';
 
 const numCPUs = os.cpus().length;
 

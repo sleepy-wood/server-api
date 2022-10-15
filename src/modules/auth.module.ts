@@ -1,15 +1,13 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import * as C from '@controller/index';
-import * as M from '@module/index';
-import * as Models from '@model/index';
+import * as C from '../controllers';
+import * as M from '../modules';
+import * as Models from '../entities';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Models.Supervisor]),
-    SequelizeModule.forFeature([Models.User]),
-    forwardRef(() => M.SupervisorModule),
+    TypeOrmModule.forFeature([Models.User]),
     forwardRef(() => M.ServiceModule),
     forwardRef(() => M.UserModule),
     forwardRef(() => M.UtilModule),

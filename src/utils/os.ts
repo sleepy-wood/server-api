@@ -1,4 +1,3 @@
-import os from 'os';
 import ip from 'ip';
 
 export const getLocalIp = (): string => {

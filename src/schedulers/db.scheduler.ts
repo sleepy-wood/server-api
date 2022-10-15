@@ -3,12 +3,11 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 
-import * as M from '@model/index';
-import * as U from '@util/index';
+import * as U from '../utils';
 
 /**
  * @author PIYoung
- * @createdAt 2021-12-
+ * @createdAt 2022-10-
  * @description DB 소프트 삭제 후 1년 지난 데이터 완전 삭제
  * @runTime every day at 02:00
  * https://crontab.cronhub.io/

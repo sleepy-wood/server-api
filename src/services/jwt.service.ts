@@ -2,10 +2,10 @@ import jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import * as I from '@interface/index';
-import * as U from '@util/index';
-import * as M from '@model/index';
-import { HttpException } from '@exception/index';
+import * as I from '../interfaces';
+import * as U from '../utils';
+import * as M from '../entities';
+import { HttpException } from '../exceptions';
 
 @Injectable()
 export class JWTService {
@@ -23,12 +23,11 @@ export class JWTService {
     }
   }
 
-  getJWTToken(user: M.User | M.Supervisor, expiresIn?: number): [string, HttpException] {
+  getJWTToken(user: M.User, expiresIn?: number): [string, HttpException] {
     expiresIn = expiresIn || 31557600000; // 1y
 
     const secret = this.configService.get<string>('SECRET');
-    const dataStoredInToken: I.DataStoredInToken =
-      user instanceof M.Supervisor ? { id: user.id, isSupervisor: user.isSupervisor } : { id: user.id };
+    const dataStoredInToken: I.DataStoredInToken = { id: user.id };
 
     try {
       return [jwt.sign(dataStoredInToken, secret, { expiresIn }), null];

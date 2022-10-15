@@ -1,9 +1,9 @@
 import { forwardRef, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 
-import * as C from '@controller/index';
-import * as M from '@module/index';
-import * as MW from '@middleware/index';
-import * as S from '@service/index';
+import * as C from '../controllers';
+import * as M from '../modules';
+import * as MW from '../middlewares';
+import * as S from '../services';
 
 @Module({
   imports: [forwardRef(() => M.ServiceModule), forwardRef(() => M.UtilModule)],
@@ -12,16 +12,9 @@ import * as S from '@service/index';
 })
 export class FileModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(MW.AuthMiddleware)
-      .forRoutes({
-        path: 'v1/files/temp/upload',
-        method: RequestMethod.ALL,
-      })
-      .apply(MW.SupervisorMiddleware)
-      .forRoutes({
-        path: 'v1/files/temp/upload-supervisor',
-        method: RequestMethod.ALL,
-      });
+    consumer.apply(MW.AuthMiddleware).forRoutes({
+      path: 'v1/files/temp/upload',
+      method: RequestMethod.ALL,
+    });
   }
 }

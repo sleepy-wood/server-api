@@ -2,10 +2,10 @@ import { Response, NextFunction, Request } from 'express';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { WhereOptions } from 'sequelize';
 
-import * as M from '@model/index';
-import * as U from '@util/index';
-import { HttpException } from '@exception/index';
-import { JWTService } from '@service/index';
+import * as M from '../entities';
+import * as U from '../utils';
+import { HttpException } from '../exceptions';
+import { JWTService } from '../services';
 
 @Injectable()
 export class SecureFileMiddleware implements NestMiddleware {
