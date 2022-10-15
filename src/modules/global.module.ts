@@ -31,11 +31,15 @@ morgan.format(
       isGlobal: true,
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        store: redisCacheStore,
-        host: configService.get<string>('REDIS_HOST'),
-        port: configService.get<number>('REDIS_PORT'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        return new Promise((resolve) => {
+          resolve({
+            store: redisCacheStore,
+            host: configService.get<string>('REDIS_HOST'),
+            port: configService.get<number>('REDIS_PORT'),
+          });
+        });
+      },
     }),
   ],
   providers: [

@@ -1,17 +1,17 @@
 import { forwardRef, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import * as C from '@controller/index';
-import * as M from '@module/index';
-import * as Models from '@model/index';
-import * as MW from '@middleware/index';
-import * as S from '@service/index';
+import * as C from '../controllers';
+import * as E from '../entities';
+import * as M from '../modules';
+import * as MW from '../middlewares';
+import * as S from '../services';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Models.User]), forwardRef(() => M.UtilModule)],
+  imports: [TypeOrmModule.forFeature([E.User]), forwardRef(() => M.UtilModule)],
+  exports: [S.UserService],
   controllers: [C.UserController],
   providers: [S.UserService],
-  exports: [SequelizeModule, S.UserService],
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

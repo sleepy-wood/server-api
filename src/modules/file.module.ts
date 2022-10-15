@@ -6,7 +6,7 @@ import * as MW from '../middlewares';
 import * as S from '../services';
 
 @Module({
-  imports: [forwardRef(() => M.ServiceModule), forwardRef(() => M.UtilModule)],
+  imports: [forwardRef(() => M.UtilModule)],
   controllers: [C.FileController],
   providers: [S.FileService],
 })
