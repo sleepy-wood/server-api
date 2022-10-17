@@ -175,11 +175,9 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
   SwaggerModule.setup('/api/api-docs', app, document, {
     explorer: true,
     customSiteTitle: '슬리피우드 API 문서',
-    customfavIcon: isDev ? '/swagger-favicon/favicon.ico' : 'https://team-buildup.shop/api/swagger-favicon/favicon.ico',
-    customCssUrl: isDev
-      ? '/swagger-themes/3.x/theme-feeling-blue.css'
-      : 'https://team-buildup.shop/api/swagger-themes/3.x/theme-feeling-blue.css',
-    customJs: isDev ? '/swagger-js/index.js' : 'https://team-buildup.shop/api/swagger-js/index.js',
+    customfavIcon: '/static/swagger-favicon/favicon.ico',
+    customCssUrl: '/static/swagger-themes/3.x/theme-feeling-blue.css',
+    customJs: '/static/swagger-js/index.js',
     swaggerOptions: {
       plugins: [SnippetGeneratorPlugin],
       docExpansion: 'list', // "list"*, "full", "none"

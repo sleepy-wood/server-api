@@ -50,17 +50,6 @@ import { HttpExceptionFilter } from '../exceptions';
     }),
     ServeStaticModule.forRoot(
       {
-        rootPath: join(path, 'public'),
-        exclude: ['/sleepy-wood*', '/temp*', '/public*'],
-        serveStaticOptions: {
-          index: false,
-          redirect: false,
-          setHeaders: (res: Response, _path, stat) => {
-            U.logger.log(`${res.req.socket.remoteAddress} [ServeStaticModule]: ${_path}`);
-          },
-        },
-      },
-      {
         rootPath: join(path, 'uploads/temp'),
         serveRoot: '/temp',
         serveStaticOptions: {
@@ -70,10 +59,13 @@ import { HttpExceptionFilter } from '../exceptions';
       },
       {
         rootPath: join(path, 'uploads/static'),
-        serveRoot: '/public',
+        serveRoot: '/static',
         serveStaticOptions: {
           index: false,
           redirect: false,
+          setHeaders: (res: Response, _path, stat) => {
+            U.logger.log(`${res.req.socket.remoteAddress} [ServeStaticModule]: ${_path}`);
+          },
         },
       },
     ),
