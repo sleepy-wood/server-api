@@ -1,5 +1,4 @@
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -7,7 +6,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
-import * as fs from 'fs';
 import helmet from 'helmet';
 import { path } from 'app-root-path';
 import { join } from 'path';
@@ -40,18 +38,13 @@ function readMemory() {
 
 async function bootstrap() {
   const localIp = '127.0.0.1';
-  const port = process.env.PORT ?? 3000;
-  const httpsOptions: HttpsOptions = {
-    key: fs.readFileSync(join(path, '/secrets/privkey.pem')),
-    cert: fs.readFileSync(join(path, '/secrets/fullchain.pem')),
-  };
+  const port = Number(process.env.PORT) ?? 3000;
 
   const server = express();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(server), {
     logger,
-    ...(env === 'local' ? {} : { httpsOptions }),
     cors: {
-      origin: env === 'development' ? ['https://team-buildup.shop'] : env === 'local' ? true : 'team-buildup.shop',
+      origin: env === 'development' || env === 'local' ? true : 'https://team-buildup.shop',
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       credentials: true,
     },
@@ -93,101 +86,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  if (env === 'development' || env === 'local') {
-    const config = new DocumentBuilder()
-      .setTitle('메타버스 슬리피우드 어플리케이션')
-      .setDescription('<h4>슬리피우드 REST APIs</h4><h5>nestJS</h5><h5>written by PIYoung</h5>')
-      .setVersion('1.0.0')
-      .addServer(env === 'local' ? `http://${localIp}:${port}` : 'https://team-buildup.shop')
-      .addTag('auth', '권한 REST APIs')
-      .addTag('files', '파일 업로드 REST APIs')
-      .addTag('users', '사용자 REST APIs')
-      .addBearerAuth()
-      .build();
-    const document = SwaggerModule.createDocument(app, config, {
-      extraModels: Object.entries(Entities).map(([name, entity]) => entity),
-    });
-    const SnippetGeneratorPlugin = {
-      statePlugins: {
-        spec: {
-          wrapSelectors: {
-            requestFor: (ori: any, system: any) => (state: any, _path: any, method: any) => {
-              return ori(_path, method)
-                ?.set('spec', state.get('json', {}))
-                ?.setIn(['oasPathMethod', 'path'], _path)
-                ?.setIn(['oasPathMethod', 'method'], method);
-            },
-            mutatedRequestFor: (ori: any) => (state: any, _path: any, method: any) => {
-              return ori(_path, method)
-                ?.set('spec', state.get('json', {}))
-                ?.setIn(['oasPathMethod', 'path'], _path)
-                ?.setIn(['oasPathMethod', 'method'], method);
-            },
-          },
-        },
-      },
-      fn: {
-        requestSnippetGenerator_node_native: (req: any) => {
-          const { spec, oasPathMethod } = req.toJS();
-          const { _path, method } = oasPathMethod;
-          const targets = ['node_native'];
-
-          let snippet: string;
-          try {
-            snippet = this.OpenAPISnippets.getEndpointSnippets(spec, _path, method, targets).snippets[0].content;
-          } catch (err) {
-            snippet = JSON.stringify({ err });
-          }
-
-          return snippet;
-        },
-        requestSnippetGenerator_javascript_xhr: (req: any) => {
-          const { spec, oasPathMethod } = req.toJS();
-          const { _path, method } = oasPathMethod;
-          const targets = ['javascript_xhr'];
-
-          let snippet: string;
-          try {
-            snippet = this.OpenAPISnippets.getEndpointSnippets(spec, _path, method, targets).snippets[0].content;
-          } catch (err) {
-            snippet = JSON.stringify({ err });
-          }
-
-          return snippet;
-        },
-      },
-    };
-    SwaggerModule.setup('/api/api-docs', app, document, {
-      explorer: true,
-      customSiteTitle: '슬리피우드 API 문서',
-      customfavIcon: '/swagger-favicon/favicon.ico',
-      customCssUrl: '/swagger-themes/3.x/theme-feeling-blue.css',
-      customJs: '/swagger-js/index.js',
-      swaggerOptions: {
-        plugins: [SnippetGeneratorPlugin],
-        docExpansion: 'list', // "list"*, "full", "none"
-        persistAuthorization: true,
-        requestSnippetsEnabled: true,
-        requestSnippets: {
-          generators: {
-            node_native: {
-              title: 'Node',
-              syntax: 'javascript',
-            },
-            javascript_xhr: {
-              title: 'XHR',
-              syntax: 'javascript',
-            },
-          },
-          languages: ['curl_bash', 'node_native', 'javascript_xhr'],
-        },
-        syntaxHighlight: {
-          activate: true,
-          theme: 'nord',
-        },
-      },
-    });
-  }
+  generateSwagger(app, localIp, port);
 
   await app.listen(port, () => {
     logger.log(`┌──────────────────────────────────────────────────────────────┐`);
@@ -206,3 +105,99 @@ async function bootstrap() {
 
 if (env === 'development' || env === 'local') bootstrap();
 else ClusterService.init(bootstrap);
+
+function generateSwagger(app: NestExpressApplication, localIp: string, port: number) {
+  const config = new DocumentBuilder()
+    .setTitle('메타버스 슬리피우드 어플리케이션')
+    .setDescription('<h4>슬리피우드 REST APIs</h4><h5>nestJS</h5><h5>written by PIYoung</h5>')
+    .setVersion('1.0.0')
+    .addServer(env === 'local' ? `http://${localIp}:${port}` : 'https://team-buildup.shop')
+    .addTag('auth', '권한 REST APIs')
+    .addTag('files', '파일 업로드 REST APIs')
+    .addTag('users', '사용자 REST APIs')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config, {
+    extraModels: Object.entries(Entities).map(([name, entity]) => entity),
+  });
+  const SnippetGeneratorPlugin = {
+    statePlugins: {
+      spec: {
+        wrapSelectors: {
+          requestFor: (ori: any, system: any) => (state: any, _path: any, method: any) => {
+            return ori(_path, method)
+              ?.set('spec', state.get('json', {}))
+              ?.setIn(['oasPathMethod', 'path'], _path)
+              ?.setIn(['oasPathMethod', 'method'], method);
+          },
+          mutatedRequestFor: (ori: any) => (state: any, _path: any, method: any) => {
+            return ori(_path, method)
+              ?.set('spec', state.get('json', {}))
+              ?.setIn(['oasPathMethod', 'path'], _path)
+              ?.setIn(['oasPathMethod', 'method'], method);
+          },
+        },
+      },
+    },
+    fn: {
+      requestSnippetGenerator_node_native: (req: any) => {
+        const { spec, oasPathMethod } = req.toJS();
+        const { _path, method } = oasPathMethod;
+        const targets = ['node_native'];
+
+        let snippet: string;
+        try {
+          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, _path, method, targets).snippets[0].content;
+        } catch (err) {
+          snippet = JSON.stringify({ err });
+        }
+
+        return snippet;
+      },
+      requestSnippetGenerator_javascript_xhr: (req: any) => {
+        const { spec, oasPathMethod } = req.toJS();
+        const { _path, method } = oasPathMethod;
+        const targets = ['javascript_xhr'];
+
+        let snippet: string;
+        try {
+          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, _path, method, targets).snippets[0].content;
+        } catch (err) {
+          snippet = JSON.stringify({ err });
+        }
+
+        return snippet;
+      },
+    },
+  };
+  SwaggerModule.setup('/api/api-docs', app, document, {
+    explorer: true,
+    customSiteTitle: '슬리피우드 API 문서',
+    customfavIcon: '/swagger-favicon/favicon.ico',
+    customCssUrl: '/swagger-themes/3.x/theme-feeling-blue.css',
+    customJs: '/swagger-js/index.js',
+    swaggerOptions: {
+      plugins: [SnippetGeneratorPlugin],
+      docExpansion: 'list', // "list"*, "full", "none"
+      persistAuthorization: true,
+      requestSnippetsEnabled: true,
+      requestSnippets: {
+        generators: {
+          node_native: {
+            title: 'Node',
+            syntax: 'javascript',
+          },
+          javascript_xhr: {
+            title: 'XHR',
+            syntax: 'javascript',
+          },
+        },
+        languages: ['curl_bash', 'node_native', 'javascript_xhr'],
+      },
+      syntaxHighlight: {
+        activate: true,
+        theme: 'nord',
+      },
+    },
+  });
+}
