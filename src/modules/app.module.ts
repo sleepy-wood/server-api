@@ -11,10 +11,11 @@ import { Response } from 'express';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { join } from 'path';
 
-import * as E from '../exceptions';
+import * as E from '../entities';
 import * as M from '../modules';
 import * as SCH from '../schedulers';
 import * as U from '../utils';
+import { HttpExceptionFilter } from '../exceptions';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import * as U from '../utils';
         username: configService.get<string>('MYSQL_USER'),
         password: configService.get<string>('MYSQL_PASSWORD'),
         database: configService.get<string>('MYSQL_DATABASE'),
-        entities: [join(path, '/models/**/*.model.ts')],
+        entities: [...Object.entries(E).map(([name, entity]) => entity)], // [join(path, '/entities/**/*.entity.ts')],
         logging: 'all',
         timezone: '+09:00',
         charset: 'utf8mb4_unicode_ci',
@@ -50,7 +51,7 @@ import * as U from '../utils';
     ServeStaticModule.forRoot(
       {
         rootPath: join(path, 'public'),
-        exclude: ['/sunflower-care*', '/temp*', '/public*'],
+        exclude: ['/sleepy-wood*', '/temp*', '/public*'],
         serveStaticOptions: {
           index: false,
           redirect: false,
@@ -89,7 +90,7 @@ import * as U from '../utils';
     },
     {
       provide: APP_FILTER,
-      useClass: E.HttpExceptionFilter,
+      useClass: HttpExceptionFilter,
     },
     ...Object.entries(SCH).map(([name, module]) => module),
   ],

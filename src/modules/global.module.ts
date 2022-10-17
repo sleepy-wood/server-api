@@ -1,4 +1,4 @@
-import morgan from 'morgan';
+import * as morgan from 'morgan';
 import * as redisCacheStore from 'cache-manager-redis-store';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheInterceptor, CacheModule, CacheStore, Module } from '@nestjs/common';
@@ -42,7 +42,7 @@ morgan.format(
   providers: [
     {
       provide: APP_INTERCEPTOR,
-      useClass: MorganInterceptor('sunflower-care', {
+      useClass: MorganInterceptor('combined', {
         stream: {
           write: (message: string) => {
             U.logger.log(message.substring(0, message.lastIndexOf('\n')));

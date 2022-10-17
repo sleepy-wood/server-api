@@ -4,10 +4,10 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import compression from 'compression';
-import cookieParser from 'cookie-parser';
-import express from 'express';
-import fs from 'fs';
+import * as compression from 'compression';
+import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
+import * as fs from 'fs';
 import helmet from 'helmet';
 import { path } from 'app-root-path';
 import { join } from 'path';
@@ -18,7 +18,6 @@ import { TimeoutInterceptor } from './interceptors/timeout.interceptor';
 import { AppModule } from './modules/app.module';
 import { ClusterService } from './services/cluster.service';
 import { logger } from './utils/logger';
-import { getLocalIp } from './utils/os';
 
 declare const module: any;
 
@@ -40,11 +39,11 @@ function readMemory() {
 }
 
 async function bootstrap() {
-  const localIp = getLocalIp();
+  const localIp = '127.0.0.1';
   const port = process.env.PORT ?? 3000;
   const httpsOptions: HttpsOptions = {
-    key: fs.readFileSync('./secrets/privkey.pem'),
-    cert: fs.readFileSync('./secrets/fullchain.pem'),
+    key: fs.readFileSync(join(path, '/secrets/privkey.pem')),
+    cert: fs.readFileSync(join(path, '/secrets/fullchain.pem')),
   };
 
   const server = express();
@@ -88,7 +87,7 @@ async function bootstrap() {
     redirect: false,
   });
 
-  app.setGlobalPrefix('sunflower-care');
+  app.setGlobalPrefix('api');
 
   app.enableVersioning({
     type: VersioningType.URI,
@@ -102,8 +101,7 @@ async function bootstrap() {
       .addServer(env === 'local' ? `http://${localIp}:${port}` : 'https://team-buildup.shop')
       .addTag('auth', '권한 REST APIs')
       .addTag('files', '파일 업로드 REST APIs')
-      .addTag('services', '서비스 REST APIs')
-      .addTag('users', '사용자 REST APIs <font color="blue"><b>작업 중</b></font>')
+      .addTag('users', '사용자 REST APIs')
       .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(app, config, {
@@ -192,13 +190,12 @@ async function bootstrap() {
   }
 
   await app.listen(port, () => {
-    logger.log(`┌─────────────────────────────────────────────────────────────────────┐`);
-    logger.log(`│   🟢 Starting: ${new Date().toISOString()}                             │`);
-    if (env === 'local')
-      logger.log(`│   🟢 The http server is listening on local ${localIp + ' ' || '127.0.0.1      '}          │`);
+    logger.log(`┌──────────────────────────────────────────────────────────────┐`);
+    logger.log(`│   🟢 Starting: ${new Date().toISOString()}                      │`);
+    if (env === 'local') logger.log(`│   🟢 The http server is listening on local ${localIp}         │`);
     else logger.log(`│   🟢 The https server is listening on 'https://team-buildup.shop │`);
-    logger.log(`│   🟢 The http server is listening on port ${port}.                     │`);
-    logger.log(`└─────────────────────────────────────────────────────────────────────┘`);
+    logger.log(`│   🟢 The http server is listening on port ${port}.              │`);
+    logger.log(`└──────────────────────────────────────────────────────────────┘`);
   });
 
   if (module.hot) {

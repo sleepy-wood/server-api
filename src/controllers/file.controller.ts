@@ -1,10 +1,10 @@
-import multer from 'multer';
 import { Controller, Post, UseInterceptors, UploadedFiles, HttpCode, Req } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { path } from 'app-root-path';
 import { randomBytes } from 'crypto';
 import { Request } from 'express';
+import { diskStorage } from 'multer';
 import { join } from 'path';
 
 import * as I from '../interfaces';
@@ -42,7 +42,7 @@ export class FileController {
   })
   @UseInterceptors(
     FilesInterceptor('files', 10, {
-      storage: multer.diskStorage({
+      storage: diskStorage({
         destination: (req: Request, file: Express.Multer.File, cb) => {
           cb(null, join(path, 'uploads/temp'));
         },

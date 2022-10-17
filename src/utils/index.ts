@@ -4,4 +4,3 @@ export * from './file';
 export * from './hash';
 export * from './logger';
 export * from './object';
-export * from './os';

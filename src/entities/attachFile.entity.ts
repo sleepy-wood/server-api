@@ -85,9 +85,7 @@ export class AttachFile {
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.attachFiles, {
-    cascade: true,
     nullable: false,
-    onDelete: 'CASCADE',
   })
   user: User;
 }

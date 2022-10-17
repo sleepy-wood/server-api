@@ -61,9 +61,7 @@ export class DeviceToken {
 
   @ApiProperty({ type: () => User })
   @OneToOne(() => User, (user) => user.deviceToken, {
-    cascade: true,
     nullable: false,
-    onDelete: 'CASCADE',
   })
   user: User;
 }

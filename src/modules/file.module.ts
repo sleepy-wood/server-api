@@ -1,12 +1,19 @@
 import { forwardRef, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import * as C from '../controllers';
+import * as E from '../entities';
 import * as M from '../modules';
 import * as MW from '../middlewares';
 import * as S from '../services';
 
 @Module({
-  imports: [forwardRef(() => M.UtilModule)],
+  imports: [
+    TypeOrmModule.forFeature([E.AttachFile]),
+    TypeOrmModule.forFeature([E.User]),
+    forwardRef(() => M.UtilModule),
+  ],
+  exports: [TypeOrmModule],
   controllers: [C.FileController],
   providers: [S.FileService],
 })
