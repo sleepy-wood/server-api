@@ -1,7 +1,7 @@
 import morgan from 'morgan';
-import redisCacheStore from 'cache-manager-redis-store';
+import * as redisCacheStore from 'cache-manager-redis-store';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
+import { CacheInterceptor, CacheModule, CacheStore, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import { MorganInterceptor, MorganModule } from 'nest-morgan';
@@ -31,15 +31,12 @@ morgan.format(
       isGlobal: true,
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        return new Promise((resolve) => {
-          resolve({
-            store: redisCacheStore,
-            host: configService.get<string>('REDIS_HOST'),
-            port: configService.get<number>('REDIS_PORT'),
-          });
-        });
-      },
+      useFactory: async (configService: ConfigService) => ({
+        store: redisCacheStore.create({
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
+        }) as CacheStore,
+      }),
     }),
   ],
   providers: [

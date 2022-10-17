@@ -10,9 +10,10 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev": "NODE_TLS_REJECT_UNAUTHORIZED='0' nest build --webpack --webpackPath webpack-hmr.config.js --watch",
+    "start:local": "NODE_ENV='local' NODE_TLS_REJECT_UNAUTHORIZED='0' nest build --webpack --webpackPath webpack-hmr.config.js --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main"
+    "start:prod": "nest build && tsc-alias && pm2 start dist/main.js -i max"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

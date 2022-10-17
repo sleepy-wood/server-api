@@ -1,5 +1,5 @@
 import multer from 'multer';
-import { Controller, Post, UseInterceptors, UploadedFiles, HttpCode, Req, CacheInterceptor } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFiles, HttpCode, Req } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { path } from 'app-root-path';
@@ -14,7 +14,6 @@ import { FileService } from '../services';
 
 @ApiBearerAuth()
 @ApiTags('files')
-@UseInterceptors(CacheInterceptor)
 @Controller({
   path: 'files',
   version: '1',
