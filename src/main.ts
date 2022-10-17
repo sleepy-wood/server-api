@@ -72,8 +72,8 @@ async function bootstrap() {
         directives: {
           defaultSrc: [`'self'`],
           imgSrc: [`'self'`, '*.jsdelivr.net', 'blob:', 'data:', 'validator.swagger.io'],
-          styleSrc: [`'self'`, '*.fonts.googleapis.com', '*.jsdelivr.net', `'unsafe-inline'`],
-          fontSrc: [`'self'`, '*.fonts.googleapis.com', '*.jsdelivr.net'],
+          styleSrc: [`'self'`, '*.jsdelivr.net', `'unsafe-inline'`],
+          fontSrc: [`'self'`, '*.jsdelivr.net'],
           scriptSrc: [`'self'`, '*.jsdelivr.net', `https: 'unsafe-inline'`, `'unsafe-eval'`],
         },
       },
@@ -157,7 +157,7 @@ async function bootstrap() {
         },
       },
     };
-    SwaggerModule.setup('/api-docs', app, document, {
+    SwaggerModule.setup('/api/api-docs', app, document, {
       explorer: true,
       customSiteTitle: '슬리피우드 API 문서',
       customfavIcon: '/swagger-favicon/favicon.ico',
