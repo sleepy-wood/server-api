@@ -22,6 +22,7 @@ declare const module: any;
 const startTime = performance.now();
 
 const env = process.env.NODE_ENV ?? 'development';
+const isDev = env === 'development' || env === 'local';
 
 logger.log(` * imports done in ${(performance.now() - startTime).toFixed(3)}ms`);
 logger.log(` * Memory: ${readMemory()}`);
@@ -44,7 +45,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(server), {
     logger,
     cors: {
-      origin: env === 'development' || env === 'local' ? true : 'https://team-buildup.shop',
+      origin: isDev ? true : 'https://team-buildup.shop',
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       credentials: true,
     },
@@ -91,7 +92,8 @@ async function bootstrap() {
   await app.listen(port, () => {
     logger.log(`┌──────────────────────────────────────────────────────────────┐`);
     logger.log(`│   🟢 Starting: ${new Date().toISOString()}                      │`);
-    if (env === 'local') logger.log(`│   🟢 The http server is listening on local ${localIp}         │`);
+    if (env === 'local' || env == 'development')
+      logger.log(`│   🟢 The http server is listening on local ${localIp}         │`);
     else logger.log(`│   🟢 The https server is listening on 'https://team-buildup.shop │`);
     logger.log(`│   🟢 The http server is listening on port ${port}.              │`);
     logger.log(`└──────────────────────────────────────────────────────────────┘`);
@@ -103,7 +105,7 @@ async function bootstrap() {
   }
 }
 
-if (env === 'development' || env === 'local') bootstrap();
+if (isDev) bootstrap();
 else ClusterService.init(bootstrap);
 
 function generateSwagger(app: NestExpressApplication, localIp: string, port: number) {
@@ -173,9 +175,11 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
   SwaggerModule.setup('/api/api-docs', app, document, {
     explorer: true,
     customSiteTitle: '슬리피우드 API 문서',
-    customfavIcon: '/swagger-favicon/favicon.ico',
-    customCssUrl: '/swagger-themes/3.x/theme-feeling-blue.css',
-    customJs: '/swagger-js/index.js',
+    customfavIcon: isDev ? '/swagger-favicon/favicon.ico' : 'https://team-buildup.shop/api/swagger-favicon/favicon.ico',
+    customCssUrl: isDev
+      ? '/swagger-themes/3.x/theme-feeling-blue.css'
+      : 'https://team-buildup.shop/api/swagger-themes/3.x/theme-feeling-blue.css',
+    customJs: isDev ? '/swagger-js/index.js' : 'https://team-buildup.shop/api/swagger-js/index.js',
     swaggerOptions: {
       plugins: [SnippetGeneratorPlugin],
       docExpansion: 'list', // "list"*, "full", "none"
