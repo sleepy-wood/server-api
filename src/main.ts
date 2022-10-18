@@ -142,14 +142,29 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
       },
     },
     fn: {
+      requestSnippetGenerator_csharp_restsharp: (req: any) => {
+        const { spec, oasPathMethod } = req.toJS();
+        const { path, method } = oasPathMethod;
+        const targets = ['csharp_restsharp'];
+
+        let snippet: string;
+        try {
+          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, path, method, targets).snippets[0].content;
+        } catch (err) {
+          console.log(err);
+          snippet = JSON.stringify({ err });
+        }
+
+        return snippet;
+      },
       requestSnippetGenerator_node_native: (req: any) => {
         const { spec, oasPathMethod } = req.toJS();
-        const { _path, method } = oasPathMethod;
+        const { path, method } = oasPathMethod;
         const targets = ['node_native'];
 
         let snippet: string;
         try {
-          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, _path, method, targets).snippets[0].content;
+          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, path, method, targets).snippets[0].content;
         } catch (err) {
           snippet = JSON.stringify({ err });
         }
@@ -158,12 +173,12 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
       },
       requestSnippetGenerator_javascript_xhr: (req: any) => {
         const { spec, oasPathMethod } = req.toJS();
-        const { _path, method } = oasPathMethod;
+        const { path, method } = oasPathMethod;
         const targets = ['javascript_xhr'];
 
         let snippet: string;
         try {
-          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, _path, method, targets).snippets[0].content;
+          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, path, method, targets).snippets[0].content;
         } catch (err) {
           snippet = JSON.stringify({ err });
         }
@@ -175,9 +190,9 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
   SwaggerModule.setup('/api/api-docs', app, document, {
     explorer: true,
     customSiteTitle: '슬리피우드 API 문서',
-    customfavIcon: '/static/swagger-favicon/favicon.ico',
-    customCssUrl: '/static/swagger-themes/3.x/theme-feeling-blue.css',
-    customJs: '/static/swagger-js/index.js',
+    customfavIcon: '/public/swagger-favicon/favicon.ico',
+    customCssUrl: '/public/swagger-themes/3.x/theme-feeling-blue.css',
+    customJs: '/public/swagger-js/index.js',
     swaggerOptions: {
       plugins: [SnippetGeneratorPlugin],
       docExpansion: 'list', // "list"*, "full", "none"
@@ -185,6 +200,10 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
       requestSnippetsEnabled: true,
       requestSnippets: {
         generators: {
+          csharp_restsharp: {
+            title: 'C#',
+            syntax: 'csharp',
+          },
           node_native: {
             title: 'Node',
             syntax: 'javascript',
@@ -194,7 +213,7 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
             syntax: 'javascript',
           },
         },
-        languages: ['curl_bash', 'node_native', 'javascript_xhr'],
+        languages: ['curl_bash', 'csharp_restsharp', 'node_native', 'javascript_xhr'],
       },
       syntaxHighlight: {
         activate: true,
