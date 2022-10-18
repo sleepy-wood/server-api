@@ -22,7 +22,7 @@ declare const module: any;
 const startTime = performance.now();
 
 const env = process.env.NODE_ENV ?? 'development';
-const isDev = env === 'development' || env === 'local';
+const isDev = env === 'development';
 
 logger.log(` * imports done in ${(performance.now() - startTime).toFixed(3)}ms`);
 logger.log(` * Memory: ${readMemory()}`);
