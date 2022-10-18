@@ -5,7 +5,7 @@
  */
 const init = function () {
   const script = document.createElement('script');
-  script.src = '/static/swagger-js/openapisnippet.min.js';
+  script.src = '/public/swagger-js/openapisnippet.min.js';
   document.head.appendChild(script); //or something of the likes
   setTimeout(() => {
     const sort = () => {
