@@ -21,7 +21,7 @@ declare const module: any;
 
 const startTime = performance.now();
 
-const env = process.env.NODE_ENV ?? 'development';
+const env = process.env.NODE_ENV;
 const isDev = env === 'development';
 
 logger.log(` * imports done in ${(performance.now() - startTime).toFixed(3)}ms`);
@@ -113,7 +113,7 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
     .setTitle('메타버스 슬리피우드 어플리케이션')
     .setDescription('<h4>슬리피우드 REST APIs</h4><h5>nestJS</h5><h5>written by PIYoung</h5>')
     .setVersion('1.0.0')
-    .addServer(env === 'local' ? `http://${localIp}:${port}` : 'https://team-buildup.shop')
+    .addServer(isDev ? `http://${localIp}:${port}` : 'https://team-buildup.shop')
     .addTag('auth', '권한 REST APIs')
     .addTag('files', '파일 업로드 REST APIs')
     .addTag('users', '사용자 REST APIs')
