@@ -92,8 +92,7 @@ async function bootstrap() {
   await app.listen(port, () => {
     logger.log(`┌──────────────────────────────────────────────────────────────┐`);
     logger.log(`│   🟢 Starting: ${new Date().toISOString()}                      │`);
-    if (env === 'local' || env == 'development')
-      logger.log(`│   🟢 The http server is listening on local ${localIp}         │`);
+    if (isDev) logger.log(`│   🟢 The http server is listening on local ${localIp}         │`);
     else logger.log(`│   🟢 The https server is listening on 'https://team-buildup.shop │`);
     logger.log(`│   🟢 The http server is listening on port ${port}.              │`);
     logger.log(`└──────────────────────────────────────────────────────────────┘`);
