@@ -30,7 +30,7 @@ import { HttpExceptionFilter } from '../exceptions';
         password: configService.get<string>('MYSQL_PASSWORD'),
         database: configService.get<string>('MYSQL_DATABASE'),
         entities: [...Object.entries(E).map(([name, entity]) => entity)], // [join(path, '/entities/**/*.entity.ts')],
-        logging: 'all',
+        logger: new U.TypeOrmLogger(),
         timezone: '+09:00',
         charset: 'utf8mb4_unicode_ci',
         autoLoadEntities: true,
