@@ -3,9 +3,9 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import * as compression from 'compression';
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import express from 'express';
 import helmet from 'helmet';
 import { path } from 'app-root-path';
 import { join } from 'path';
