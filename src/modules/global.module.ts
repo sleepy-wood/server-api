@@ -12,7 +12,7 @@ morgan.token('date', (req, res, tz) => {
   const timezone = 'Asia/Seoul';
   const date = new Date();
   const zonedDate = utcToZonedTime(date, timezone);
-  const formatString = 'YYYY-MM-DD HH:mm:ss';
+  const formatString = 'yyyy-MM-dd HH:mm:ss';
   return format(zonedDate, formatString, { timeZone: timezone });
 });
 morgan.format(
