@@ -1,4 +1,4 @@
-import { Controller, Post, HttpCode, Body, UseInterceptors, CacheInterceptor, Req } from '@nestjs/common';
+import { Controller, Post, HttpCode, Body, UseInterceptors, CacheInterceptor, Req, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
@@ -23,6 +23,18 @@ export class AuthController {
     private readonly jwtService: JWTService,
     private readonly userService: UserService,
   ) {}
+
+  @ApiOperation({ summary: '로그인(임시)' })
+  @HttpCode(StatusCodes.OK)
+  @Post('login/temp')
+  async loginTemp(): Promise<any> {
+    return {
+      result: true,
+      data: {
+        token: 'token',
+      },
+    };
+  }
 
   @ApiOperation({
     summary: 'SMS 인증 및 로그인',
