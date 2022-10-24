@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "PIYoung",
   "private": true,
-  "license": "MIT",
+  "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
