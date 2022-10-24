@@ -80,3 +80,7 @@ dist/**/*
 
 # components documentation
 documentation
+
+# CI/CD Stuff
+copilot
+Dockerfile

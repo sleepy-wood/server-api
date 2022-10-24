@@ -20,10 +20,23 @@ exec: true     # Enable running commands in your container.
 
 # Optional fields for more advanced use-cases.
 #
-#variables:                    # Pass environment variables as key value pairs.
+variables:                    # Pass environment variables as key value pairs.
+  # Redis
+  REDIS_HOST: redis.$COPILOT_SERVICE_DISCOVERY_ENDPOINT
+  REDIS_PORT: 6379
+  # Server Port
+  PORT: 3000
+  # Throttling Options
+  THROTTLE_TTL: 60
+  THROTTLE_LIMIT: 100
+  # timezone / locale
+  TZ: Asia/Seoul
+  locale: ko_KR
 #  LOG_LEVEL: info
 
-#secrets:                      # Pass secrets from AWS Systems Manager (SSM) Parameter Store.
+secrets:                      # Pass secrets from AWS Systems Manager (SSM) Parameter Store.
+  SECRET: SECRET
+  SALT: SALT
 #  GITHUB_TOKEN: GITHUB_TOKEN  # The key is the name of the environment variable, the value is the name of the SSM parameter.
 
 # You can override any of the values defined above by environment.
