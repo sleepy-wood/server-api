@@ -111,12 +111,16 @@ Resources:
       DBSubnetGroupName: !Ref dbDBSubnetGroup
       VpcSecurityGroupIds:
         - !Ref dbDBClusterSecurityGroup
-      ScalingConfiguration:
-        AutoPause: true
+      # ScalingConfiguration:
+      #   AutoPause: true
+      #   # Replace "All" below with "!Ref Env" to set different autoscaling limits per environment.
+      #   MinCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMinCapacity]
+      #   MaxCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMaxCapacity]
+      #   SecondsUntilAutoPause: !Ref dbDBAutoPauseSeconds
+      ServerlessV2ScalingConfiguration:
         # Replace "All" below with "!Ref Env" to set different autoscaling limits per environment.
         MinCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMinCapacity]
         MaxCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMaxCapacity]
-        SecondsUntilAutoPause: !Ref dbDBAutoPauseSeconds
   dbSecretAuroraClusterAttachment:
     Type: AWS::SecretsManager::SecretTargetAttachment
     Properties:
