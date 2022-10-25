@@ -91,7 +91,7 @@ Resources:
     Type: 'AWS::RDS::DBClusterParameterGroup'
     Properties:
       Description: !Ref 'AWS::StackName'
-      Family: 'aurora-mysql5.7'
+      Family: 'aurora-mysql8.0'
       Parameters:
         character_set_client: 'utf8'
   dbDBCluster:
@@ -105,7 +105,7 @@ Resources:
         !Join [ "",  [ '{{resolve:secretsmanager:', !Ref dbAuroraSecret, ":SecretString:password}}" ]]
       DatabaseName: !Ref dbDBName
       Engine: 'aurora-mysql'
-      EngineVersion: '5.7.mysql_aurora.2.07.1'
+      EngineVersion: '8.0.mysql_aurora.3.02.1'
       # EngineMode: serverless
       DBClusterParameterGroupName: !Ref dbDBClusterParameterGroup
       DBSubnetGroupName: !Ref dbDBSubnetGroup
