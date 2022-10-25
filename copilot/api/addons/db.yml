@@ -117,8 +117,6 @@ Resources:
         MinCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMinCapacity]
         MaxCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMaxCapacity]
         SecondsUntilAutoPause: !Ref dbDBAutoPauseSeconds
-      # public access
-      PubliclyAccessible: 'true'
   dbSecretAuroraClusterAttachment:
     Type: AWS::SecretsManager::SecretTargetAttachment
     Properties:
