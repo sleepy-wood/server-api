@@ -32,9 +32,13 @@ Resources:
   dbDBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
     Properties:
-      DBSubnetGroupDescription: Group of Copilot private subnets for Aurora cluster.
+      # DBSubnetGroupDescription: Group of Copilot private subnets for Aurora cluster.
+      # SubnetIds:
+        # !Split [',', { 'Fn::ImportValue': !Sub '${App}-${Env}-PrivateSubnets' }]
+      # public access
+      DBSubnetGroupDescription: Group of Copilot public subnets for Aurora cluster.
       SubnetIds:
-        !Split [',', { 'Fn::ImportValue': !Sub '${App}-${Env}-PrivateSubnets' }]
+        !Split [',', { 'Fn::ImportValue': !Sub '${App}-${Env}-PublicSubnets' }]
   dbSecurityGroup:
     Metadata:
       'aws:copilot:description': 'A security group for your workload to access the DB cluster db'
