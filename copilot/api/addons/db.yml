@@ -19,6 +19,7 @@ Parameters:
     Type: Number
     Description: The duration in seconds before the cluster pauses.
     Default: 1000
+
 Mappings:
   dbEnvScalingConfigurationMap:
     test:
