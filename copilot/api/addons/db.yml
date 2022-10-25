@@ -121,6 +121,12 @@ Resources:
         # Replace "All" below with "!Ref Env" to set different autoscaling limits per environment.
         MinCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMinCapacity]
         MaxCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMaxCapacity]
+  dbDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBClusterIdentifier: !Ref dbDBCluster
+      Engine: aurora-mysql
+      DBInstanceClass: db.serverless
   dbSecretAuroraClusterAttachment:
     Type: AWS::SecretsManager::SecretTargetAttachment
     Properties:
