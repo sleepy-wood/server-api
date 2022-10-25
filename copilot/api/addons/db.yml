@@ -51,18 +51,6 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub 'copilot-${App}-${Env}-${Name}-Aurora'
-      # public access
-      SecurityGroupIngress:
-        - ToPort: 3306
-          FromPort: 3306
-          IpProtocol: tcp
-          Description: !Sub 'Public access to the workload ${Name}.'
-          CidrIp: 0.0.0.0/0
-        - ToPort: 3306
-          FromPort: 3306
-          IpProtocol: tcp
-          Description: !Sub 'Public access to the workload ${Name}.'
-          CidrIpv6: ::/0
   dbDBClusterSecurityGroup:
     Metadata:
       'aws:copilot:description': 'A security group for your DB cluster db'
@@ -75,6 +63,17 @@ Resources:
           IpProtocol: tcp
           Description: !Sub 'From the Aurora Security Group of the workload ${Name}.'
           SourceSecurityGroupId: !Ref dbSecurityGroup
+        # public access
+        - ToPort: 3306
+          FromPort: 3306
+          IpProtocol: tcp
+          Description: !Sub 'Public access to the workload ${Name}.'
+          CidrIp: 0.0.0.0/0
+        - ToPort: 3306
+          FromPort: 3306
+          IpProtocol: tcp
+          Description: !Sub 'Public access to the workload ${Name}.'
+          CidrIpv6: ::/0
       VpcId:
         Fn::ImportValue:
           !Sub '${App}-${Env}-VpcId'
@@ -139,6 +138,7 @@ Resources:
       SecretId: !Ref dbAuroraSecret
       TargetId: !Ref dbDBCluster
       TargetType: AWS::RDS::DBCluster
+
 Outputs:
   dbSecret: # injected as DB_SECRET environment variable by Copilot.
     Description: "The JSON secret that holds the database username and password. Fields are 'host', 'port', 'dbname', 'username', 'password', 'dbClusterIdentifier' and 'engine'"
