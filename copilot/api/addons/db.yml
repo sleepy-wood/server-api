@@ -120,14 +120,14 @@ Resources:
       ServerlessV2ScalingConfiguration:
         MinCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMinCapacity]
         MaxCapacity: !FindInMap [dbEnvScalingConfigurationMap, All, DBMaxCapacity]
-      # public access
-      PubliclyAccessible: true
   dbDBInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       DBClusterIdentifier: !Ref dbDBCluster
       Engine: aurora-mysql
       DBInstanceClass: db.serverless
+      # public access
+      PubliclyAccessible: true
   dbSecretAuroraClusterAttachment:
     Type: AWS::SecretsManager::SecretTargetAttachment
     Properties:
