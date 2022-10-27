@@ -8,6 +8,8 @@ export * from './app/landDecoration';
 export * from './app/sleep.entity';
 export * from './app/tree.entity';
 export * from './app/treeDecoration.entity';
+export * from './app/treeFlatFrequency.entity.';
+export * from './app/treeMinMax.entity';
 export * from './common/admin.entity';
 export * from './common/attachFile.entity';
 export * from './common/deviceToken.entity';

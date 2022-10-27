@@ -10,7 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { BridgeLand, User, LandDecoration } from '..';
+import { BridgeLand, User, LandDecoration, Tree } from '..';
 
 @Entity()
 export class Land {
@@ -121,4 +121,12 @@ export class Land {
     onDelete: 'CASCADE',
   })
   landDecorations: LandDecoration[];
+
+  @ApiProperty({ type: () => [Tree] })
+  @OneToMany(() => Tree, (tree) => tree.land, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  trees: Tree[];
 }

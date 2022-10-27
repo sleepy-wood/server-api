@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  Column,
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
@@ -9,13 +10,25 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { TreeDecoration, User } from '..';
+import { Land, TreeDecoration, User } from '..';
 
 @Entity()
 export class Tree {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ApiProperty()
+  @Column({
+    comment: '나무 이름',
+  })
+  name: string;
+
+  @ApiProperty()
+  @Column({
+    comment: '나무 성장일',
+  })
+  treeDay: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -36,6 +49,12 @@ export class Tree {
     onDelete: 'CASCADE',
   })
   treeDecorations: TreeDecoration[];
+
+  @ApiProperty({ type: () => Land })
+  @ManyToOne(() => Land, (land) => land.trees, {
+    nullable: false,
+  })
+  land: Land;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.trees, {

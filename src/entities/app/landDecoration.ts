@@ -20,7 +20,7 @@ export class LandDecoration {
   @ApiProperty()
   @Column({
     nullable: false,
-    comment: '현서한테 물어보기.',
+    comment: '파일 경로',
   })
   path: string;
 
