@@ -18,6 +18,14 @@ export class Sleep {
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
+  sleepAt: Date;
+
+  @ApiProperty()
+  @CreateDateColumn({ type: 'timestamp' })
+  wakeAt: Date;
+
+  @ApiProperty()
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
   @ApiProperty()
