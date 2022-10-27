@@ -5,13 +5,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
-import { BridgeLand } from '..';
+import { Bridge, Land } from '..';
 
 @Entity()
-export class Bridge {
+export class BridgeLand {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,11 +28,15 @@ export class Bridge {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => [BridgeLand] })
-  @OneToMany(() => BridgeLand, (bridgeLand) => bridgeLand.land, {
-    cascade: true,
+  @ApiProperty({ type: () => Bridge })
+  @ManyToOne(() => Bridge, (bridge) => bridge.bridgeLand, {
     nullable: false,
-    onDelete: 'CASCADE',
   })
-  bridgeLand: BridgeLand[];
+  bridge: Bridge;
+
+  @ApiProperty({ type: () => Land })
+  @ManyToOne(() => Land, (land) => land.bridgeLand, {
+    nullable: false,
+  })
+  land: Land;
 }

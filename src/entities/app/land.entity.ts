@@ -9,7 +9,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Bridge, User, LandDecoration } from '..';
+import { BridgeLand, User, LandDecoration } from '..';
 
 @Entity()
 export class Land {
@@ -35,13 +35,13 @@ export class Land {
   })
   user: User;
 
-  @ApiProperty({ type: () => [Bridge] })
-  @OneToMany(() => Bridge, (bridge) => bridge.land, {
+  @ApiProperty({ type: () => [BridgeLand] })
+  @OneToMany(() => BridgeLand, (bridgeLand) => bridgeLand.land, {
     cascade: true,
     nullable: false,
     onDelete: 'CASCADE',
   })
-  bridges: Bridge[];
+  bridgeLand: BridgeLand[];
 
   @ApiProperty({ type: () => [LandDecoration] })
   @OneToMany(() => LandDecoration, (landDecoration) => landDecoration.land, {
