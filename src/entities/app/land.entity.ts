@@ -5,10 +5,11 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  ManyToOne,
+  OneToOne,
+  OneToMany,
 } from 'typeorm';
 
-import { User } from '..';
+import { Bridge, User, LandDecoration } from '..';
 
 @Entity()
 export class Land {
@@ -29,8 +30,24 @@ export class Land {
   deletedAt: Date;
 
   @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.attachFiles, {
+  @OneToOne(() => User, (user) => user.land, {
     nullable: false,
   })
   user: User;
+
+  @ApiProperty({ type: () => [Bridge] })
+  @OneToMany(() => Bridge, (bridge) => bridge.land, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  bridges: Bridge[];
+
+  @ApiProperty({ type: () => [LandDecoration] })
+  @OneToMany(() => LandDecoration, (landDecoration) => landDecoration.land, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  landDecorations: LandDecoration[];
 }

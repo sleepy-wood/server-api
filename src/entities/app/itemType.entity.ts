@@ -1,17 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Entity,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from 'typeorm';
-
-import { User } from '..';
+import { Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Sleep {
+export class ItemType {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -27,10 +18,4 @@ export class Sleep {
   @ApiProperty()
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
-
-  @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.sleeps, {
-    nullable: false,
-  })
-  user: User;
 }

@@ -8,7 +8,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { User } from '..';
+import { Land } from '..';
 
 @Entity()
 export class Bridge {
@@ -28,9 +28,9 @@ export class Bridge {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.attachFiles, {
+  @ApiProperty({ type: () => Land })
+  @ManyToOne(() => Land, (land) => land.bridges, {
     nullable: false,
   })
-  user: User;
+  land: Land;
 }

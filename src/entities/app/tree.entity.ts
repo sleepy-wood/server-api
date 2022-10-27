@@ -5,10 +5,11 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
+  OneToMany,
   ManyToOne,
 } from 'typeorm';
 
-import { User } from '..';
+import { TreeDecoration, User } from '..';
 
 @Entity()
 export class Tree {
@@ -28,8 +29,16 @@ export class Tree {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
+  @ApiProperty({ type: () => [TreeDecoration] })
+  @OneToMany(() => TreeDecoration, (treeDecoration) => treeDecoration.tree, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  treeDecorations: TreeDecoration[];
+
   @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.attachFiles, {
+  @ManyToOne(() => User, (user) => user.trees, {
     nullable: false,
   })
   user: User;

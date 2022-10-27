@@ -8,7 +8,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { User } from '..';
+import { Tree, User } from '..';
 
 @Entity()
 export class TreeDecoration {
@@ -28,8 +28,14 @@ export class TreeDecoration {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
+  @ApiProperty({ type: () => Tree })
+  @ManyToOne(() => Tree, (tree) => tree.treeDecorations, {
+    nullable: false,
+  })
+  tree: Tree;
+
   @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.attachFiles, {
+  @ManyToOne(() => User, (user) => user.treeDecorations, {
     nullable: false,
   })
   user: User;

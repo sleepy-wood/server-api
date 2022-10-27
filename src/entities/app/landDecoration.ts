@@ -8,7 +8,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { User } from '..';
+import { Land, User } from '..';
 
 @Entity()
 export class LandDecoration {
@@ -28,8 +28,14 @@ export class LandDecoration {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
+  @ApiProperty({ type: () => Land })
+  @ManyToOne(() => Land, (land) => land.landDecorations, {
+    nullable: true,
+  })
+  land: Land;
+
   @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.attachFiles, {
+  @ManyToOne(() => User, (user) => user.landDecorations, {
     nullable: false,
   })
   user: User;
