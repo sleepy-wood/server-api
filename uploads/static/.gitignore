@@ -6,8 +6,8 @@
 !.gitignore
 
 # Default Tree Textures
-!20221027193030_default_Tree_Bark_A .png
-!20221027193030_default_Tree_Bark_B .png
+!20221027193030_default_Tree_Bark_A.png
+!20221027193030_default_Tree_Bark_B.png
 !20221027193030_default_Tree_leaf_Green.png
 !20221027193030_default_Tree_leaf_Orange.png
 !20221027193030_default_Tree_leaf_Red.png
