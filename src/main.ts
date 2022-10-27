@@ -142,10 +142,10 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
       },
     },
     fn: {
-      requestSnippetGenerator_csharp_restsharp: (req: any) => {
+      requestSnippetGenerator_csharp_httpclient: (req: any) => {
         const { spec, oasPathMethod } = req.toJS();
         const { path, method } = oasPathMethod;
-        const targets = ['csharp_restsharp'];
+        const targets = ['csharp_httpclient'];
 
         let snippet: string;
         try {
@@ -185,14 +185,44 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
 
         return snippet;
       },
+      requestSnippetGenerator_python_python3: (req: any) => {
+        const { spec, oasPathMethod } = req.toJS();
+        const { path, method } = oasPathMethod;
+        const targets = ['python_python3'];
+
+        let snippet: string;
+        try {
+          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, path, method, targets).snippets[0].content;
+        } catch (err) {
+          console.log(err);
+          snippet = JSON.stringify({ err });
+        }
+
+        return snippet;
+      },
+      requestSnippetGenerator_python_requests: (req: any) => {
+        const { spec, oasPathMethod } = req.toJS();
+        const { path, method } = oasPathMethod;
+        const targets = ['python_requests'];
+
+        let snippet: string;
+        try {
+          snippet = this.OpenAPISnippets.getEndpointSnippets(spec, path, method, targets).snippets[0].content;
+        } catch (err) {
+          console.log(err);
+          snippet = JSON.stringify({ err });
+        }
+
+        return snippet;
+      },
     },
   };
   SwaggerModule.setup('/api/api-docs', app, document, {
     explorer: true,
     customSiteTitle: '슬리피우드 API 문서',
-    customfavIcon: '/public/swagger-favicon/favicon.ico',
-    customCssUrl: '/public/swagger-themes/3.x/theme-feeling-blue.css',
-    customJs: '/public/swagger-js/index.js',
+    customfavIcon: '/resources/swagger-favicon/favicon.ico',
+    customCssUrl: '/resources/swagger-themes/3.x/theme-feeling-blue.css',
+    customJs: '/resources/swagger-js/index.js',
     swaggerOptions: {
       plugins: [SnippetGeneratorPlugin],
       docExpansion: 'list', // "list"*, "full", "none"
@@ -200,7 +230,7 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
       requestSnippetsEnabled: true,
       requestSnippets: {
         generators: {
-          csharp_restsharp: {
+          csharp_httpclient: {
             title: 'C#',
             syntax: 'csharp',
           },
@@ -212,8 +242,23 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
             title: 'XHR',
             syntax: 'javascript',
           },
+          python_python3: {
+            title: 'python-client',
+            syntax: 'python',
+          },
+          python_requests: {
+            title: 'python-requests',
+            syntax: 'python',
+          },
         },
-        languages: ['curl_bash', 'csharp_restsharp', 'node_native', 'javascript_xhr'],
+        languages: [
+          'curl_bash',
+          'csharp_httpclient',
+          'node_native',
+          'javascript_xhr',
+          'python_python3',
+          'python_requests',
+        ],
       },
       syntaxHighlight: {
         activate: true,

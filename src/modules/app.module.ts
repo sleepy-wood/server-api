@@ -70,7 +70,7 @@ import { HttpExceptionFilter } from '../exceptions';
       },
       {
         rootPath: join(path, 'uploads/static'),
-        serveRoot: '/static',
+        serveRoot: '/resources',
         serveStaticOptions: {
           index: false,
           redirect: false,
