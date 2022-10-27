@@ -25,15 +25,15 @@ export class ItemService {
     // this is intentional
   }
 
-  async findOne(context: I.RequestWithUser, contextType: I.ContextType, id: number): Promise<any> {
+  async findOne(context: I.RequestWithUser, id: number, contextType: I.ContextType): Promise<any> {
     // this is intentional
   }
 
-  async update(context: I.RequestWithUser, contextType: I.ContextType, id: number): Promise<any> {
+  async update(context: I.RequestWithUser, id: number, body: any, contextType: I.ContextType): Promise<any> {
     // this is intentional
   }
 
-  async remove(context: I.RequestWithUser, contextType: I.ContextType, id: number): Promise<any> {
+  async remove(context: I.RequestWithUser, id: number, contextType: I.ContextType): Promise<any> {
     // this is intentional
   }
 }

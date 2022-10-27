@@ -115,7 +115,12 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
     .setVersion('1.0.0')
     .addServer(isDev ? `http://${localIp}:${port}` : 'https://team-buildup.shop')
     .addTag('auth', '권한 REST APIs')
+    .addTag('bridges', '다리 REST APIs')
     .addTag('files', '파일 업로드 REST APIs')
+    .addTag('items', '아이템 REST APIs')
+    .addTag('lands', '랜드 REST APIs')
+    .addTag('sleeps', '수면 REST APIs')
+    .addTag('trees', '나무 REST APIs')
     .addTag('users', '사용자 REST APIs')
     .addBearerAuth()
     .build();

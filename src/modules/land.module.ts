@@ -8,15 +8,15 @@ import * as MW from '../middlewares';
 import * as S from '../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.User]), forwardRef(() => M.UtilModule)],
-  exports: [S.UserService],
-  providers: [S.UserService],
-  controllers: [C.UserController],
+  imports: [TypeOrmModule.forFeature([E.Land, E.User]), forwardRef(() => M.UtilModule)],
+  exports: [S.LandService],
+  providers: [S.LandService],
+  controllers: [C.LandController],
 })
-export class UserModule implements NestModule {
+export class LandModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(MW.AuthMiddleware).forRoutes({
-      path: 'v1/users*',
+      path: 'v1/lands*',
       method: RequestMethod.ALL,
     });
   }

@@ -1,4 +1,4 @@
-//@index('./*.ts', f => f.path !== `./index` ? `export * from '${f.path}'` : "")
+//@index('./*.ts', f => f.path !== `./index` ? `export * from '${f.path}';` : "")
 export * from './attachFile.service';
 export * from './bridge.service';
 export * from './bridgeLand.service';

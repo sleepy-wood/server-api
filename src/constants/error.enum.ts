@@ -25,6 +25,10 @@ export const ErrorCodes = <const>{
     message: '유저 인증에 실패했어요.',
     status: StatusCodes.NOT_FOUND,
   },
+  NO_USER: {
+    message: '사용자 정보가 없어요.',
+    status: StatusCodes.BAD_REQUEST,
+  },
   USER_NO_TYPE: {
     message: '유저 타입이 잘못됐어요(NoType).',
     status: StatusCodes.UNAUTHORIZED,
