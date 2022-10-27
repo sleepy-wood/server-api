@@ -15,6 +15,7 @@
     "start:prod": "nest build && tsc-alias && pm2 start dist/main.js -i max"
   },
   "dependencies": {
+    "@nestjs/axios": "^0.1.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^8.0.0",
