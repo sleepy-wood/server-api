@@ -17,11 +17,11 @@ export class Sleep {
   id: number;
 
   @ApiProperty()
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', comment: '잠든 시간' })
   sleepAt: Date;
 
   @ApiProperty()
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', comment: '깨어난 시간' })
   wakeAt: Date;
 
   @ApiProperty()
