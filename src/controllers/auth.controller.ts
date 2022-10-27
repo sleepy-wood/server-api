@@ -1,4 +1,6 @@
-import { Controller, Post, HttpCode, Body, UseInterceptors, CacheInterceptor, Req, HttpStatus } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { Controller, Post, HttpCode, Body, UseInterceptors, CacheInterceptor, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
@@ -18,6 +20,8 @@ import { HttpException } from '../exceptions';
 })
 export class AuthController {
   constructor(
+    private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
     @InjectRepository(E.User)
     private readonly user: Repository<E.User>,
     private readonly jwtService: JWTService,
@@ -28,6 +32,39 @@ export class AuthController {
   @HttpCode(StatusCodes.OK)
   @Post('login/temp')
   async loginTemp(): Promise<any> {
+    return {
+      result: true,
+      data: {
+        token: 'token',
+      },
+    };
+  }
+
+  @ApiOperation({ summary: '구글 로그인' })
+  @HttpCode(StatusCodes.OK)
+  @Post('login/google')
+  async loginGoogle(): Promise<any> {
+    return {
+      result: true,
+      data: {
+        token: 'token',
+      },
+    };
+  }
+
+  @ApiOperation({ summary: '카카오 로그인' })
+  @HttpCode(StatusCodes.OK)
+  @Post('login/kakao')
+  async loginKakao(): Promise<any> {
+    const kakao_api_url = `https://kauth.kakao.com/oauth/authorize?client_id=${this.configService.get<string>(
+      'KAKAO_REST_API',
+    )}
+    &redirect_uri=${this.configService.get<string>('KAKAO_REDIRECT_URL')}
+    &response_type=code`;
+
+    const token_res = await this.httpService.axiosRef.post<any>(kakao_api_url);
+    console.log(token_res);
+
     return {
       result: true,
       data: {
