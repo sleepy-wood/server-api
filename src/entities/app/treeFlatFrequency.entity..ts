@@ -4,7 +4,7 @@ import { Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGe
 import { TreeMinMax } from '..';
 
 @Entity()
-export class treeFlatFrequency {
+export class TreeFlatFrequency {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
