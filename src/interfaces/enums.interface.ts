@@ -1,7 +1,7 @@
 export enum AttachFileType {
-  Temp = 'Temp', // temporary
-  Static = 'Static', // public
-  Secure = 'Secure', // private
+  Temp = 'Temp',
+  Static = 'Static',
+  Secure = 'Secure',
 }
 
 export enum ContextType {
@@ -14,10 +14,4 @@ export enum UserType {
   None = 'None',
   Guest = 'Guest',
   Kakao = 'Kakao',
-}
-
-export enum UserStatus {
-  UnAuthorized = 'UnAuthorized', // 미인증
-  Authorized = 'Authorized', // 인증
-  AuthRequired = 'AuthRequired', // 추가 인증 필요
 }
