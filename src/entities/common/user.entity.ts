@@ -47,6 +47,14 @@ export class User {
 
   @ApiProperty()
   @Column({
+    unique: true,
+    nullable: true,
+    comment: '유저 아바타',
+  })
+  avatar: string;
+
+  @ApiProperty()
+  @Column({
     nullable: false,
     default: 0,
     comment: '전체 뱃지 카운트',
