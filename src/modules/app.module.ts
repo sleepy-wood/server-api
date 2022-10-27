@@ -44,7 +44,7 @@ import { HttpExceptionFilter } from '../exceptions';
           timezone: '+09:00',
           charset: 'utf8mb4_unicode_ci',
           autoLoadEntities: true,
-          synchronize: false, // never use this in production
+          synchronize: true, // never use this in production
         };
       },
     }),
