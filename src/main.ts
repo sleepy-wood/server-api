@@ -3,11 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { path } from 'app-root-path';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import helmet from 'helmet';
-import { path } from 'app-root-path';
 import { join } from 'path';
 import { performance } from 'perf_hooks';
 
@@ -23,6 +23,7 @@ const startTime = performance.now();
 
 const env = process.env.NODE_ENV;
 const isDev = env === 'development';
+const isContainer = env === 'container';
 
 logger.log(` * imports done in ${(performance.now() - startTime).toFixed(3)}ms`);
 logger.log(` * Memory: ${readMemory()}`);
@@ -104,7 +105,7 @@ async function bootstrap() {
   }
 }
 
-if (isDev) bootstrap();
+if (isDev || isContainer) bootstrap();
 else ClusterService.init(bootstrap);
 
 function generateSwagger(app: NestExpressApplication, localIp: string, port: number) {

@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VARIANT: 16-bullseye
+        NODE_VERSION: "lts/*"
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    environment:
+      MYSQL_DATABASE: sleepy_wood
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: mariadb
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 3000
+      SECRET: abcd
+      SALT: 1234
+      THROTTLE_TTL: 60
+      THROTTLE_LIMIT: 100
+      TZ: Asia/Seoul
+      locale: ko-KR
+
+  db:
+    image: mariadb:10
+    restart: unless-stopped
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mariadb
+      MYSQL_DATABASE: sleepy_wood
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: mariadb
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+
+volumes:
+  mariadb-data:

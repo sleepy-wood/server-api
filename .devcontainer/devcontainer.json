@@ -1,0 +1,27 @@
+{
+  "name": "Node.js",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "editorconfig.editorconfig",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      }
+    }
+  },
+  "forwardPorts": ["app:3000", "db:3306", "redis:6379"],
+  "postCreateCommand": "yarn",
+  "remoteUser": "node",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-from-docker:1": {
+      "moby": false
+    },
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
+  }
+}
