@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  Column,
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
@@ -16,6 +17,76 @@ export class Land {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'Land Id',
+  })
+  landId: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'x 좌표',
+  })
+  positionX: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'y 좌표',
+  })
+  positionY: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'z 좌표',
+  })
+  positionZ: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'x 크기',
+  })
+  scaleX: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'y 크기',
+  })
+  scaleY: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'z 크기',
+  })
+  scaleZ: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'x 오일러 각도',
+  })
+  eulerAngleX: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'y 오일러 각도',
+  })
+  eulerAngleY: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: 'z 오일러 각도',
+  })
+  eulerAngleZ: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
