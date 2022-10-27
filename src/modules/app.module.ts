@@ -1,3 +1,4 @@
+import Redis from 'ioredis';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
@@ -7,15 +8,14 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { path } from 'app-root-path';
 import { Response } from 'express';
-import Redis from 'ioredis';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { join } from 'path';
 
 import * as E from '../entities';
-import { HttpExceptionFilter } from '../exceptions';
 import * as M from '../modules';
 import * as SCH from '../schedulers';
 import * as U from '../utils';
+import { HttpExceptionFilter } from '../exceptions';
 
 @Module({
   imports: [
@@ -23,14 +23,15 @@ import * as U from '../utils';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const { username, host, dbname, password, port } = process.env.DB_SECRET ? JSON.parse(process.env.DB_SECRET) :
-          {
-            host: configService.get<string>('MYSQL_HOST'),
-            port: configService.get<number>('MYSQL_PORT'),
-            username: configService.get<string>('MYSQL_USER'),
-            password: configService.get<string>('MYSQL_PASSWORD'),
-            dbname: configService.get<string>('MYSQL_DATABASE'),
-          }
+        const { username, host, dbname, password, port } = process.env.DB_SECRET
+          ? JSON.parse(process.env.DB_SECRET)
+          : {
+              host: configService.get<string>('MYSQL_HOST'),
+              port: configService.get<number>('MYSQL_PORT'),
+              username: configService.get<string>('MYSQL_USER'),
+              password: configService.get<string>('MYSQL_PASSWORD'),
+              dbname: configService.get<string>('MYSQL_DATABASE'),
+            };
         return {
           type: 'mysql',
           host: host,
@@ -38,13 +39,13 @@ import * as U from '../utils';
           username: username,
           password: password,
           database: dbname,
-          entities: [...Object.entries(E).map(([name, entity]) => entity)], // [join(path, '/entities/**/*.entity.ts')],
+          entities: [...Object.entries(E).map(([name, entity]) => entity)],
           logger: new U.TypeOrmLogger(),
           timezone: '+09:00',
           charset: 'utf8mb4_unicode_ci',
           autoLoadEntities: true,
           synchronize: false, // never use this in production
-        }
+        };
       },
     }),
     ThrottlerModule.forRootAsync({
@@ -69,7 +70,7 @@ import * as U from '../utils';
       },
       {
         rootPath: join(path, 'uploads/static'),
-        serveRoot: '/public',
+        serveRoot: '/static',
         serveStaticOptions: {
           index: false,
           redirect: false,
@@ -98,4 +99,4 @@ import * as U from '../utils';
   ],
   exports: [],
 })
-export class AppModule { }
+export class AppModule {}
