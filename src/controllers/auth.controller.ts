@@ -6,7 +6,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { Repository } from 'typeorm';
 
-// import * as D from '../dtos';
 import * as E from '../entities';
 import { JWTService, UserService } from '../services';
 import { StatusCodes } from '../constants';

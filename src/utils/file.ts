@@ -5,7 +5,6 @@ import { join } from 'path';
 import * as U from '../utils';
 import { HttpException } from '../exceptions';
 
-// move file
 export const moveFile = (from: string | string[], to: string | string[]) => {
   try {
     if (Array.isArray(from) && Array.isArray(to)) for (let i = 0; i < from.length; i++) doMove(from[i], to[i]);
