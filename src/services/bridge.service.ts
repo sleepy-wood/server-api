@@ -27,6 +27,7 @@ export class BridgeService {
     bridge.rotationX = rotationX;
     bridge.rotationY = rotationY;
     bridge.rotationZ = rotationZ;
+    bridge.userId = req.user.id;
 
     return this.bridge.save(bridge).catch((err) => {
       U.logger.error(err);
@@ -44,7 +45,7 @@ export class BridgeService {
 
     return this.bridge
       .findAndCount({
-        where: { deletedAt: null },
+        where: { userId: req.user.id, deletedAt: null },
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
@@ -57,13 +58,16 @@ export class BridgeService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Bridge> {
-    return this.bridge.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.bridge.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateBridgeDto): Promise<void> {
+    const data = await this.findOne(req, id);
+    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
+
     const bridge = new E.Bridge();
     const { name, positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = body;
 
@@ -79,6 +83,8 @@ export class BridgeService {
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {
+    const data = await this.findOne(req, id);
+    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
     await this.bridge.softDelete(id).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');

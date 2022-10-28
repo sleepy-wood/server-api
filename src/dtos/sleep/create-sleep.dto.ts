@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsDateString } from 'class-validator';
+import { IsNotEmpty, IsDateString, IsEnum } from 'class-validator';
+
+import * as I from '../../interfaces';
 
 export class CreateSleepDto {
   @ApiProperty({
@@ -19,4 +21,15 @@ export class CreateSleepDto {
   @IsDateString({ strict: false }, { message: '깨어난 시간이 올바른 날짜 형식이 아니에요.' })
   @IsNotEmpty({ message: '깨어난 시간은 필수 입력 항목이에요.' })
   readonly endDate: Date;
+
+  @ApiProperty({
+    enum: I.SleepType,
+    example: I.SleepType.InBed,
+    default: I.SleepType.InBed,
+    required: true,
+    description: '선호 성별',
+  })
+  @IsEnum(I.SleepType, { message: '수면 유형이 올바르지 않아요.' })
+  @IsNotEmpty({ message: '수면 유형은 필수 입력 항목이에요.' })
+  readonly type: keyof typeof I.SleepType;
 }

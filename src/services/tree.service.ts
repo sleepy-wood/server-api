@@ -39,7 +39,7 @@ export class TreeService {
 
     return this.tree
       .findAndCount({
-        where: { deletedAt: null },
+        where: { userId: req.user.id, deletedAt: null },
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
@@ -51,13 +51,16 @@ export class TreeService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Tree> {
-    return this.tree.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.tree.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateTreeDto): Promise<void> {
+    const data = await this.findOne(req, id);
+    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
+
     const tree = new E.Tree();
     const { name, treeDay } = body;
 
@@ -68,6 +71,8 @@ export class TreeService {
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {
+    const data = await this.findOne(req, id);
+    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
     await this.tree.softDelete(id).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');

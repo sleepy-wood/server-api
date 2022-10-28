@@ -31,6 +31,7 @@ export class LandService {
     land.eulerAngleX = eulerAngleX;
     land.eulerAngleY = eulerAngleY;
     land.eulerAngleZ = eulerAngleZ;
+    land.userId = req.user.id;
 
     return this.land.save(land).catch((err) => {
       U.logger.error(err);
@@ -48,7 +49,7 @@ export class LandService {
 
     return this.land
       .findAndCount({
-        where: { deletedAt: null },
+        where: { userId: req.user.id, deletedAt: null },
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
@@ -60,13 +61,16 @@ export class LandService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Land> {
-    return this.land.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.land.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateLandDto): Promise<void> {
+    const data = await this.findOne(req, id);
+    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
+
     const land = new E.Land();
     const { landId, positionX, positionY, positionZ, scaleX, scaleY, scaleZ, eulerAngleX, eulerAngleY, eulerAngleZ } =
       body;
@@ -86,6 +90,8 @@ export class LandService {
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {
+    const data = await this.findOne(req, id);
+    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
     await this.land.softDelete(id).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');

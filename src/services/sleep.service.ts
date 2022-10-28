@@ -39,7 +39,7 @@ export class SleepService {
 
     return this.sleep
       .findAndCount({
-        where: { deletedAt: null },
+        where: { userId: req.user.id, deletedAt: null },
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
@@ -51,13 +51,16 @@ export class SleepService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Sleep> {
-    return this.sleep.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.sleep.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateSleepDto): Promise<void> {
+    const data = await this.findOne(req, id);
+    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
+
     const sleep = new E.Sleep();
     const { startDate, endDate } = body;
 
@@ -68,6 +71,8 @@ export class SleepService {
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {
+    const data = await this.findOne(req, id);
+    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
     await this.sleep.softDelete(id).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
