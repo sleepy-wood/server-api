@@ -8,8 +8,8 @@ import * as MW from '../middlewares';
 import * as S from '../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.Sleep, E.User]), forwardRef(() => M.UtilModule)],
-  exports: [S.SleepService],
+  imports: [TypeOrmModule.forFeature([E.Sleep]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
+  exports: [TypeOrmModule, S.SleepService],
   providers: [S.SleepService],
   controllers: [C.SleepController],
 })

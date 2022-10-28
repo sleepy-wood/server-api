@@ -9,7 +9,7 @@ import * as S from '../services';
 
 @Module({
   imports: [TypeOrmModule.forFeature([E.User]), forwardRef(() => M.UtilModule)],
-  exports: [S.UserService],
+  exports: [TypeOrmModule, S.UserService],
   providers: [S.UserService],
   controllers: [C.UserController],
 })

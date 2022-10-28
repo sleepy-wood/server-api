@@ -23,7 +23,13 @@ import { HttpExceptionFilter } from '../exceptions';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const { username, host, dbname, password, port } = process.env.DB_SECRET
+        const {
+          username,
+          host,
+          dbname: database,
+          password,
+          port,
+        } = process.env.DB_SECRET
           ? JSON.parse(process.env.DB_SECRET)
           : {
               host: configService.get<string>('MYSQL_HOST'),
@@ -34,11 +40,11 @@ import { HttpExceptionFilter } from '../exceptions';
             };
         return {
           type: 'mysql',
-          host: host,
-          port: port,
-          username: username,
-          password: password,
-          database: dbname,
+          host,
+          port,
+          username,
+          password,
+          database,
           entities: [...Object.entries(E).map(([name, entity]) => entity)],
           logger: new U.TypeOrmLogger(),
           timezone: '+09:00',

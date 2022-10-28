@@ -8,8 +8,8 @@ import * as MW from '../middlewares';
 import * as S from '../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.Item, E.User]), forwardRef(() => M.UtilModule)],
-  exports: [S.ItemService],
+  imports: [TypeOrmModule.forFeature([E.Item]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
+  exports: [TypeOrmModule, S.ItemService],
   providers: [S.ItemService],
   controllers: [C.ItemController],
 })

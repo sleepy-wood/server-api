@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 
 import * as D from '../dtos';
 import * as E from '../entities';
@@ -13,6 +13,7 @@ const exclude = ['deletedAt'];
 @Injectable()
 export class LandService {
   constructor(
+    private readonly dataSource: DataSource,
     @InjectRepository(E.Land)
     private readonly land: Repository<E.Land>,
   ) {}

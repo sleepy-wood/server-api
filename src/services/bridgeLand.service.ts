@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import * as D from '../dtos';
 import * as E from '../entities';
@@ -13,6 +13,7 @@ const exclude = ['deletedAt'];
 @Injectable()
 export class BridgeLandService {
   constructor(
+    private readonly dataSource: DataSource,
     @InjectRepository(E.BridgeLand)
     private readonly bridgeLand: Repository<E.BridgeLand>,
   ) {}

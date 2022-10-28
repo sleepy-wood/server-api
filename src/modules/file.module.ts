@@ -8,11 +8,7 @@ import * as MW from '../middlewares';
 import * as S from '../services';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([E.AttachFile]),
-    TypeOrmModule.forFeature([E.User]),
-    forwardRef(() => M.UtilModule),
-  ],
+  imports: [TypeOrmModule.forFeature([E.AttachFile]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
   exports: [TypeOrmModule],
   controllers: [C.FileController],
   providers: [S.FileService],
