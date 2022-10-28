@@ -6,12 +6,14 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { path } from 'app-root-path';
 import { Response } from 'express';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { join } from 'path';
 
 import * as E from '../entities';
+import * as I from '../interfaces';
 import * as M from '../modules';
 import * as SCH from '../schedulers';
 import * as U from '../utils';
@@ -52,6 +54,27 @@ import { HttpExceptionFilter } from '../exceptions';
           autoLoadEntities: true,
           synchronize: false, // never use this in production
         };
+      },
+      dataSourceFactory: async (options) => {
+        const dataSource = await new DataSource(options).initialize();
+        const { manager } = dataSource;
+
+        const users = await manager.find(E.User);
+        console.log(users);
+
+        if (users.length === 0) {
+          const user = new E.User();
+          user.nickname = 'sampleUser';
+          user.password = U.generateHash('1234');
+          user.avatar = 'Julia';
+          user.badgeCount = 0;
+          user.hp = '010-2717-2868';
+          user.type = I.UserType.Kakao;
+
+          await manager.save(user);
+        }
+
+        return dataSource;
       },
     }),
     ThrottlerModule.forRootAsync({
