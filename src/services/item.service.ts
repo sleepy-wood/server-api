@@ -18,6 +18,7 @@ export class ItemService {
 
   async create(req: I.RequestWithUser, body: D.CreateItemDto): Promise<E.Item> {
     const item = new E.Item();
+    const {} = body;
 
     return this.item.save(item).catch((err) => {
       U.logger.error(err);
@@ -55,6 +56,7 @@ export class ItemService {
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateItemDto): Promise<void> {
     const item = new E.Item();
+    const {} = body;
 
     await this.item.update(id, item);
   }

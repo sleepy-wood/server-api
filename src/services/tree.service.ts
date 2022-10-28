@@ -18,6 +18,10 @@ export class TreeService {
 
   async create(req: I.RequestWithUser, body: D.CreateTreeDto): Promise<E.Tree> {
     const tree = new E.Tree();
+    const { name, treeDay } = body;
+
+    tree.name = name;
+    tree.treeDay = treeDay;
 
     return this.tree.save(tree).catch((err) => {
       U.logger.error(err);
@@ -55,6 +59,10 @@ export class TreeService {
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateTreeDto): Promise<void> {
     const tree = new E.Tree();
+    const { name, treeDay } = body;
+
+    name && (tree.name = name);
+    treeDay && (tree.treeDay = treeDay);
 
     await this.tree.update(id, tree);
   }

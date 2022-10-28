@@ -18,6 +18,10 @@ export class SleepService {
 
   async create(req: I.RequestWithUser, body: D.CreateSleepDto): Promise<E.Sleep> {
     const sleep = new E.Sleep();
+    const { sleepAt, wakeAt } = body;
+
+    sleep.sleepAt = sleepAt;
+    sleep.wakeAt = wakeAt;
 
     return this.sleep.save(sleep).catch((err) => {
       U.logger.error(err);
@@ -55,6 +59,10 @@ export class SleepService {
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateSleepDto): Promise<void> {
     const sleep = new E.Sleep();
+    const { sleepAt, wakeAt } = body;
+
+    sleepAt && (sleep.sleepAt = sleepAt);
+    wakeAt && (sleep.wakeAt = wakeAt);
 
     await this.sleep.update(id, sleep);
   }
