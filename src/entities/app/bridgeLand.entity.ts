@@ -6,6 +6,8 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  JoinColumn,
+  Column,
 } from 'typeorm';
 
 import { Bridge, Land } from '..';
@@ -15,6 +17,14 @@ export class BridgeLand {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  bridgeId: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  landId: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -32,11 +42,13 @@ export class BridgeLand {
   @ManyToOne(() => Bridge, (bridge) => bridge.bridgeLand, {
     nullable: false,
   })
+  @JoinColumn({ name: 'bridgeId' })
   bridge: Bridge;
 
   @ApiProperty({ type: () => Land })
   @ManyToOne(() => Land, (land) => land.bridgeLand, {
     nullable: false,
   })
+  @JoinColumn({ name: 'landId' })
   land: Land;
 }

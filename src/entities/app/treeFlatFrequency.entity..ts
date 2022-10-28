@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+} from 'typeorm';
 
 import { TreeMinMax } from '..';
 
@@ -52,5 +60,11 @@ export class TreeFlatFrequency {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
+  @ApiProperty({ type: () => [TreeMinMax] })
+  @OneToMany(() => TreeMinMax, (treeMinMax) => treeMinMax.treeFlatFrequency, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   treeMinMaxes: TreeMinMax[];
 }

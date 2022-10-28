@@ -7,9 +7,11 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
-import { BridgeLand } from '..';
+import { BridgeLand, User } from '..';
 
 @Entity()
 export class Bridge {
@@ -73,6 +75,10 @@ export class Bridge {
   rotationZ: number;
 
   @ApiProperty()
+  @Column({ nullable: false })
+  userId: number;
+
+  @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
@@ -91,4 +97,11 @@ export class Bridge {
     onDelete: 'CASCADE',
   })
   bridgeLand: BridgeLand[];
+
+  @ApiProperty({ type: () => User })
+  @ManyToOne(() => User, (user) => user.sleeps, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'userId' })
+  user: User;
 }

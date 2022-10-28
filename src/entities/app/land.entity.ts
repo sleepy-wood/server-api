@@ -6,9 +6,9 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  OneToOne,
   OneToMany,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 
 import { BridgeLand, User, LandDecoration, Tree } from '..';
@@ -99,6 +99,10 @@ export class Land {
   eulerAngleZ: number;
 
   @ApiProperty()
+  @Column({ nullable: false })
+  userId: number;
+
+  @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
@@ -109,13 +113,6 @@ export class Land {
   @ApiProperty()
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
-
-  @ApiProperty({ type: () => User })
-  @OneToOne(() => User, (user) => user.land, {
-    nullable: false,
-  })
-  @JoinColumn()
-  user: User;
 
   @ApiProperty({ type: () => [BridgeLand] })
   @OneToMany(() => BridgeLand, (bridgeLand) => bridgeLand.land, {
@@ -140,4 +137,11 @@ export class Land {
     onDelete: 'CASCADE',
   })
   trees: Tree[];
+
+  @ApiProperty({ type: () => User })
+  @ManyToOne(() => User, (user) => user.lands, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'userId' })
+  user: User;
 }

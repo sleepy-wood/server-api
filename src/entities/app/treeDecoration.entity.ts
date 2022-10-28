@@ -6,6 +6,8 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  JoinColumn,
+  Column,
 } from 'typeorm';
 
 import { Tree, User } from '..';
@@ -15,6 +17,14 @@ export class TreeDecoration {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  landId: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  userId: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -32,11 +42,13 @@ export class TreeDecoration {
   @ManyToOne(() => Tree, (tree) => tree.treeDecorations, {
     nullable: false,
   })
+  @JoinColumn({ name: 'landId' })
   tree: Tree;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.treeDecorations, {
     nullable: false,
   })
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

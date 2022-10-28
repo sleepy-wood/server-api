@@ -7,6 +7,7 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import { Land, User } from '..';
@@ -98,6 +99,14 @@ export class LandDecoration {
   eulerAngleZ: number;
 
   @ApiProperty()
+  @Column({ nullable: false })
+  landId: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  userId: number;
+
+  @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
@@ -113,11 +122,13 @@ export class LandDecoration {
   @ManyToOne(() => Land, (land) => land.landDecorations, {
     nullable: true,
   })
+  @JoinColumn({ name: 'landId' })
   land: Land;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.landDecorations, {
     nullable: false,
   })
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

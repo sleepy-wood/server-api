@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import { Land, TreeDecoration, User } from '..';
@@ -29,6 +30,14 @@ export class Tree {
     comment: '나무 성장일',
   })
   treeDay: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  landId: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  userId: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -54,11 +63,13 @@ export class Tree {
   @ManyToOne(() => Land, (land) => land.trees, {
     nullable: false,
   })
+  @JoinColumn({ name: 'landId' })
   land: Land;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.trees, {
     nullable: false,
   })
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

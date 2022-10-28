@@ -12,7 +12,7 @@ import {
 
 import * as I from '../../interfaces';
 import * as U from '../../utils';
-import { AttachFile, DeviceToken, Land, LandDecoration, Sleep, Tree, TreeDecoration } from '..';
+import { AttachFile, Bridge, DeviceToken, Land, LandDecoration, Sleep, Tree, TreeDecoration } from '..';
 
 @Entity()
 export class User {
@@ -93,13 +93,21 @@ export class User {
   })
   deviceToken: DeviceToken;
 
-  @ApiProperty({ type: () => Land })
-  @OneToOne(() => Land, (land) => land.user, {
+  @ApiProperty({ type: () => [Bridge] })
+  @OneToMany(() => Bridge, (bridge) => bridge.user, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  bridges: Bridge[];
+
+  @ApiProperty({ type: () => [Land] })
+  @OneToMany(() => Land, (land) => land.user, {
     cascade: true,
     nullable: false,
     onDelete: 'CASCADE',
   })
-  land: Land;
+  lands: Land[];
 
   @ApiProperty({ type: () => [AttachFile] })
   @OneToMany(() => AttachFile, (attachFile) => attachFile.user, {

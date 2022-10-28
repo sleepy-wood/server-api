@@ -9,7 +9,7 @@ export class UpdateSleepDto {
   })
   @IsDateString({ strict: false }, { message: '잠든 시간이 올바른 날짜 형식이 아니에요.' })
   @IsOptional()
-  readonly sleepAt?: Date;
+  readonly startDate?: Date;
 
   @ApiProperty({
     example: new Date(),
@@ -18,5 +18,5 @@ export class UpdateSleepDto {
   })
   @IsDateString({ strict: false }, { message: '깨어난 시간이 올바른 날짜 형식이 아니에요.' })
   @IsOptional()
-  readonly wakeAt?: Date;
+  readonly endDate?: Date;
 }
