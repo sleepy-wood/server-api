@@ -43,7 +43,7 @@ export class TreeController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Tree>>{
       result: true,
-      data: await this.treeService.create(req, body),
+      data: await this.treeService.create(req, body, I.ContextType.Request),
     };
   }
 

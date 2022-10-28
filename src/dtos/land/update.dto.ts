@@ -1,6 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsNumberString, IsEnum } from 'class-validator';
 
-export class CreateUserDto {}
-
-export class UpdateUserDto {}
+export class UpdateLandDto {}

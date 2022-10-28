@@ -18,7 +18,7 @@ export class ItemService {
     private readonly item: Repository<E.Item>,
   ) {}
 
-  async create(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
+  async create(context: I.RequestWithUser, body: D.CreateItemDto, contextType: I.ContextType): Promise<any> {
     // this is intentional
   }
 

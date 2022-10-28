@@ -18,7 +18,7 @@ export class TreeService {
     private readonly tree: Repository<E.Tree>,
   ) {}
 
-  async create(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
+  async create(context: I.RequestWithUser, body: D.CreateTreeDto, contextType: I.ContextType): Promise<any> {
     // this is intentional
   }
 

@@ -18,7 +18,7 @@ export class BridgeService {
     private readonly bridge: Repository<E.Bridge>,
   ) {}
 
-  async create(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
+  async create(context: I.RequestWithUser, body: D.CreateBridgeDto, contextType: I.ContextType): Promise<any> {
     // this is intentional
   }
 

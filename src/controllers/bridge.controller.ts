@@ -39,11 +39,11 @@ export class BridgeController {
   @ApiOperation({ summary: '다리 생성' })
   @HttpCode(StatusCodes.OK)
   @Post()
-  async create(@Req() req: I.RequestWithUser, @Body() body: any) {
+  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateBridgeDto) {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Bridge>>{
       result: true,
-      data: await this.bridgeService.create(req, body),
+      data: await this.bridgeService.create(req, body, I.ContextType.Request),
     };
   }
 

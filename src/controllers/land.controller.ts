@@ -43,7 +43,7 @@ export class LandController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Land>>{
       result: true,
-      data: await this.landService.create(req, body),
+      data: await this.landService.create(req, body, I.ContextType.Request),
     };
   }
 

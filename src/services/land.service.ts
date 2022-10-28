@@ -18,7 +18,7 @@ export class LandService {
     private readonly land: Repository<E.Land>,
   ) {}
 
-  async create(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
+  async create(context: I.RequestWithUser, body: D.CreateLandDto, contextType: I.ContextType): Promise<any> {
     // this is intentional
   }
 

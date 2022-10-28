@@ -18,7 +18,7 @@ export class SleepService {
     private readonly sleep: Repository<E.Sleep>,
   ) {}
 
-  async create(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
+  async create(context: I.RequestWithUser, body: D.CreateSleepDto, contextType: I.ContextType): Promise<any> {
     // this is intentional
   }
 

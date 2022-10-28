@@ -43,7 +43,7 @@ export class ItemController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Item>>{
       result: true,
-      data: await this.itemService.create(req, body),
+      data: await this.itemService.create(req, body, I.ContextType.Request),
     };
   }
 
