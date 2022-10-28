@@ -7,6 +7,7 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import { User } from '..';
@@ -63,5 +64,6 @@ export class DeviceToken {
   @OneToOne(() => User, (user) => user.deviceToken, {
     nullable: false,
   })
+  @JoinColumn()
   user: User;
 }

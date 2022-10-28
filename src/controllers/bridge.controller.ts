@@ -1,5 +1,3 @@
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
 import {
   Controller,
   Post,
@@ -15,9 +13,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Request } from 'express';
-import { Repository } from 'typeorm';
 
 import * as D from '../dtos';
 import * as E from '../entities';
@@ -43,16 +38,16 @@ export class BridgeController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Bridge>>{
       result: true,
-      data: await this.bridgeService.create(req, body, I.ContextType.Request),
+      data: await this.bridgeService.create(req, body),
     };
   }
 
   @ApiOperation({ summary: '다리 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()
-  async findAll(@Req() req: I.RequestWithUser, @Query() query: any) {
+  async findAll(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
     if (!req.user) throw new HttpException('NO_USER');
-    const { rows, count } = await this.bridgeService.findAll(req, query);
+    const [rows, count] = await this.bridgeService.findAll(req, query);
     return <I.RowResponse<E.Bridge>>{
       result: true,
       count,
@@ -76,7 +71,7 @@ export class BridgeController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Bridge>>{
       result: true,
-      data: await this.bridgeService.findOne(req, +id, I.ContextType.Request),
+      data: await this.bridgeService.findOne(req, +id),
     };
   }
 
@@ -92,11 +87,11 @@ export class BridgeController {
   })
   @HttpCode(StatusCodes.OK)
   @Put(':id')
-  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: any) {
+  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: D.UpdateBridgeDto) {
     if (!req.user) throw new HttpException('NO_USER');
+    await this.bridgeService.update(req, +id, body);
     return <I.BasicResponse<boolean>>{
       result: true,
-      data: await this.bridgeService.update(req, +id, body, I.ContextType.Request),
     };
   }
 
@@ -114,9 +109,9 @@ export class BridgeController {
   @Delete(':id')
   async remove(@Req() req: I.RequestWithUser, @Param('id') id: string) {
     if (!req.user) throw new HttpException('NO_USER');
+    await this.bridgeService.remove(req, +id);
     return <I.BasicResponse<boolean>>{
       result: true,
-      data: await this.bridgeService.remove(req, +id, I.ContextType.Request),
     };
   }
 }

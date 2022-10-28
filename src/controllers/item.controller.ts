@@ -1,5 +1,3 @@
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
 import {
   Controller,
   Post,
@@ -15,9 +13,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Request } from 'express';
-import { Repository } from 'typeorm';
 
 import * as D from '../dtos';
 import * as E from '../entities';
@@ -43,7 +38,7 @@ export class ItemController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Item>>{
       result: true,
-      data: await this.itemService.create(req, body, I.ContextType.Request),
+      data: await this.itemService.create(req, body),
     };
   }
 
@@ -52,7 +47,7 @@ export class ItemController {
   @Get()
   async findAll(@Req() req: I.RequestWithUser, @Query() query: any) {
     if (!req.user) throw new HttpException('NO_USER');
-    const { rows, count } = await this.itemService.findAll(req, query);
+    const [rows, count] = await this.itemService.findAll(req, query);
     return <I.RowResponse<E.Item>>{
       result: true,
       count,
@@ -76,7 +71,7 @@ export class ItemController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Item>>{
       result: true,
-      data: await this.itemService.findOne(req, +id, I.ContextType.Request),
+      data: await this.itemService.findOne(req, +id),
     };
   }
 
@@ -96,7 +91,6 @@ export class ItemController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<boolean>>{
       result: true,
-      data: await this.itemService.update(req, +id, body, I.ContextType.Request),
     };
   }
 
@@ -116,7 +110,6 @@ export class ItemController {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<boolean>>{
       result: true,
-      data: await this.itemService.remove(req, +id, I.ContextType.Request),
     };
   }
 }

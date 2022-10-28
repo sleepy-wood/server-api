@@ -8,8 +8,6 @@ import * as I from '../interfaces';
 import * as U from '../utils';
 import { HttpException } from '../exceptions';
 
-const exclude = ['password', 'createdAt', 'updatedAt', 'deletedAt'];
-
 @Injectable()
 export class UserService {
   constructor(

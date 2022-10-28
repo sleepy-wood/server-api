@@ -8,8 +8,6 @@ import * as I from '../interfaces';
 import * as U from '../utils';
 import { HttpException } from '../exceptions';
 
-const exclude = ['deletedAt'];
-
 @Injectable()
 export class TreeDecorationService {
   constructor(
@@ -18,23 +16,53 @@ export class TreeDecorationService {
     private readonly treeDecoration: Repository<E.TreeDecoration>,
   ) {}
 
-  async create(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async create(req: I.RequestWithUser, body: D.CreateTreeDecorationDto): Promise<E.TreeDecoration> {
+    const treeDecoration = new E.TreeDecoration();
+
+    return this.treeDecoration.save(treeDecoration).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
-  async findAll(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.TreeDecoration[], number]> {
+    let { page, count, sort, dir, q } = query;
+
+    page = Number(page) || 1;
+    count = Number(count) || 30;
+    sort = sort || 'createdAt';
+    dir = dir || 'DESC';
+
+    return this.treeDecoration
+      .findAndCount({
+        where: { deletedAt: null },
+        order: { [sort]: dir },
+        skip: (page - 1) * count,
+        take: count,
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
-  async findOne(context: I.RequestWithUser, id: number, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async findOne(req: I.RequestWithUser, id: number): Promise<E.TreeDecoration> {
+    return this.treeDecoration.findOneBy({ id, deletedAt: null }).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
-  async update(context: I.RequestWithUser, id: number, body: any, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async update(req: I.RequestWithUser, id: number, body: D.UpdateTreeDecorationDto): Promise<void> {
+    const treeDecoration = new E.TreeDecoration();
+
+    await this.treeDecoration.update(id, treeDecoration);
   }
 
-  async remove(context: I.RequestWithUser, id: number, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async remove(req: I.RequestWithUser, id: number): Promise<void> {
+    await this.treeDecoration.softDelete(id).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 }

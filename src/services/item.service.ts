@@ -8,8 +8,6 @@ import * as I from '../interfaces';
 import * as U from '../utils';
 import { HttpException } from '../exceptions';
 
-const exclude = ['deletedAt'];
-
 @Injectable()
 export class ItemService {
   constructor(
@@ -18,23 +16,53 @@ export class ItemService {
     private readonly item: Repository<E.Item>,
   ) {}
 
-  async create(context: I.RequestWithUser, body: D.CreateItemDto, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async create(req: I.RequestWithUser, body: D.CreateItemDto): Promise<E.Item> {
+    const item = new E.Item();
+
+    return this.item.save(item).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
-  async findAll(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Item[], number]> {
+    let { page, count, sort, dir, q } = query;
+
+    page = Number(page) || 1;
+    count = Number(count) || 30;
+    sort = sort || 'createdAt';
+    dir = dir || 'DESC';
+
+    return this.item
+      .findAndCount({
+        where: { deletedAt: null },
+        order: { [sort]: dir },
+        skip: (page - 1) * count,
+        take: count,
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
-  async findOne(context: I.RequestWithUser, id: number, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async findOne(req: I.RequestWithUser, id: number): Promise<E.Item> {
+    return this.item.findOneBy({ id, deletedAt: null }).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
-  async update(context: I.RequestWithUser, id: number, body: any, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async update(req: I.RequestWithUser, id: number, body: D.UpdateItemDto): Promise<void> {
+    const item = new E.Item();
+
+    await this.item.update(id, item);
   }
 
-  async remove(context: I.RequestWithUser, id: number, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async remove(req: I.RequestWithUser, id: number): Promise<void> {
+    await this.item.softDelete(id).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 }

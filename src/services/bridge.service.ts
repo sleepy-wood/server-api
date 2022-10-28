@@ -8,8 +8,6 @@ import * as I from '../interfaces';
 import * as U from '../utils';
 import { HttpException } from '../exceptions';
 
-const exclude = ['deletedAt'];
-
 @Injectable()
 export class BridgeService {
   constructor(
@@ -18,23 +16,72 @@ export class BridgeService {
     private readonly bridge: Repository<E.Bridge>,
   ) {}
 
-  async create(context: I.RequestWithUser, body: D.CreateBridgeDto, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async create(req: I.RequestWithUser, body: D.CreateBridgeDto): Promise<E.Bridge> {
+    const bridge = new E.Bridge();
+    const { name, positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = body;
+
+    bridge.name = name;
+    bridge.positionX = positionX;
+    bridge.positionY = positionY;
+    bridge.positionZ = positionZ;
+    bridge.rotationX = rotationX;
+    bridge.rotationY = rotationY;
+    bridge.rotationZ = rotationZ;
+
+    return this.bridge.save(bridge).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
-  async findAll(context: I.RequestWithUser, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Bridge[], number]> {
+    let { page, count, sort, dir, q } = query;
+
+    page = Number(page) || 1;
+    count = Number(count) || 30;
+    sort = sort || 'createdAt';
+    dir = dir || 'DESC';
+
+    return this.bridge
+      .findAndCount({
+        where: { deletedAt: null },
+        order: { [sort]: dir },
+        skip: (page - 1) * count,
+        take: count,
+        relations: ['bridgeLand', 'bridgeLand.land'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
-  async findOne(context: I.RequestWithUser, id: number, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async findOne(req: I.RequestWithUser, id: number): Promise<E.Bridge> {
+    return this.bridge.findOneBy({ id, deletedAt: null }).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
-  async update(context: I.RequestWithUser, id: number, body: any, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async update(req: I.RequestWithUser, id: number, body: D.UpdateBridgeDto): Promise<void> {
+    const bridge = new E.Bridge();
+    const { name, positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = body;
+
+    name && (bridge.name = name);
+    positionX && (bridge.positionX = positionX);
+    positionY && (bridge.positionY = positionY);
+    positionZ && (bridge.positionZ = positionZ);
+    rotationX && (bridge.rotationX = rotationX);
+    rotationY && (bridge.rotationY = rotationY);
+    rotationZ && (bridge.rotationZ = rotationZ);
+
+    await this.bridge.update(id, bridge);
   }
 
-  async remove(context: I.RequestWithUser, id: number, contextType: I.ContextType): Promise<any> {
-    // this is intentional
+  async remove(req: I.RequestWithUser, id: number): Promise<void> {
+    await this.bridge.softDelete(id).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 }

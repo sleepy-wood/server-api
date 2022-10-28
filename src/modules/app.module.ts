@@ -58,9 +58,7 @@ import { HttpExceptionFilter } from '../exceptions';
       dataSourceFactory: async (options) => {
         const dataSource = await new DataSource(options).initialize();
         const { manager } = dataSource;
-
         const users = await manager.find(E.User);
-        console.log(users);
 
         if (users.length === 0) {
           const user = new E.User();

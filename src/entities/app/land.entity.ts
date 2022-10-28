@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 import { BridgeLand, User, LandDecoration, Tree } from '..';
@@ -104,6 +105,7 @@ export class Land {
   @OneToOne(() => User, (user) => user.land, {
     nullable: false,
   })
+  @JoinColumn()
   user: User;
 
   @ApiProperty({ type: () => [BridgeLand] })

@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import * as I from '../../interfaces';
