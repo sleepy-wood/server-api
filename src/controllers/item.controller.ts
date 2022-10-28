@@ -34,7 +34,7 @@ export class ItemController {
   @ApiOperation({ summary: '아이템 생성' })
   @HttpCode(StatusCodes.OK)
   @Post()
-  async create(@Req() req: I.RequestWithUser, @Body() body: any) {
+  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateItemDto) {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Item>>{
       result: true,
@@ -45,7 +45,7 @@ export class ItemController {
   @ApiOperation({ summary: '아이템 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()
-  async findAll(@Req() req: I.RequestWithUser, @Query() query: any) {
+  async findAll(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
     if (!req.user) throw new HttpException('NO_USER');
     const [rows, count] = await this.itemService.findAll(req, query);
     return <I.RowResponse<E.Item>>{
@@ -87,8 +87,9 @@ export class ItemController {
   })
   @HttpCode(StatusCodes.OK)
   @Put(':id')
-  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: any) {
+  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: D.UpdateBridgeDto) {
     if (!req.user) throw new HttpException('NO_USER');
+    await this.itemService.update(req, +id, body);
     return <I.BasicResponse<boolean>>{
       result: true,
     };
@@ -108,6 +109,7 @@ export class ItemController {
   @Delete(':id')
   async remove(@Req() req: I.RequestWithUser, @Param('id') id: string) {
     if (!req.user) throw new HttpException('NO_USER');
+    await this.itemService.remove(req, +id);
     return <I.BasicResponse<boolean>>{
       result: true,
     };

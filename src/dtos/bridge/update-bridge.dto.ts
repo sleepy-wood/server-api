@@ -4,7 +4,7 @@ import { IsString, IsOptional, IsNumber } from 'class-validator';
 export class UpdateBridgeDto {
   @ApiProperty({
     example: 'Bridge',
-    required: true,
+    required: false,
     description: '다리 이름',
   })
   @IsString({ message: '다리 이름은 문자열이어야 해요.' })
@@ -13,7 +13,7 @@ export class UpdateBridgeDto {
 
   @ApiProperty({
     example: 12.34,
-    required: true,
+    required: false,
     description: 'x축 좌표',
   })
   @IsNumber(
@@ -28,7 +28,7 @@ export class UpdateBridgeDto {
 
   @ApiProperty({
     example: 12.34,
-    required: true,
+    required: false,
     description: 'y축 좌표',
   })
   @IsNumber(
@@ -43,7 +43,7 @@ export class UpdateBridgeDto {
 
   @ApiProperty({
     example: 12.34,
-    required: true,
+    required: false,
     description: 'z축 좌표',
   })
   @IsNumber(
@@ -58,7 +58,7 @@ export class UpdateBridgeDto {
 
   @ApiProperty({
     example: 12.34,
-    required: true,
+    required: false,
     description: 'x축 회전',
   })
   @IsNumber(
@@ -73,7 +73,7 @@ export class UpdateBridgeDto {
 
   @ApiProperty({
     example: 12.34,
-    required: true,
+    required: false,
     description: 'y축 회전',
   })
   @IsNumber(
@@ -88,7 +88,7 @@ export class UpdateBridgeDto {
 
   @ApiProperty({
     example: 12.34,
-    required: true,
+    required: false,
     description: 'z축 회전',
   })
   @IsNumber(

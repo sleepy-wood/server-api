@@ -34,7 +34,7 @@ export class SleepController {
   @ApiOperation({ summary: '수면 생성' })
   @HttpCode(StatusCodes.OK)
   @Post()
-  async create(@Req() req: I.RequestWithUser, @Body() body: any) {
+  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateSleepDto) {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Sleep>>{
       result: true,
@@ -45,7 +45,7 @@ export class SleepController {
   @ApiOperation({ summary: '수면 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()
-  async findAll(@Req() req: I.RequestWithUser, @Query() query: any) {
+  async findAll(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
     if (!req.user) throw new HttpException('NO_USER');
     const [rows, count] = await this.sleepService.findAll(req, query);
     return <I.RowResponse<E.Sleep>>{
@@ -87,8 +87,9 @@ export class SleepController {
   })
   @HttpCode(StatusCodes.OK)
   @Put(':id')
-  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: any) {
+  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: D.UpdateSleepDto) {
     if (!req.user) throw new HttpException('NO_USER');
+    await this.sleepService.update(req, +id, body);
     return <I.BasicResponse<boolean>>{
       result: true,
     };
@@ -108,6 +109,7 @@ export class SleepController {
   @Delete(':id')
   async remove(@Req() req: I.RequestWithUser, @Param('id') id: string) {
     if (!req.user) throw new HttpException('NO_USER');
+    await this.sleepService.remove(req, +id);
     return <I.BasicResponse<boolean>>{
       result: true,
     };
