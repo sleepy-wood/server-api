@@ -32,10 +32,16 @@ export class AuthController {
   @HttpCode(StatusCodes.OK)
   @Post('login/temp')
   async loginTemp(): Promise<any> {
+    const user = await this.user.findOne({ where: { id: 1 } });
+    if (!user) throw new HttpException('USER_VALIDATION');
+    const [token, error] = this.jwtService.getJWTToken(user);
+    if (error) throw error;
+
     return {
       result: true,
       data: {
-        token: 'token',
+        token,
+        user,
       },
     };
   }
