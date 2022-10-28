@@ -26,6 +26,7 @@ export class Bridge {
 
   @ApiProperty()
   @Column({
+    type: 'float',
     nullable: false,
     comment: 'x 좌표',
   })
@@ -33,6 +34,7 @@ export class Bridge {
 
   @ApiProperty()
   @Column({
+    type: 'float',
     nullable: false,
     comment: 'y 좌표',
   })
@@ -40,6 +42,7 @@ export class Bridge {
 
   @ApiProperty()
   @Column({
+    type: 'float',
     nullable: false,
     comment: 'z 좌표',
   })
@@ -47,6 +50,7 @@ export class Bridge {
 
   @ApiProperty()
   @Column({
+    type: 'float',
     nullable: false,
     comment: 'x 회전',
   })
@@ -54,6 +58,7 @@ export class Bridge {
 
   @ApiProperty()
   @Column({
+    type: 'float',
     nullable: false,
     comment: 'y 회전',
   })
@@ -61,6 +66,7 @@ export class Bridge {
 
   @ApiProperty()
   @Column({
+    type: 'float',
     nullable: false,
     comment: 'z 회전',
   })
