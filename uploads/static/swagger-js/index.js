@@ -41,7 +41,7 @@ const init = function () {
     };
 
     sort();
-  }, 100);
+  }, 1000);
 };
 
 if (
