@@ -36,7 +36,7 @@ import { HttpException } from '../exceptions';
 export class TreeController {
   constructor(private readonly treeService: TreeService) {}
 
-  @ApiOperation({ summary: '다리 생성' })
+  @ApiOperation({ summary: '나무 생성' })
   @HttpCode(StatusCodes.OK)
   @Post()
   async create(@Req() req: I.RequestWithUser, @Body() body: any) {
@@ -47,7 +47,7 @@ export class TreeController {
     };
   }
 
-  @ApiOperation({ summary: '다리 목록 조회' })
+  @ApiOperation({ summary: '나무 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()
   async findAll(@Req() req: I.RequestWithUser, @Query() query: any) {
@@ -60,10 +60,10 @@ export class TreeController {
     };
   }
 
-  @ApiOperation({ summary: '다리 상세조회' })
+  @ApiOperation({ summary: '나무 상세조회' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '나무 아이디',
     required: true,
     schema: {
       type: 'string',
@@ -80,10 +80,10 @@ export class TreeController {
     };
   }
 
-  @ApiOperation({ summary: '다리 수정' })
+  @ApiOperation({ summary: '나무 수정' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '나무 아이디',
     required: true,
     schema: {
       type: 'string',
@@ -100,10 +100,10 @@ export class TreeController {
     };
   }
 
-  @ApiOperation({ summary: '다리 삭제' })
+  @ApiOperation({ summary: '나무 삭제' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '나무 아이디',
     required: true,
     schema: {
       type: 'string',

@@ -36,7 +36,7 @@ import { HttpException } from '../exceptions';
 export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
-  @ApiOperation({ summary: '다리 생성' })
+  @ApiOperation({ summary: '아이템 생성' })
   @HttpCode(StatusCodes.OK)
   @Post()
   async create(@Req() req: I.RequestWithUser, @Body() body: any) {
@@ -47,7 +47,7 @@ export class ItemController {
     };
   }
 
-  @ApiOperation({ summary: '다리 목록 조회' })
+  @ApiOperation({ summary: '아이템 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()
   async findAll(@Req() req: I.RequestWithUser, @Query() query: any) {
@@ -60,10 +60,10 @@ export class ItemController {
     };
   }
 
-  @ApiOperation({ summary: '다리 상세조회' })
+  @ApiOperation({ summary: '아이템 상세조회' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '아이템 아이디',
     required: true,
     schema: {
       type: 'string',
@@ -80,10 +80,10 @@ export class ItemController {
     };
   }
 
-  @ApiOperation({ summary: '다리 수정' })
+  @ApiOperation({ summary: '아이템 수정' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '아이템 아이디',
     required: true,
     schema: {
       type: 'string',
@@ -100,10 +100,10 @@ export class ItemController {
     };
   }
 
-  @ApiOperation({ summary: '다리 삭제' })
+  @ApiOperation({ summary: '아이템 삭제' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '아이템 아이디',
     required: true,
     schema: {
       type: 'string',
