@@ -8,10 +8,11 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  OneToOne,
   JoinColumn,
 } from 'typeorm';
 
-import { Land, TreeDecoration, User } from '..';
+import { Land, TreeDecoration, TreeFlatFrequency, User } from '..';
 
 @Entity()
 export class Tree {
@@ -50,6 +51,12 @@ export class Tree {
   @ApiProperty()
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
+
+  @ApiProperty({ type: () => TreeFlatFrequency })
+  @OneToOne(() => TreeFlatFrequency, (treeFlatFrequency) => treeFlatFrequency.tree, {
+    nullable: false,
+  })
+  treeFlatFrequency: TreeFlatFrequency;
 
   @ApiProperty({ type: () => [TreeDecoration] })
   @OneToMany(() => TreeDecoration, (treeDecoration) => treeDecoration.tree, {

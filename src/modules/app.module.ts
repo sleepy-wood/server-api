@@ -19,8 +19,6 @@ import * as SCH from '../schedulers';
 import * as U from '../utils';
 import { HttpExceptionFilter } from '../exceptions';
 
-const synchronize = false; // never use this in production
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -54,14 +52,18 @@ const synchronize = false; // never use this in production
           timezone: '+09:00',
           charset: 'utf8mb4_unicode_ci',
           autoLoadEntities: true,
-          synchronize, // never use this in production
+          synchronize: false, // never use this in production
         };
       },
       dataSourceFactory: async (options) => {
         const dataSource = await new DataSource(options).initialize();
         const { manager } = dataSource;
 
-        if (synchronize) {
+        const users = await manager.find(E.User, {
+          take: 1,
+        });
+
+        if (users.length === 0) {
           const user = new E.User();
           user.nickname = 'sampleUser';
           user.password = U.generateHash('1234');

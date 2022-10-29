@@ -7,9 +7,10 @@ import {
   PrimaryGeneratedColumn,
   Column,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 
-import { TreeMinMax } from '..';
+import { Tree, TreeMinMax } from '..';
 
 @Entity()
 export class TreeFlatFrequency {
@@ -49,6 +50,10 @@ export class TreeFlatFrequency {
   scale: number;
 
   @ApiProperty()
+  @Column({ nullable: false })
+  treeId: number;
+
+  @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
@@ -59,6 +64,12 @@ export class TreeFlatFrequency {
   @ApiProperty()
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
+
+  @ApiProperty({ type: () => Tree })
+  @OneToOne(() => Tree, (tree) => tree.treeFlatFrequency, {
+    nullable: false,
+  })
+  tree: Tree;
 
   @ApiProperty({ type: () => [TreeMinMax] })
   @OneToMany(() => TreeMinMax, (treeMinMax) => treeMinMax.treeFlatFrequency, {

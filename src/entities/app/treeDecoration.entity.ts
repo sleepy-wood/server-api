@@ -20,7 +20,7 @@ export class TreeDecoration {
 
   @ApiProperty()
   @Column({ nullable: false })
-  landId: number;
+  treeId: number;
 
   @ApiProperty()
   @Column({ nullable: false })
@@ -42,7 +42,7 @@ export class TreeDecoration {
   @ManyToOne(() => Tree, (tree) => tree.treeDecorations, {
     nullable: false,
   })
-  @JoinColumn({ name: 'landId' })
+  @JoinColumn({ name: 'treeId' })
   tree: Tree;
 
   @ApiProperty({ type: () => User })
