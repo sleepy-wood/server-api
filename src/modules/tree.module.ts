@@ -8,9 +8,16 @@ import * as MW from '../middlewares';
 import * as S from '../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.Tree]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
-  exports: [TypeOrmModule, S.TreeService],
-  providers: [S.TreeService],
+  imports: [
+    TypeOrmModule.forFeature([E.Tree]),
+    TypeOrmModule.forFeature([E.TreeDecoration]),
+    TypeOrmModule.forFeature([E.TreeFlatFrequency]),
+    TypeOrmModule.forFeature([E.TreeMinMax]),
+    forwardRef(() => M.UserModule),
+    forwardRef(() => M.UtilModule),
+  ],
+  exports: [TypeOrmModule, S.TreeService, S.TreeDecorationService, S.TreeFlatFrequencyService, S.TreeMinMaxService],
+  providers: [S.TreeService, S.TreeDecorationService, S.TreeFlatFrequencyService, S.TreeMinMaxService],
   controllers: [C.TreeController],
 })
 export class TreeModule implements NestModule {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Repository, QueryRunner } from 'typeorm';
 
 import * as D from '../dtos';
 import * as E from '../entities';
@@ -23,6 +23,18 @@ export class BridgeLandService {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });
+  }
+
+  async bulkCreate(queryRunner: QueryRunner, fromLandId: number, toLandId: number, bridgeId: number): Promise<void> {
+    await queryRunner.manager
+      .save(E.BridgeLand, [
+        { bridgeId, landId: fromLandId },
+        { bridgeId, landId: toLandId },
+      ])
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.BridgeLand[], number]> {

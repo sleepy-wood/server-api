@@ -5,7 +5,7 @@ export class CreateLandDto {
   @ApiProperty({
     example: 1,
     required: true,
-    description: 'Land Id',
+    description: 'Unity Land Id',
   })
   @IsNumber(
     {
@@ -15,7 +15,7 @@ export class CreateLandDto {
     { message: 'Land Id는 숫자여야 해요.' },
   )
   @IsNotEmpty({ message: 'Land Id는 필수 입력 항목이에요.' })
-  readonly landId: number;
+  readonly unityLandId: number;
 
   @ApiProperty({
     example: 12.34,

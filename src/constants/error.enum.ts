@@ -5,6 +5,10 @@ export const ErrorCodes = <const>{
     message: '처리 중 오류가 발생했어요.',
     status: StatusCodes.INTERNAL_SERVER_ERROR,
   },
+  TRANSACTION_ERROR: {
+    message: '트랜잭션 처리 중 오류가 발생했어요.',
+    status: StatusCodes.INTERNAL_SERVER_ERROR,
+  },
   UNDEFINED_ERROR: {
     message: '알 수 없는 오류가 발생했어요.',
     status: StatusCodes.INTERNAL_SERVER_ERROR,

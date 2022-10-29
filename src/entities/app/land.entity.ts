@@ -22,9 +22,9 @@ export class Land {
   @ApiProperty()
   @Column({
     nullable: false,
-    comment: 'Land Id',
+    comment: 'Unity Land Id',
   })
-  landId: number;
+  unityLandId: number;
 
   @ApiProperty()
   @Column({

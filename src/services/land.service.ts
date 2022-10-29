@@ -18,10 +18,20 @@ export class LandService {
 
   async create(req: I.RequestWithUser, body: D.CreateLandDto): Promise<E.Land> {
     const land = new E.Land();
-    const { landId, positionX, positionY, positionZ, scaleX, scaleY, scaleZ, eulerAngleX, eulerAngleY, eulerAngleZ } =
-      body;
+    const {
+      unityLandId,
+      positionX,
+      positionY,
+      positionZ,
+      scaleX,
+      scaleY,
+      scaleZ,
+      eulerAngleX,
+      eulerAngleY,
+      eulerAngleZ,
+    } = body;
 
-    land.landId = landId;
+    land.unityLandId = unityLandId;
     land.positionX = positionX;
     land.positionY = positionY;
     land.positionZ = positionZ;
@@ -53,6 +63,7 @@ export class LandService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
+        relations: ['bridgeLand', 'bridgeLand.bridge'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -72,10 +83,20 @@ export class LandService {
     if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
 
     const land = new E.Land();
-    const { landId, positionX, positionY, positionZ, scaleX, scaleY, scaleZ, eulerAngleX, eulerAngleY, eulerAngleZ } =
-      body;
+    const {
+      unityLandId,
+      positionX,
+      positionY,
+      positionZ,
+      scaleX,
+      scaleY,
+      scaleZ,
+      eulerAngleX,
+      eulerAngleY,
+      eulerAngleZ,
+    } = body;
 
-    landId && (land.landId = landId);
+    unityLandId && (land.unityLandId = unityLandId);
     positionX && (land.positionX = positionX);
     positionY && (land.positionY = positionY);
     positionZ && (land.positionZ = positionZ);

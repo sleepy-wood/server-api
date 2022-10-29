@@ -8,9 +8,14 @@ import * as MW from '../middlewares';
 import * as S from '../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.Bridge]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
-  exports: [TypeOrmModule, S.BridgeService],
-  providers: [S.BridgeService],
+  imports: [
+    TypeOrmModule.forFeature([E.Bridge]),
+    TypeOrmModule.forFeature([E.BridgeLand]),
+    forwardRef(() => M.UserModule),
+    forwardRef(() => M.UtilModule),
+  ],
+  exports: [TypeOrmModule, S.BridgeService, S.BridgeLandService],
+  providers: [S.BridgeService, S.BridgeLandService],
   controllers: [C.BridgeController],
 })
 export class BridgeModule implements NestModule {

@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 
 import * as D from '../dtos';
 import * as E from '../entities';
 import * as I from '../interfaces';
+import * as S from '../services';
 import * as U from '../utils';
 import { HttpException } from '../exceptions';
 
@@ -14,11 +15,13 @@ export class BridgeService {
     private readonly dataSource: DataSource,
     @InjectRepository(E.Bridge)
     private readonly bridge: Repository<E.Bridge>,
+    @Inject(forwardRef(() => S.BridgeLandService))
+    private readonly bridgeLandService: S.BridgeLandService,
   ) {}
 
   async create(req: I.RequestWithUser, body: D.CreateBridgeDto): Promise<E.Bridge> {
     const bridge = new E.Bridge();
-    const { name, positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = body;
+    const { fromLandId, toLandId, name, positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = body;
 
     bridge.name = name;
     bridge.positionX = positionX;
@@ -29,10 +32,21 @@ export class BridgeService {
     bridge.rotationZ = rotationZ;
     bridge.userId = req.user.id;
 
-    return this.bridge.save(bridge).catch((err) => {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await queryRunner.manager.save(E.Bridge, bridge);
+      await this.bridgeLandService.bulkCreate(queryRunner, fromLandId, toLandId, result.id);
+      return result;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
       U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+      throw new HttpException('TRANSACTION_ERROR');
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Bridge[], number]> {

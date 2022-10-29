@@ -3,6 +3,36 @@ import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateBridgeDto {
   @ApiProperty({
+    example: 1,
+    required: true,
+    description: '다리로 연결할 Land Id',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '다리로 연결할 Land Id는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '다리로 연결할 Land Id는 필수 입력 항목이에요.' })
+  readonly fromLandId: number;
+
+  @ApiProperty({
+    example: 2,
+    required: true,
+    description: '다리로 연결할 Land Id',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '다리로 연결할 Land Id는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '다리로 연결할 Land Id는 필수 입력 항목이에요.' })
+  readonly toLandId: number;
+
+  @ApiProperty({
     example: 'Bridge',
     required: true,
     description: '다리 이름',
