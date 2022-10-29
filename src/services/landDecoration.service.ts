@@ -19,6 +19,33 @@ export class LandDecorationService {
   async create(req: I.RequestWithUser, body: D.CreateLandDecorationDto): Promise<E.LandDecoration> {
     const landDecoration = new E.LandDecoration();
 
+    const {
+      path,
+      localPositionX,
+      localPositionY,
+      localPositionZ,
+      localScaleX,
+      localScaleY,
+      localScaleZ,
+      localEulerAngleX,
+      localEulerAngleY,
+      localEulerAngleZ,
+      landId,
+    } = body;
+
+    landDecoration.path = path;
+    landDecoration.localPositionX = localPositionX;
+    landDecoration.localPositionY = localPositionY;
+    landDecoration.localPositionZ = localPositionZ;
+    landDecoration.localScaleX = localScaleX;
+    landDecoration.localScaleY = localScaleY;
+    landDecoration.localScaleZ = localScaleZ;
+    landDecoration.localEulerAngleX = localEulerAngleX;
+    landDecoration.localEulerAngleY = localEulerAngleY;
+    landDecoration.localEulerAngleZ = localEulerAngleZ;
+    landDecoration.landId = landId;
+    landDecoration.userId = req.user.id;
+
     return this.landDecoration.save(landDecoration).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');

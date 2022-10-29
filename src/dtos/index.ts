@@ -1,8 +1,6 @@
 //@index('./**/*.ts', f => f.path !== `./index` ? `export * from '${f.path}';` : "")
 export * from './bridge/create-bridge.dto';
-export * from './bridge/create-bridgeLand.dto';
 export * from './bridge/update-bridge.dto';
-export * from './bridge/update-bridgeLand.dto';
 export * from './common/ListQuery.dto';
 export * from './item/create-item.dto';
 export * from './item/create-itemType.dto';

@@ -16,12 +16,12 @@ import * as S from '../services';
   ],
   exports: [TypeOrmModule, S.LandService, S.LandDecorationService],
   providers: [S.LandService, S.LandDecorationService],
-  controllers: [C.LandController],
+  controllers: [C.LandController, C.LandDecorationDecorationController],
 })
 export class LandModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(MW.AuthMiddleware).forRoutes({
-      path: 'v1/lands*',
+      path: 'v1/land*',
       method: RequestMethod.ALL,
     });
   }
