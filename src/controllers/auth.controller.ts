@@ -57,6 +57,18 @@ export class AuthController {
     };
   }
 
+  @ApiOperation({ summary: '애플 로그인' })
+  @HttpCode(StatusCodes.OK)
+  @Post('login/apple')
+  async loginApple(): Promise<any> {
+    return {
+      result: true,
+      data: {
+        token: 'token',
+      },
+    };
+  }
+
   @ApiOperation({ summary: '카카오 로그인' })
   @HttpCode(StatusCodes.OK)
   @Post('login/kakao')
