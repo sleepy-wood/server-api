@@ -23,11 +23,11 @@ export class CreateSleepDto {
   readonly endDate: Date;
 
   @ApiProperty({
-    enum: I.SleepType,
-    example: I.SleepType.InBed,
+    enum: [0, 1, 2, 3, 4, 5],
+    example: 0,
     default: I.SleepType.InBed,
     required: true,
-    description: '선호 성별',
+    description: '수면 유형',
   })
   @IsEnum(I.SleepType, { message: '수면 유형이 올바르지 않아요.' })
   @IsNotEmpty({ message: '수면 유형은 필수 입력 항목이에요.' })

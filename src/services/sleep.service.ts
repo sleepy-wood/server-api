@@ -18,10 +18,12 @@ export class SleepService {
 
   async create(req: I.RequestWithUser, body: D.CreateSleepDto): Promise<E.Sleep> {
     const sleep = new E.Sleep();
-    const { startDate, endDate } = body;
+    const { startDate, endDate, type } = body;
 
     sleep.startDate = startDate;
     sleep.endDate = endDate;
+    sleep.type = type;
+    sleep.userId = req.user.id;
 
     return this.sleep.save(sleep).catch((err) => {
       U.logger.error(err);
@@ -62,10 +64,11 @@ export class SleepService {
     if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
 
     const sleep = new E.Sleep();
-    const { startDate, endDate } = body;
+    const { startDate, endDate, type } = body;
 
     startDate && (sleep.startDate = startDate);
     endDate && (sleep.endDate = endDate);
+    type && (sleep.type = type);
 
     await this.sleep.update(id, sleep);
   }

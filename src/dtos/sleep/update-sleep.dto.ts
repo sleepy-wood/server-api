@@ -23,8 +23,8 @@ export class UpdateSleepDto {
   readonly endDate?: Date;
 
   @ApiProperty({
-    enum: I.SleepType,
-    example: I.SleepType.InBed,
+    enum: [0, 1, 2, 3, 4, 5],
+    example: 0,
     default: I.SleepType.InBed,
     required: true,
     description: '수면 유형',

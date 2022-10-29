@@ -85,6 +85,31 @@ export class LandDecorationService {
     if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
 
     const landDecoration = new E.LandDecoration();
+    const {
+      path,
+      localPositionX,
+      localPositionY,
+      localPositionZ,
+      localScaleX,
+      localScaleY,
+      localScaleZ,
+      localEulerAngleX,
+      localEulerAngleY,
+      localEulerAngleZ,
+      landId,
+    } = body;
+
+    path && (landDecoration.path = path);
+    localPositionX && (landDecoration.localPositionX = localPositionX);
+    localPositionY && (landDecoration.localPositionY = localPositionY);
+    localPositionZ && (landDecoration.localPositionZ = localPositionZ);
+    localScaleX && (landDecoration.localScaleX = localScaleX);
+    localScaleY && (landDecoration.localScaleY = localScaleY);
+    localScaleZ && (landDecoration.localScaleZ = localScaleZ);
+    localEulerAngleX && (landDecoration.localEulerAngleX = localEulerAngleX);
+    localEulerAngleY && (landDecoration.localEulerAngleY = localEulerAngleY);
+    localEulerAngleZ && (landDecoration.localEulerAngleZ = localEulerAngleZ);
+    landId && (landDecoration.landId = landId);
 
     await this.landDecoration.update(id, landDecoration);
   }
