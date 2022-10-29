@@ -16,29 +16,14 @@ export class UserService {
     private readonly user: Repository<E.User>,
   ) {}
 
-  create(createUserDto: D.CreateUserDto) {
-    return 'This action adds a new giver';
-  }
-
-  findAll() {
-    return `This action returns all giver`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} giver`;
-  }
-
-  update(id: number, updateUserDto: D.UpdateUserDto) {
-    return `This action updates a #${id} giver`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} giver`;
-  }
-
-  async findOrCreate(id: number, userType: I.UserType): Promise<E.User> {
-    const user = await this.user.findOne({ where: { id } });
-
-    return user;
+  async findOne(req: I.RequestWithUser): Promise<E.User> {
+    return this.user
+      .findOne({
+        where: { id: req.user.id, deletedAt: null },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 }

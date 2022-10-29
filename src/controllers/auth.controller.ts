@@ -78,30 +78,6 @@ export class AuthController {
     };
   }
 
-  @ApiOperation({
-    summary: 'SMS 인증 및 로그인',
-    description: 'SMS 인증을 통해 JWT를 발급 받아 로그인해요.',
-  })
-  @HttpCode(StatusCodes.OK)
-  @Post('signup/sms')
-  async verifySMS(@Body() body: any): Promise<any> {
-    const user = await this.userService.findOrCreate(body.hp, body.userType);
-
-    if (!user) throw new HttpException('USER_VALIDATION');
-
-    const [token, error] = this.jwtService.getJWTToken(user);
-
-    if (error) throw error;
-
-    return {
-      result: true,
-      data: {
-        token,
-        user,
-      },
-    };
-  }
-
   @ApiOperation({ summary: '리프래쉬 토큰 발급' })
   @ApiBearerAuth()
   @HttpCode(StatusCodes.OK)
