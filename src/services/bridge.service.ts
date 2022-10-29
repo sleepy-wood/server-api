@@ -15,21 +15,31 @@ export class BridgeService {
     private readonly dataSource: DataSource,
     @InjectRepository(E.Bridge)
     private readonly bridge: Repository<E.Bridge>,
-    @Inject(forwardRef(() => S.BridgeLandService))
-    private readonly bridgeLandService: S.BridgeLandService,
+    @Inject(forwardRef(() => S.BridgeInfoService))
+    private readonly bridgeInfoService: S.BridgeInfoService,
   ) {}
 
   async create(req: I.RequestWithUser, body: D.CreateBridgeDto): Promise<E.Bridge> {
     const bridge = new E.Bridge();
-    const { fromLandId, toLandId, name, positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = body;
+    const {
+      fromLandId,
+      toLandId,
+      name,
+      bridgePositionX,
+      bridgePositionY,
+      bridgePositionZ,
+      bridgeRotationX,
+      bridgeRotationY,
+      bridgeRotationZ,
+    } = body;
 
     bridge.name = name;
-    bridge.positionX = positionX;
-    bridge.positionY = positionY;
-    bridge.positionZ = positionZ;
-    bridge.rotationX = rotationX;
-    bridge.rotationY = rotationY;
-    bridge.rotationZ = rotationZ;
+    bridge.bridgePositionX = bridgePositionX;
+    bridge.bridgePositionY = bridgePositionY;
+    bridge.bridgePositionZ = bridgePositionZ;
+    bridge.bridgeRotationX = bridgeRotationX;
+    bridge.bridgeRotationY = bridgeRotationY;
+    bridge.bridgeRotationZ = bridgeRotationZ;
     bridge.userId = req.user.id;
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -38,7 +48,8 @@ export class BridgeService {
     await queryRunner.startTransaction();
     try {
       const result = await queryRunner.manager.save(E.Bridge, bridge);
-      await this.bridgeLandService.bulkCreate(queryRunner, fromLandId, toLandId, result.id);
+      await this.bridgeInfoService.create(queryRunner, fromLandId, toLandId, result.id);
+      await queryRunner.commitTransaction();
       return result;
     } catch (err) {
       await queryRunner.rollbackTransaction();
@@ -63,7 +74,7 @@ export class BridgeService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
-        relations: ['bridgeLand', 'bridgeLand.land'],
+        relations: ['bridgeInfo'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -75,7 +86,7 @@ export class BridgeService {
     return this.bridge
       .findOne({
         where: { id, userId: req.user.id, deletedAt: null },
-        relations: ['bridgeLand', 'bridgeLand.land'],
+        relations: ['bridgeInfo'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -88,15 +99,23 @@ export class BridgeService {
     if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
 
     const bridge = new E.Bridge();
-    const { name, positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = body;
+    const {
+      name,
+      bridgePositionX,
+      bridgePositionY,
+      bridgePositionZ,
+      bridgeRotationX,
+      bridgeRotationY,
+      bridgeRotationZ,
+    } = body;
 
     name && (bridge.name = name);
-    positionX && (bridge.positionX = positionX);
-    positionY && (bridge.positionY = positionY);
-    positionZ && (bridge.positionZ = positionZ);
-    rotationX && (bridge.rotationX = rotationX);
-    rotationY && (bridge.rotationY = rotationY);
-    rotationZ && (bridge.rotationZ = rotationZ);
+    bridgePositionX && (bridge.bridgePositionX = bridgePositionX);
+    bridgePositionY && (bridge.bridgePositionY = bridgePositionY);
+    bridgePositionZ && (bridge.bridgePositionZ = bridgePositionZ);
+    bridgeRotationX && (bridge.bridgeRotationX = bridgeRotationX);
+    bridgeRotationY && (bridge.bridgeRotationY = bridgeRotationY);
+    bridgeRotationZ && (bridge.bridgeRotationZ = bridgeRotationZ);
 
     await this.bridge.update(id, bridge);
   }

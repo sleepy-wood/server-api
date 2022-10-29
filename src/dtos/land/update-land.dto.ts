@@ -30,7 +30,7 @@ export class UpdateLandDto {
     { message: 'x축 좌표는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly positionX?: number;
+  readonly landPositionX?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -45,7 +45,7 @@ export class UpdateLandDto {
     { message: 'y축 좌표는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly positionY?: number;
+  readonly landPositionY?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -60,7 +60,7 @@ export class UpdateLandDto {
     { message: 'z축 좌표는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly positionZ?: number;
+  readonly landPositionZ?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -75,7 +75,7 @@ export class UpdateLandDto {
     { message: 'x축 크기는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly scaleX?: number;
+  readonly landScaleX?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -90,7 +90,7 @@ export class UpdateLandDto {
     { message: 'y축 크기는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly scaleY?: number;
+  readonly landScaleY?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -105,7 +105,7 @@ export class UpdateLandDto {
     { message: 'z축 크기는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly scaleZ?: number;
+  readonly landScaleZ?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -120,7 +120,7 @@ export class UpdateLandDto {
     { message: 'x축 오일러 각도는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly eulerAngleX?: number;
+  readonly landEulerAngleX?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -135,7 +135,7 @@ export class UpdateLandDto {
     { message: 'y축 오일러 각도는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly eulerAngleY?: number;
+  readonly landEulerAngleY?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -150,5 +150,5 @@ export class UpdateLandDto {
     { message: 'z축 오일러 각도는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly eulerAngleZ?: number;
+  readonly landEulerAngleZ?: number;
 }

@@ -20,27 +20,27 @@ export class LandService {
     const land = new E.Land();
     const {
       unityLandId,
-      positionX,
-      positionY,
-      positionZ,
-      scaleX,
-      scaleY,
-      scaleZ,
-      eulerAngleX,
-      eulerAngleY,
-      eulerAngleZ,
+      landPositionX,
+      landPositionY,
+      landPositionZ,
+      landScaleX,
+      landScaleY,
+      landScaleZ,
+      landEulerAngleX,
+      landEulerAngleY,
+      landEulerAngleZ,
     } = body;
 
     land.unityLandId = unityLandId;
-    land.positionX = positionX;
-    land.positionY = positionY;
-    land.positionZ = positionZ;
-    land.scaleX = scaleX;
-    land.scaleY = scaleY;
-    land.scaleZ = scaleZ;
-    land.eulerAngleX = eulerAngleX;
-    land.eulerAngleY = eulerAngleY;
-    land.eulerAngleZ = eulerAngleZ;
+    land.landPositionX = landPositionX;
+    land.landPositionY = landPositionY;
+    land.landPositionZ = landPositionZ;
+    land.landScaleX = landScaleX;
+    land.landScaleY = landScaleY;
+    land.landScaleZ = landScaleZ;
+    land.landEulerAngleX = landEulerAngleX;
+    land.landEulerAngleY = landEulerAngleY;
+    land.landEulerAngleZ = landEulerAngleZ;
     land.userId = req.user.id;
 
     return this.land.save(land).catch((err) => {
@@ -63,7 +63,7 @@ export class LandService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
-        relations: ['bridgeLand', 'bridgeLand.bridge'],
+        relations: ['landDecorations'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -75,7 +75,7 @@ export class LandService {
     return this.land
       .findOne({
         where: { id, userId: req.user.id, deletedAt: null },
-        relations: ['bridgeLand', 'bridgeLand.bridge'],
+        relations: ['landDecorations'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -90,27 +90,27 @@ export class LandService {
     const land = new E.Land();
     const {
       unityLandId,
-      positionX,
-      positionY,
-      positionZ,
-      scaleX,
-      scaleY,
-      scaleZ,
-      eulerAngleX,
-      eulerAngleY,
-      eulerAngleZ,
+      landPositionX,
+      landPositionY,
+      landPositionZ,
+      landScaleX,
+      landScaleY,
+      landScaleZ,
+      landEulerAngleX,
+      landEulerAngleY,
+      landEulerAngleZ,
     } = body;
 
     unityLandId && (land.unityLandId = unityLandId);
-    positionX && (land.positionX = positionX);
-    positionY && (land.positionY = positionY);
-    positionZ && (land.positionZ = positionZ);
-    scaleX && (land.scaleX = scaleX);
-    scaleY && (land.scaleY = scaleY);
-    scaleZ && (land.scaleZ = scaleZ);
-    eulerAngleX && (land.eulerAngleX = eulerAngleX);
-    eulerAngleY && (land.eulerAngleY = eulerAngleY);
-    eulerAngleZ && (land.eulerAngleZ = eulerAngleZ);
+    landPositionX && (land.landPositionX = landPositionX);
+    landPositionY && (land.landPositionY = landPositionY);
+    landPositionZ && (land.landPositionZ = landPositionZ);
+    landScaleX && (land.landScaleX = landScaleX);
+    landScaleY && (land.landScaleY = landScaleY);
+    landScaleZ && (land.landScaleZ = landScaleZ);
+    landEulerAngleX && (land.landEulerAngleX = landEulerAngleX);
+    landEulerAngleY && (land.landEulerAngleY = landEulerAngleY);
+    landEulerAngleZ && (land.landEulerAngleZ = landEulerAngleZ);
 
     await this.land.update(id, land);
   }

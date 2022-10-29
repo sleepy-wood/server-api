@@ -24,7 +24,7 @@ export class UpdateBridgeDto {
     { message: 'x축 좌표는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly positionX?: number;
+  readonly bridgePositionX?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -39,7 +39,7 @@ export class UpdateBridgeDto {
     { message: 'y축 좌표는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly positionY?: number;
+  readonly bridgePositionY?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -54,7 +54,7 @@ export class UpdateBridgeDto {
     { message: 'z축 좌표는 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly positionZ?: number;
+  readonly bridgePositionZ?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -69,7 +69,7 @@ export class UpdateBridgeDto {
     { message: 'x축 회전은 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly rotationX?: number;
+  readonly bridgeRotationX?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -84,7 +84,7 @@ export class UpdateBridgeDto {
     { message: 'y축 회전은 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly rotationY?: number;
+  readonly bridgeRotationY?: number;
 
   @ApiProperty({
     example: 12.34,
@@ -99,5 +99,5 @@ export class UpdateBridgeDto {
     { message: 'z축 회전은 숫자여야 해요.' },
   )
   @IsOptional()
-  readonly rotationZ?: number;
+  readonly bridgeRotationZ?: number;
 }

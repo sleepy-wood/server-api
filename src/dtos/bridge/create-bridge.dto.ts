@@ -54,7 +54,7 @@ export class CreateBridgeDto {
     { message: 'x축 좌표는 숫자여야 해요.' },
   )
   @IsNotEmpty({ message: 'x축 좌표는 필수 입력 항목이에요.' })
-  readonly positionX: number;
+  readonly bridgePositionX: number;
 
   @ApiProperty({
     example: 12.34,
@@ -69,7 +69,7 @@ export class CreateBridgeDto {
     { message: 'y축 좌표는 숫자여야 해요.' },
   )
   @IsNotEmpty({ message: 'y축 좌표는 필수 입력 항목이에요.' })
-  readonly positionY: number;
+  readonly bridgePositionY: number;
 
   @ApiProperty({
     example: 12.34,
@@ -84,7 +84,7 @@ export class CreateBridgeDto {
     { message: 'z축 좌표는 숫자여야 해요.' },
   )
   @IsNotEmpty({ message: 'z축 좌표는 필수 입력 항목이에요.' })
-  readonly positionZ: number;
+  readonly bridgePositionZ: number;
 
   @ApiProperty({
     example: 12.34,
@@ -99,7 +99,7 @@ export class CreateBridgeDto {
     { message: 'x축 회전은 숫자여야 해요.' },
   )
   @IsNotEmpty({ message: 'x축 회전은 필수 입력 항목이에요.' })
-  readonly rotationX: number;
+  readonly bridgeRotationX: number;
 
   @ApiProperty({
     example: 12.34,
@@ -114,7 +114,7 @@ export class CreateBridgeDto {
     { message: 'y축 회전은 숫자여야 해요.' },
   )
   @IsNotEmpty({ message: 'y축 회전은 필수 입력 항목이에요.' })
-  readonly rotationY: number;
+  readonly bridgeRotationY: number;
 
   @ApiProperty({
     example: 12.34,
@@ -129,5 +129,5 @@ export class CreateBridgeDto {
     { message: 'z축 회전은 숫자여야 해요.' },
   )
   @IsNotEmpty({ message: 'z축 회전은 필수 입력 항목이에요.' })
-  readonly rotationZ: number;
+  readonly bridgeRotationZ: number;
 }

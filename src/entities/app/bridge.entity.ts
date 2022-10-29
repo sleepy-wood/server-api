@@ -6,12 +6,12 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  OneToMany,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
-import { BridgeLand, User } from '..';
+import { BridgeInfo, User } from '..';
 
 @Entity()
 export class Bridge {
@@ -32,7 +32,7 @@ export class Bridge {
     nullable: false,
     comment: 'x 좌표',
   })
-  positionX: number;
+  bridgePositionX: number;
 
   @ApiProperty()
   @Column({
@@ -40,7 +40,7 @@ export class Bridge {
     nullable: false,
     comment: 'y 좌표',
   })
-  positionY: number;
+  bridgePositionY: number;
 
   @ApiProperty()
   @Column({
@@ -48,7 +48,7 @@ export class Bridge {
     nullable: false,
     comment: 'z 좌표',
   })
-  positionZ: number;
+  bridgePositionZ: number;
 
   @ApiProperty()
   @Column({
@@ -56,7 +56,7 @@ export class Bridge {
     nullable: false,
     comment: 'x 회전',
   })
-  rotationX: number;
+  bridgeRotationX: number;
 
   @ApiProperty()
   @Column({
@@ -64,7 +64,7 @@ export class Bridge {
     nullable: false,
     comment: 'y 회전',
   })
-  rotationY: number;
+  bridgeRotationY: number;
 
   @ApiProperty()
   @Column({
@@ -72,7 +72,7 @@ export class Bridge {
     nullable: false,
     comment: 'z 회전',
   })
-  rotationZ: number;
+  bridgeRotationZ: number;
 
   @ApiProperty()
   @Column({ nullable: false })
@@ -90,13 +90,13 @@ export class Bridge {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => [BridgeLand] })
-  @OneToMany(() => BridgeLand, (bridgeLand) => bridgeLand.land, {
+  @ApiProperty({ type: () => [BridgeInfo] })
+  @OneToOne(() => BridgeInfo, (bridgeInfo) => bridgeInfo.bridge, {
     cascade: true,
     nullable: false,
     onDelete: 'CASCADE',
   })
-  bridgeLand: BridgeLand[];
+  bridgeInfo: BridgeInfo;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.sleeps, {

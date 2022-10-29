@@ -1,6 +1,6 @@
 // @index(['./**/*.ts'], f => `export * from '${f.path}';`)
 export * from './app/bridge.entity';
-export * from './app/bridgeLand.entity';
+export * from './app/bridgeInfo.entity';
 export * from './app/item.entity';
 export * from './app/itemType.entity';
 export * from './app/land.entity';

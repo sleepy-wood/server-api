@@ -5,15 +5,15 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  ManyToOne,
   JoinColumn,
   Column,
+  OneToOne,
 } from 'typeorm';
 
 import { Bridge, Land } from '..';
 
 @Entity()
-export class BridgeLand {
+export class BridgeInfo {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,7 +24,11 @@ export class BridgeLand {
 
   @ApiProperty()
   @Column({ nullable: false })
-  landId: number;
+  fromLandId: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  toLandId: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -39,16 +43,23 @@ export class BridgeLand {
   deletedAt: Date;
 
   @ApiProperty({ type: () => Bridge })
-  @ManyToOne(() => Bridge, (bridge) => bridge.bridgeLand, {
+  @OneToOne(() => Bridge, (bridge) => bridge.bridgeInfo, {
     nullable: false,
   })
   @JoinColumn({ name: 'bridgeId' })
   bridge: Bridge;
 
   @ApiProperty({ type: () => Land })
-  @ManyToOne(() => Land, (land) => land.bridgeLand, {
+  @OneToOne(() => Land, (land) => land.fromBridgeInfo, {
     nullable: false,
   })
-  @JoinColumn({ name: 'landId' })
-  land: Land;
+  @JoinColumn({ name: 'fromLandId' })
+  fromLand: Land;
+
+  @ApiProperty({ type: () => Land })
+  @OneToOne(() => Land, (land) => land.toBridgeInfo, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'toLandId' })
+  toLand: Land;
 }

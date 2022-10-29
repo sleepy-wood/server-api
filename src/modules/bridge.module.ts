@@ -10,12 +10,12 @@ import * as S from '../services';
 @Module({
   imports: [
     TypeOrmModule.forFeature([E.Bridge]),
-    TypeOrmModule.forFeature([E.BridgeLand]),
+    TypeOrmModule.forFeature([E.BridgeInfo]),
     forwardRef(() => M.UserModule),
     forwardRef(() => M.UtilModule),
   ],
-  exports: [TypeOrmModule, S.BridgeService, S.BridgeLandService],
-  providers: [S.BridgeService, S.BridgeLandService],
+  exports: [TypeOrmModule, S.BridgeService, S.BridgeInfoService],
+  providers: [S.BridgeService, S.BridgeInfoService],
   controllers: [C.BridgeController],
 })
 export class BridgeModule implements NestModule {

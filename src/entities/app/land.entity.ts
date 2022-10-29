@@ -9,9 +9,10 @@ import {
   OneToMany,
   JoinColumn,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 
-import { BridgeLand, User, LandDecoration, Tree } from '..';
+import { BridgeInfo, User, LandDecoration, Tree } from '..';
 
 @Entity()
 export class Land {
@@ -32,7 +33,7 @@ export class Land {
     nullable: false,
     comment: 'x 좌표',
   })
-  positionX: number;
+  landPositionX: number;
 
   @ApiProperty()
   @Column({
@@ -40,7 +41,7 @@ export class Land {
     nullable: false,
     comment: 'y 좌표',
   })
-  positionY: number;
+  landPositionY: number;
 
   @ApiProperty()
   @Column({
@@ -48,7 +49,7 @@ export class Land {
     nullable: false,
     comment: 'z 좌표',
   })
-  positionZ: number;
+  landPositionZ: number;
 
   @ApiProperty()
   @Column({
@@ -56,7 +57,7 @@ export class Land {
     nullable: false,
     comment: 'x 크기',
   })
-  scaleX: number;
+  landScaleX: number;
 
   @ApiProperty()
   @Column({
@@ -64,7 +65,7 @@ export class Land {
     nullable: false,
     comment: 'y 크기',
   })
-  scaleY: number;
+  landScaleY: number;
 
   @ApiProperty()
   @Column({
@@ -72,7 +73,7 @@ export class Land {
     nullable: false,
     comment: 'z 크기',
   })
-  scaleZ: number;
+  landScaleZ: number;
 
   @ApiProperty()
   @Column({
@@ -80,7 +81,7 @@ export class Land {
     nullable: false,
     comment: 'x 오일러 각도',
   })
-  eulerAngleX: number;
+  landEulerAngleX: number;
 
   @ApiProperty()
   @Column({
@@ -88,7 +89,7 @@ export class Land {
     nullable: false,
     comment: 'y 오일러 각도',
   })
-  eulerAngleY: number;
+  landEulerAngleY: number;
 
   @ApiProperty()
   @Column({
@@ -96,7 +97,7 @@ export class Land {
     nullable: false,
     comment: 'z 오일러 각도',
   })
-  eulerAngleZ: number;
+  landEulerAngleZ: number;
 
   @ApiProperty()
   @Column({ nullable: false })
@@ -114,13 +115,21 @@ export class Land {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => [BridgeLand] })
-  @OneToMany(() => BridgeLand, (bridgeLand) => bridgeLand.land, {
+  @ApiProperty({ type: () => BridgeInfo })
+  @OneToOne(() => BridgeInfo, (bridgeInfo) => bridgeInfo.fromLand, {
     cascade: true,
     nullable: false,
     onDelete: 'CASCADE',
   })
-  bridgeLand: BridgeLand[];
+  fromBridgeInfo: BridgeInfo;
+
+  @ApiProperty({ type: () => BridgeInfo })
+  @OneToOne(() => BridgeInfo, (bridgeInfo) => bridgeInfo.toLand, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  toBridgeInfo: BridgeInfo;
 
   @ApiProperty({ type: () => [LandDecoration] })
   @OneToMany(() => LandDecoration, (landDecoration) => landDecoration.land, {

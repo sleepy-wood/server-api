@@ -31,7 +31,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'x 좌표',
   })
-  positionX: number;
+  localPositionX: number;
 
   @ApiProperty()
   @Column({
@@ -39,7 +39,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'y 좌표',
   })
-  positionY: number;
+  localPositionY: number;
 
   @ApiProperty()
   @Column({
@@ -47,7 +47,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'z 좌표',
   })
-  positionZ: number;
+  localPositionZ: number;
 
   @ApiProperty()
   @Column({
@@ -55,7 +55,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'x 크기',
   })
-  scaleX: number;
+  localScaleX: number;
 
   @ApiProperty()
   @Column({
@@ -64,7 +64,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'y 크기',
   })
-  scaleY: number;
+  localScaleY: number;
 
   @ApiProperty()
   @Column({
@@ -72,7 +72,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'z 크기',
   })
-  scaleZ: number;
+  localScaleZ: number;
 
   @ApiProperty()
   @Column({
@@ -80,7 +80,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'x 오일러 각도',
   })
-  eulerAngleX: number;
+  localEulerAngleX: number;
 
   @ApiProperty()
   @Column({
@@ -88,7 +88,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'y 오일러 각도',
   })
-  eulerAngleY: number;
+  localEulerAngleY: number;
 
   @ApiProperty()
   @Column({
@@ -96,7 +96,7 @@ export class LandDecoration {
     nullable: false,
     comment: 'z 오일러 각도',
   })
-  eulerAngleZ: number;
+  localEulerAngleZ: number;
 
   @ApiProperty()
   @Column({ nullable: false })
