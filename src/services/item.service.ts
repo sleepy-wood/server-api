@@ -48,7 +48,7 @@ export class ItemService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Item> {
-    return this.item.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.item.findOne({ where: { id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

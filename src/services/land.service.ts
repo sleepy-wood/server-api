@@ -72,10 +72,15 @@ export class LandService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Land> {
-    return this.land.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+    return this.land
+      .findOne({
+        where: { id, userId: req.user.id, deletedAt: null },
+        relations: ['bridgeLand', 'bridgeLand.bridge'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateLandDto): Promise<void> {

@@ -51,7 +51,7 @@ export class SleepService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Sleep> {
-    return this.sleep.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
+    return this.sleep.findOne({ where: { id, userId: req.user.id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

@@ -47,7 +47,7 @@ export class TreeFlatFrequencyService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.TreeFlatFrequency> {
-    return this.treeFlatFrequency.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.treeFlatFrequency.findOne({ where: { id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

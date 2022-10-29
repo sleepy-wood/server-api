@@ -47,7 +47,7 @@ export class LandDecorationService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.LandDecoration> {
-    return this.landDecoration.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
+    return this.landDecoration.findOne({ where: { id, userId: req.user.id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

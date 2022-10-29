@@ -47,7 +47,7 @@ export class TreeMinMaxService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.TreeMinMax> {
-    return this.treeMinMax.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.treeMinMax.findOne({ where: { id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

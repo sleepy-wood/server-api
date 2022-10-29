@@ -59,7 +59,7 @@ export class BridgeLandService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.BridgeLand> {
-    return this.bridgeLand.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.bridgeLand.findOne({ where: { id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

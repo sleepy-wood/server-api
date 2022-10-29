@@ -72,10 +72,15 @@ export class BridgeService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Bridge> {
-    return this.bridge.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+    return this.bridge
+      .findOne({
+        where: { id, userId: req.user.id, deletedAt: null },
+        relations: ['bridgeLand', 'bridgeLand.land'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateBridgeDto): Promise<void> {

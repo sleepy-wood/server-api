@@ -47,7 +47,7 @@ export class ItemTypeService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.ItemType> {
-    return this.itemType.findOneBy({ id, deletedAt: null }).catch((err) => {
+    return this.itemType.findOne({ where: { id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

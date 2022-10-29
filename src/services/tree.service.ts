@@ -51,7 +51,7 @@ export class TreeService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Tree> {
-    return this.tree.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
+    return this.tree.findOne({ where: { id, userId: req.user.id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

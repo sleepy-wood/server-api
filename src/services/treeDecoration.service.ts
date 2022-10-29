@@ -47,7 +47,7 @@ export class TreeDecorationService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.TreeDecoration> {
-    return this.treeDecoration.findOneBy({ id, userId: req.user.id, deletedAt: null }).catch((err) => {
+    return this.treeDecoration.findOne({ where: { id, userId: req.user.id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });

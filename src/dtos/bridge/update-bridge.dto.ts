@@ -3,36 +3,6 @@ import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 export class UpdateBridgeDto {
   @ApiProperty({
-    example: 1,
-    required: true,
-    description: '다리로 연결할 Land Id',
-  })
-  @IsNumber(
-    {
-      allowInfinity: false,
-      allowNaN: false,
-    },
-    { message: '다리로 연결할 Land Id는 숫자여야 해요.' },
-  )
-  @IsOptional()
-  readonly fromLandId?: number;
-
-  @ApiProperty({
-    example: 2,
-    required: true,
-    description: '다리로 연결할 Land Id',
-  })
-  @IsNumber(
-    {
-      allowInfinity: false,
-      allowNaN: false,
-    },
-    { message: '다리로 연결할 Land Id는 숫자여야 해요.' },
-  )
-  @IsOptional()
-  readonly toLandId?: number;
-
-  @ApiProperty({
     example: 'Bridge',
     required: false,
     description: '다리 이름',
