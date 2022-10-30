@@ -57,7 +57,7 @@ export class DeviceToken {
   updatedAt: Date;
 
   @ApiProperty()
-  @DeleteDateColumn({ type: 'timestamp' })
+  @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 
   @ApiProperty({ type: () => User })

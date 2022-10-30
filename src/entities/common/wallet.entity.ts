@@ -16,6 +16,6 @@ export class Wallet {
   updatedAt: Date;
 
   @ApiProperty()
-  @DeleteDateColumn({ type: 'timestamp' })
+  @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 }
