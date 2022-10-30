@@ -22,6 +22,7 @@ export class TreeService {
 
     tree.name = name;
     tree.treeDay = treeDay;
+    tree.userId = req.user.id;
 
     return this.tree.save(tree).catch((err) => {
       U.logger.error(err);
@@ -43,6 +44,7 @@ export class TreeService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
+        relations: ['treeDecorations', 'treeFlatFrequency', 'treeFlatFrequency.treeMinMaxes'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -51,10 +53,15 @@ export class TreeService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Tree> {
-    return this.tree.findOne({ where: { id, userId: req.user.id, deletedAt: null } }).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+    return this.tree
+      .findOne({
+        where: { id, userId: req.user.id, deletedAt: null },
+        relations: ['treeDecorations', 'treeFlatFrequency', 'treeFlatFrequency.treeMinMaxes'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateTreeDto): Promise<void> {
