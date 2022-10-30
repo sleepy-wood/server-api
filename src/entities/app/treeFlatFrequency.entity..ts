@@ -27,7 +27,9 @@ export class TreeFlatFrequency {
 
   @ApiProperty()
   @Column({
-    type: 'float',
+    type: 'decimal',
+    scale: 16,
+    precision: 22,
     nullable: false,
     comment: '나무 기둥 길이',
   })
@@ -35,7 +37,9 @@ export class TreeFlatFrequency {
 
   @ApiProperty()
   @Column({
-    type: 'float',
+    type: 'decimal',
+    scale: 16,
+    precision: 22,
     nullable: false,
     comment: '나무 두께',
   })
@@ -43,7 +47,9 @@ export class TreeFlatFrequency {
 
   @ApiProperty()
   @Column({
-    type: 'float',
+    type: 'decimal',
+    scale: 16,
+    precision: 22,
     nullable: false,
     comment: '나무 크기',
   })
