@@ -9,7 +9,6 @@ import {
   OneToMany,
   JoinColumn,
   ManyToOne,
-  OneToOne,
 } from 'typeorm';
 
 import { BridgeInfo, User, LandDecoration, Tree } from '..';
@@ -116,7 +115,7 @@ export class Land {
   deletedAt: Date;
 
   @ApiProperty({ type: () => BridgeInfo })
-  @OneToOne(() => BridgeInfo, (bridgeInfo) => bridgeInfo.fromLand, {
+  @OneToMany(() => BridgeInfo, (bridgeInfo) => bridgeInfo.fromLand, {
     cascade: true,
     nullable: false,
     onDelete: 'CASCADE',
@@ -124,7 +123,7 @@ export class Land {
   fromBridgeInfo: BridgeInfo;
 
   @ApiProperty({ type: () => BridgeInfo })
-  @OneToOne(() => BridgeInfo, (bridgeInfo) => bridgeInfo.toLand, {
+  @OneToMany(() => BridgeInfo, (bridgeInfo) => bridgeInfo.toLand, {
     cascade: true,
     nullable: false,
     onDelete: 'CASCADE',

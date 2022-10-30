@@ -8,6 +8,7 @@ import {
   JoinColumn,
   Column,
   OneToOne,
+  ManyToOne,
 } from 'typeorm';
 
 import { Bridge, Land } from '..';
@@ -50,14 +51,14 @@ export class BridgeInfo {
   bridge: Bridge;
 
   @ApiProperty({ type: () => Land })
-  @OneToOne(() => Land, (land) => land.fromBridgeInfo, {
+  @ManyToOne(() => Land, (land) => land.fromBridgeInfo, {
     nullable: false,
   })
   @JoinColumn({ name: 'fromLandId' })
   fromLand: Land;
 
   @ApiProperty({ type: () => Land })
-  @OneToOne(() => Land, (land) => land.toBridgeInfo, {
+  @ManyToOne(() => Land, (land) => land.toBridgeInfo, {
     nullable: false,
   })
   @JoinColumn({ name: 'toLandId' })
