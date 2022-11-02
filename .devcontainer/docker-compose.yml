@@ -12,7 +12,7 @@ services:
       - ..:/workspace:cached
     command: sleep infinity
     environment:
-      MYSQL_DATABASE: sleepy_wood
+      MYSQL_DATABASE: sleepywood
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: mariadb
       MYSQL_HOST: db
@@ -34,7 +34,7 @@ services:
       - mariadb-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: mariadb
-      MYSQL_DATABASE: sleepy_wood
+      MYSQL_DATABASE: sleepywood
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: mariadb
 
