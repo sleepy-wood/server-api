@@ -73,6 +73,7 @@ import { HttpExceptionFilter } from '../exceptions';
           tempUser.type = I.UserType.Kakao;
 
           const [user] = await manager.save([tempUser]);
+          await U.saveCartAndWishList(manager, user);
           await U.saveLand(manager, user);
           await U.saveBridge(manager, user);
           await U.saveBridgeInfo(manager);
