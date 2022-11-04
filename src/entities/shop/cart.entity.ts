@@ -11,17 +11,13 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Product, User } from '..';
+import { CartItem, User } from '..';
 
 @Entity()
 export class Cart {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ApiProperty()
-  @Column({ nullable: false })
-  productId: number;
 
   @ApiProperty()
   @Column({ nullable: false })
@@ -46,9 +42,9 @@ export class Cart {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @ApiProperty({ type: () => [Product] })
-  @OneToMany(() => Product, (product) => product.cart, {
+  @ApiProperty({ type: () => [CartItem] })
+  @OneToMany(() => CartItem, (cartItem) => cartItem.cart, {
     nullable: false,
   })
-  products: Product[];
+  cartItems: CartItem[];
 }

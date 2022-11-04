@@ -6,22 +6,25 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
-  OneToMany,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 
-import { User, WishlistItem } from '..';
+import { Product, Wishlist } from '..';
 
 @Entity()
-export class Wishlist {
+export class WishlistItem {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty()
   @Column({ nullable: false })
-  userId: number;
+  productId: number;
+
+  @ApiProperty()
+  @Column({ nullable: false })
+  wishlistId: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -35,16 +38,17 @@ export class Wishlist {
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => User })
-  @OneToOne(() => User, (user) => user.wishlist, {
+  @ApiProperty({ type: () => Wishlist })
+  @ManyToOne(() => Wishlist, (wishlist) => wishlist.wishlistItems, {
     nullable: false,
   })
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  @JoinColumn({ name: 'wishlistId' })
+  wishlist: Wishlist;
 
-  @ApiProperty({ type: () => [WishlistItem] })
-  @OneToMany(() => WishlistItem, (wishlistItem) => wishlistItem.wishlist, {
+  @ApiProperty({ type: () => Product })
+  @ManyToOne(() => Product, (product) => product.wishlistItems, {
     nullable: false,
   })
-  wishlistItems: WishlistItem[];
+  @JoinColumn({ name: 'productId' })
+  product: Product;
 }
