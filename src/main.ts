@@ -14,7 +14,7 @@ import { performance } from 'perf_hooks';
 import * as Entities from './entities';
 import { TimeoutInterceptor } from './interceptors/timeout.interceptor';
 import { AppModule } from './modules/app.module';
-import { ClusterService } from './services/cluster.service';
+import { ClusterService } from './services';
 import { logger } from './utils/logger';
 
 declare const module: any;
