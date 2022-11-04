@@ -1,6 +1,16 @@
 import { EntityManager } from 'typeorm';
 import * as E from '../entities';
 
+export const saveCartAndWishList = async (manager: EntityManager, user: E.User): Promise<void> => {
+  const cart = new E.Cart();
+  const wishList = new E.Wishlist();
+
+  cart.userId = user.id;
+  wishList.userId = user.id;
+
+  await manager.save([cart, wishList]);
+};
+
 export const saveLand = async (manager: EntityManager, user: E.User): Promise<void> => {
   const land1 = new E.Land();
   land1.unityLandId = 1;
