@@ -15,3 +15,8 @@ export enum UserType {
   Guest = 'Guest',
   Kakao = 'Kakao',
 }
+
+export enum Payment {
+  Cash,
+  Card,
+}
