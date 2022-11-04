@@ -5,38 +5,22 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
   ManyToOne,
+  Column,
   JoinColumn,
 } from 'typeorm';
 
-import * as I from '../../interfaces';
-import * as U from '../../utils';
-import { OrderDetail, User } from '..';
+import { Product, User } from '..';
 
 @Entity()
-export class Order {
+export class Review {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty()
-  @Column({
-    nullable: false,
-    comment: '구매 금액',
-  })
-  amount: number;
-
-  @ApiProperty()
-  @Column({
-    default: I.Payment.Cash,
-    type: 'enum',
-    enum: [...U.getObjectValues(I.Payment)],
-    nullable: false,
-    comment: '결제 유형',
-  })
-  payment: number;
+  @Column({ nullable: false })
+  productId: number;
 
   @ApiProperty()
   @Column({ nullable: false })
@@ -54,14 +38,15 @@ export class Order {
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => [OrderDetail] })
-  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, {
+  @ApiProperty({ type: () => Product })
+  @ManyToOne(() => Product, (product) => product.reviews, {
     nullable: false,
   })
-  orderDetails: OrderDetail[];
+  @JoinColumn({ name: 'productId' })
+  product: Product;
 
   @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.orders, {
+  @ManyToOne(() => User, (user) => user.reviews, {
     nullable: false,
   })
   @JoinColumn({ name: 'userId' })

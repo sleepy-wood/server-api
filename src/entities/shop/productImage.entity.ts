@@ -6,17 +6,14 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 
-import * as I from '../../interfaces';
-import * as U from '../../utils';
-import { OrderDetail, User } from '..';
+import { Product } from '..';
 
 @Entity()
-export class Order {
+export class ProductImage {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,23 +21,42 @@ export class Order {
   @ApiProperty()
   @Column({
     nullable: false,
-    comment: '구매 금액',
+    comment: '생성된 파일이름',
   })
-  amount: number;
+  filename: string;
 
   @ApiProperty()
   @Column({
-    default: I.Payment.Cash,
-    type: 'enum',
-    enum: [...U.getObjectValues(I.Payment)],
     nullable: false,
-    comment: '결제 유형',
+    comment: '원래 파일이름',
   })
-  payment: number;
+  originalName: string;
+
+  @ApiProperty()
+  @Column({
+    unique: true,
+    nullable: false,
+    comment: '경로',
+  })
+  path: string;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '마임 타입',
+  })
+  mimeType: string;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '파일 사이즈',
+  })
+  size: number;
 
   @ApiProperty()
   @Column({ nullable: false })
-  userId: number;
+  productId: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -54,16 +70,10 @@ export class Order {
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => [OrderDetail] })
-  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, {
+  @ApiProperty({ type: () => Product })
+  @ManyToOne(() => Product, (product) => product.productImages, {
     nullable: false,
   })
-  orderDetails: OrderDetail[];
-
-  @ApiProperty({ type: () => User })
-  @ManyToOne(() => User, (user) => user.orders, {
-    nullable: false,
-  })
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  @JoinColumn({ name: 'productId' })
+  product: Product;
 }

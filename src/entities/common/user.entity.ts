@@ -12,7 +12,21 @@ import {
 
 import * as I from '../../interfaces';
 import * as U from '../../utils';
-import { AttachFile, Bridge, DeviceToken, Land, LandDecoration, Sleep, Tree, TreeDecoration } from '..';
+import {
+  AttachFile,
+  Bridge,
+  DeviceToken,
+  Land,
+  LandDecoration,
+  Sleep,
+  Tree,
+  TreeDecoration,
+  Cart,
+  Order,
+  Product,
+  Review,
+  Wishlist,
+} from '..';
 
 @Entity()
 export class User {
@@ -148,4 +162,14 @@ export class User {
     onDelete: 'CASCADE',
   })
   treeDecorations: TreeDecoration[];
+
+  cart: Cart;
+
+  wishlist: Wishlist;
+
+  orders: Order[];
+
+  products: Product[];
+
+  reviews: Review[];
 }
