@@ -114,15 +114,18 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
     .setDescription('<h4>슬리피우드 REST APIs</h4><h5>nestJS</h5><h5>written by PIYoung</h5>')
     .setVersion('1.0.0')
     .addServer(isDev ? `http://${localIp}:${port}` : 'https://team-buildup.shop')
+    // common
     .addTag('auth', '권한 REST APIs')
-    .addTag('bridges', '다리 REST APIs')
     .addTag('files', '파일 업로드 REST APIs')
+    .addTag('users', '사용자 REST APIs')
+    // app
+    .addTag('bridges', '다리 REST APIs')
     .addTag('items', '아이템 REST APIs')
     .addTag('lands', '랜드 REST APIs')
     .addTag('land-decorations', '랜드 데코레이션 REST APIs')
     .addTag('sleeps', '수면 REST APIs')
     .addTag('trees', '나무 REST APIs')
-    .addTag('users', '사용자 REST APIs')
+    // shop
     .addTag('carts', '쇼핑몰 장바구니 REST APIs')
     .addTag('orders', '쇼핑몰 주문 REST APIs')
     .addTag('products', '쇼핑몰 상품 REST APIs')
