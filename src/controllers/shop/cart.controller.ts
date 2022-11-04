@@ -31,7 +31,7 @@ import { HttpException } from '../../exceptions';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @ApiOperation({ summary: '다리 생성' })
+  @ApiOperation({ summary: '장바구니 생성' })
   @HttpCode(StatusCodes.OK)
   @Post()
   async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateCartDto) {
@@ -42,7 +42,7 @@ export class CartController {
     };
   }
 
-  @ApiOperation({ summary: '다리 목록 조회' })
+  @ApiOperation({ summary: '장바구니 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()
   async findAll(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
@@ -55,10 +55,10 @@ export class CartController {
     };
   }
 
-  @ApiOperation({ summary: '다리 상세조회' })
+  @ApiOperation({ summary: '장바구니 상세조회' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '장바구니 아이디',
     required: true,
     schema: {
       type: 'string',
@@ -75,10 +75,10 @@ export class CartController {
     };
   }
 
-  @ApiOperation({ summary: '다리 수정' })
+  @ApiOperation({ summary: '장바구니 수정' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '장바구니 아이디',
     required: true,
     schema: {
       type: 'string',
@@ -95,10 +95,10 @@ export class CartController {
     };
   }
 
-  @ApiOperation({ summary: '다리 삭제' })
+  @ApiOperation({ summary: '장바구니 삭제' })
   @ApiParam({
     name: 'id',
-    description: '다리 아이디',
+    description: '장바구니 아이디',
     required: true,
     schema: {
       type: 'string',

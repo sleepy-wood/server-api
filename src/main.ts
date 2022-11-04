@@ -123,6 +123,11 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
     .addTag('sleeps', '수면 REST APIs')
     .addTag('trees', '나무 REST APIs')
     .addTag('users', '사용자 REST APIs')
+    .addTag('carts', '쇼핑몰 장바구니 REST APIs')
+    .addTag('orders', '쇼핑몰 주문 REST APIs')
+    .addTag('products', '쇼핑몰 상품 REST APIs')
+    .addTag('reviews', '쇼핑몰 리뷰 REST APIs')
+    .addTag('wishlists', '쇼핑몰 관심 상품 REST APIs')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config, {
@@ -231,7 +236,7 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
     customJs: '/resources/swagger-js/index.js',
     swaggerOptions: {
       plugins: [SnippetGeneratorPlugin],
-      docExpansion: 'list', // "list"*, "full", "none"
+      docExpansion: 'none', // "list"*, "full", "none"
       persistAuthorization: true,
       requestSnippetsEnabled: true,
       requestSnippets: {
