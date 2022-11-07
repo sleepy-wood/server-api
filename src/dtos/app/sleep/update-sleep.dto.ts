@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsOptional } from 'class-validator';
 
-import * as I from '../../interfaces';
+import * as I from '../../../interfaces';
 
 export class UpdateSleepDto {
   @ApiProperty({
