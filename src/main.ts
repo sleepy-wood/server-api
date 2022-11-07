@@ -66,10 +66,10 @@ async function bootstrap() {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: [`'self'`],
-          imgSrc: [`'self'`, '*.jsdelivr.net', 'blob:', 'data:', 'validator.swagger.io'],
-          styleSrc: [`'self'`, '*.jsdelivr.net', `'unsafe-inline'`],
-          fontSrc: [`'self'`, '*.jsdelivr.net'],
-          scriptSrc: [`'self'`, '*.jsdelivr.net', `https: 'unsafe-inline'`, `'unsafe-eval'`],
+          imgSrc: [`'self'`, '*.googleapis.com', '*.jsdelivr.net', 'blob:', 'data:', 'validator.swagger.io'],
+          styleSrc: [`'self'`, '*.googleapis.com', '*.jsdelivr.net', `'unsafe-inline'`],
+          fontSrc: [`'self'`, '*.googleapis.com', '*.jsdelivr.net'],
+          scriptSrc: [`'self'`, '*.googleapis.com', '*.jsdelivr.net', `https: 'unsafe-inline'`, `'unsafe-eval'`],
         },
       },
     }),
