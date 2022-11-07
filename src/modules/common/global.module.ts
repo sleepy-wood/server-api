@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import { MorganInterceptor, MorganModule } from 'nest-morgan';
 
-import * as U from '../utils';
+import * as U from '../../utils';
 
 morgan.token('date', (req, res, tz) => {
   const timezone = 'Asia/Seoul';

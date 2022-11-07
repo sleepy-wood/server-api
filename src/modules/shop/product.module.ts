@@ -1,14 +1,19 @@
 import { forwardRef, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import * as C from '../controllers';
-import * as E from '../entities';
-import * as M from '../modules';
-import * as MW from '../middlewares';
-import * as S from '../services';
+import * as C from '../../controllers';
+import * as E from '../../entities';
+import * as M from '../../modules';
+import * as MW from '../../middlewares';
+import * as S from '../../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.Product]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
+  imports: [
+    TypeOrmModule.forFeature([E.Product]),
+    TypeOrmModule.forFeature([E.ProductImage]),
+    forwardRef(() => M.UserModule),
+    forwardRef(() => M.UtilModule),
+  ],
   exports: [TypeOrmModule, S.ProductService],
   providers: [S.ProductService],
   controllers: [C.ProductController],

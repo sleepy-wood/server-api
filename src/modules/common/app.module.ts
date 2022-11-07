@@ -12,12 +12,12 @@ import { Response } from 'express';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { join } from 'path';
 
-import * as E from '../entities';
-import * as I from '../interfaces';
-import * as M from '../modules';
-import * as SCH from '../schedulers';
-import * as U from '../utils';
-import { HttpExceptionFilter } from '../exceptions';
+import * as E from '../../entities';
+import * as I from '../../interfaces';
+import * as M from '../../modules';
+import * as SCH from '../../schedulers';
+import * as U from '../../utils';
+import { HttpExceptionFilter } from '../../exceptions';
 
 @Module({
   imports: [

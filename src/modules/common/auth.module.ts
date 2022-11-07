@@ -2,9 +2,9 @@ import { HttpModule } from '@nestjs/axios';
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import * as C from '../controllers';
-import * as E from '../entities';
-import * as M from '../modules';
+import * as C from '../../controllers';
+import * as E from '../../entities';
+import * as M from '../../modules';
 
 @Module({
   imports: [
