@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InsertResult, ObjectLiteral, Repository } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -27,7 +27,7 @@ export class FileService {
 
   async upload(req: I.RequestWithUser, files: Array<Express.Multer.File>, query: D.FileUploadQuery) {
     const fileList: Partial<E.AttachFile>[] = files.map((file) => ({
-      fileName: file.filename,
+      filename: file.filename,
       originalName: file.originalname,
       path: `/temp/${file.filename}`,
       mimeType: file.mimetype,
@@ -35,15 +35,11 @@ export class FileService {
       userId: req.user.id,
     }));
 
-    await this.attachFile.insert(fileList);
+    const { identifiers } = await this.attachFile.insert(fileList);
 
-    return <I.BasicResponse<File[]>>{
+    return <I.BasicResponse<ObjectLiteral[]>>{
       result: true,
-      data: files.map((file) => {
-        delete file.destination;
-        file.path = `/temp/${file.filename}`;
-        return file;
-      }),
+      data: identifiers,
     };
   }
 }
