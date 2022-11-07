@@ -1,4 +1,4 @@
-import { Controller, Post, UseInterceptors, UploadedFiles, HttpCode, Req } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFiles, HttpCode, Req, Query } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { path } from 'app-root-path';
@@ -7,6 +7,7 @@ import { Request } from 'express';
 import { diskStorage } from 'multer';
 import { join } from 'path';
 
+import * as D from '../../dtos';
 import * as I from '../../interfaces';
 import { StatusCodes } from '../../constants';
 import { HttpException } from '../../exceptions';
@@ -47,7 +48,7 @@ export class FileController {
           cb(null, join(path, 'uploads/temp'));
         },
         filename: (req: Request, file: Express.Multer.File, cb) => {
-          const ran = `sunflower_${randomBytes(16).toString('hex')}`;
+          const ran = `sleepywood_${randomBytes(16).toString('hex')}`;
           const arr = file.originalname.split('.');
           const ext = arr.length === 1 ? '' : '.' + arr[arr.length - 1];
           const fileName = Date.now() + '_' + ran + ext;
@@ -65,8 +66,12 @@ export class FileController {
   )
   @HttpCode(StatusCodes.OK)
   @Post('temp/upload')
-  async uploadFile(@Req() req: I.RequestWithUser, @UploadedFiles() files: Array<Express.Multer.File>) {
+  async uploadFile(
+    @Req() req: I.RequestWithUser,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Query() query: D.FileUploadQuery,
+  ) {
     if (!req.user) throw new HttpException('COMMON_ERROR');
-    return await this.fileService.upload(req, files);
+    return await this.fileService.upload(req, files, query);
   }
 }

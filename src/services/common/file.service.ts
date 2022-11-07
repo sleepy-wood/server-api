@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import * as D from '../../dtos';
 import * as E from '../../entities';
 import * as I from '../../interfaces';
 
@@ -20,9 +21,11 @@ export class FileService {
   constructor(
     @InjectRepository(E.AttachFile)
     private readonly attachFile: Repository<E.AttachFile>,
+    @InjectRepository(E.ProductImage)
+    private readonly productImage: Repository<E.ProductImage>,
   ) {}
 
-  async upload(req: I.RequestWithUser, files: Array<Express.Multer.File>) {
+  async upload(req: I.RequestWithUser, files: Array<Express.Multer.File>, query: D.FileUploadQuery) {
     const fileList: Partial<E.AttachFile>[] = files.map((file) => ({
       fileName: file.filename,
       originalName: file.originalname,
