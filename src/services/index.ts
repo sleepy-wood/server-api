@@ -15,6 +15,7 @@ export * from './common/cluster.service';
 export * from './common/file.service';
 export * from './common/jwt.service';
 export * from './common/user.service';
+export * from './common/util.service';
 export * from './shop/cart.service';
 export * from './shop/order.service';
 export * from './shop/product.service';

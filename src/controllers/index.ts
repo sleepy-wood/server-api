@@ -8,6 +8,7 @@ export * from './app/tree.controller';
 export * from './common/auth.controller';
 export * from './common/file.controller';
 export * from './common/user.controller';
+export * from './common/util.controller';
 export * from './shop/cart.controller';
 export * from './shop/order.controller';
 export * from './shop/product.controller';
