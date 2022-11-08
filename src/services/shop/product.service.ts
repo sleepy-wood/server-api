@@ -1,6 +1,9 @@
+import sharp from 'sharp';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, In } from 'typeorm';
+import { path } from 'app-root-path';
+import { join } from 'path';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -44,16 +47,42 @@ export class ProductService {
       for (const _attachFile of attachFiles) {
         const productImage = new E.ProductImage();
         const { filename, originalName, path: from, mimeType, size, type } = _attachFile;
-        const to = from.replace('/temp/', '/static/');
+        const serverTo = from.replace('/temp/', '/static/');
+        const clientTo = from.replace('/temp/', '/resources/');
 
-        U.moveFile(from, to);
+        U.moveFile(from, serverTo);
 
         productImage.filename = filename;
         productImage.originalName = originalName;
-        productImage.path = to;
+        productImage.path = clientTo;
         productImage.mimeType = mimeType;
         productImage.size = size;
         productImage.productId = result.id;
+
+        if (result.type === I.ProductType.Emoticon) {
+          const source = join(path, 'uploads', serverTo);
+          let i = 1;
+          for (const left of [0, 480, 960]) {
+            for (const top of [0, 480, 960]) {
+              const serverPath = source.replace('.png', `_${i}.png`);
+              const clientPath = clientTo.replace('.png', `_${i}.png`);
+              await sharp(source).extract({ left, top, width: 480, height: 480 }).toFile(serverPath);
+
+              const _productImage = new E.ProductImage();
+
+              _productImage.filename = filename;
+              _productImage.originalName = originalName;
+              _productImage.path = clientPath;
+              _productImage.mimeType = mimeType;
+              _productImage.size = size;
+              _productImage.productId = result.id;
+
+              saveData.push(_productImage);
+
+              i++;
+            }
+          }
+        }
 
         saveData.push(productImage);
       }
