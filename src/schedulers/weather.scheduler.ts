@@ -34,7 +34,8 @@ export class WeatherScheduler {
     private readonly httpService: HttpService,
   ) {}
 
-  @Cron('0 * * * *')
+  // @Cron('*/5 * * * * *')
+  @Cron('50 * * * *')
   async handleCron() {
     // You can use an environment variable provided by PM2 itself called NODE_APP_INSTANCE which requires PM2 2.5.
     const nodeProcess = this.configService.get<number>('NODE_APP_INSTANCE');
