@@ -62,6 +62,7 @@ export class OrderService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
+        relations: ['orderDetails', 'orderDetails.product', 'orderDetails.product.productImages'],
       })
       .catch((err) => {
         U.logger.error(err);
