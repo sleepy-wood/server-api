@@ -1,4 +1,5 @@
 import Redis from 'ioredis';
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
@@ -115,6 +116,7 @@ import { HttpExceptionFilter } from '../../exceptions';
       },
     ),
     ScheduleModule.forRoot(),
+    HttpModule,
     ...Object.entries(M)
       .filter(([name, module]) => name !== 'AppModule')
       .map(([name, module]) => module),
@@ -129,7 +131,7 @@ import { HttpExceptionFilter } from '../../exceptions';
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
-    ...Object.entries(SCH).map(([name, module]) => module),
+    SCH.WeatherScheduler,
   ],
   exports: [],
 })
