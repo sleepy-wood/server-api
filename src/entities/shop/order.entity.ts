@@ -23,6 +23,7 @@ export class Order {
 
   @ApiProperty()
   @Column({
+    default: 0,
     nullable: false,
     comment: '구매 금액',
   })

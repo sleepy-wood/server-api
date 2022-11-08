@@ -14,16 +14,38 @@ export class OrderService {
     private readonly dataSource: DataSource,
     @InjectRepository(E.Order)
     private readonly order: Repository<E.Order>,
+    @InjectRepository(E.OrderDetail)
+    private readonly orderDetail: Repository<E.OrderDetail>,
   ) {}
 
   async create(req: I.RequestWithUser, body: D.CreateOrderDto): Promise<E.Order> {
     const order = new E.Order();
-    const {} = body;
+    const { amount, payment, productIds } = body;
 
-    return this.order.save(order).catch((err) => {
+    order.amount = amount;
+    order.payment = payment;
+    order.userId = req.user.id;
+
+    const result = await this.order.save(order).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });
+
+    const saveData: E.OrderDetail[] = [];
+    for (const productId of productIds) {
+      const orderDetail = new E.OrderDetail();
+      orderDetail.orderId = result.id;
+      orderDetail.productId = productId;
+
+      saveData.push(orderDetail);
+    }
+
+    await this.orderDetail.save(saveData).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
+
+    return result;
   }
 
   async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Order[], number]> {
@@ -48,10 +70,15 @@ export class OrderService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Order> {
-    return this.order.findOne({ where: { id, deletedAt: null } }).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+    return this.order
+      .findOne({
+        where: { id, userId: req.user.id, deletedAt: null },
+        relations: ['orderDetails', 'orderDetails.product', 'orderDetails.product.productImages'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateOrderDto): Promise<void> {

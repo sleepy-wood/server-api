@@ -31,6 +31,7 @@ export class ProductService {
     product.price = price;
     product.type = type;
     product.detail = detail;
+    product.userId = req.user.id;
 
     const result = await this.product.save(product).catch((err) => {
       U.logger.error(err);

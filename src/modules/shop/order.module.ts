@@ -8,7 +8,12 @@ import * as MW from '../../middlewares';
 import * as S from '../../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.Order]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
+  imports: [
+    TypeOrmModule.forFeature([E.Order]),
+    TypeOrmModule.forFeature([E.OrderDetail]),
+    forwardRef(() => M.UserModule),
+    forwardRef(() => M.UtilModule),
+  ],
   exports: [TypeOrmModule, S.OrderService],
   providers: [S.OrderService],
   controllers: [C.OrderController],
