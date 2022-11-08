@@ -7,11 +7,13 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   Column,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import * as I from '../../interfaces';
 import * as U from '../../utils';
-import { CartItem, OrderDetail, ProductImage, Review, WishlistItem } from '..';
+import { CartItem, OrderDetail, ProductImage, Review, User, WishlistItem } from '..';
 
 @Entity()
 export class Product {
@@ -83,6 +85,10 @@ export class Product {
   sell: number;
 
   @ApiProperty()
+  @Column({ nullable: false })
+  userId: number;
+
+  @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
@@ -123,4 +129,11 @@ export class Product {
     nullable: false,
   })
   wishlistItems: WishlistItem[];
+
+  @ApiProperty({ type: () => User })
+  @ManyToOne(() => User, (user) => user.products, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'userId' })
+  user: User;
 }

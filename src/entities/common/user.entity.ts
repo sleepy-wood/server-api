@@ -20,7 +20,6 @@ import {
   LandDecoration,
   Sleep,
   Tree,
-  TreeDecoration,
   Cart,
   Order,
   Product,
@@ -155,21 +154,43 @@ export class User {
   })
   trees: Tree[];
 
-  @ApiProperty({ type: () => [TreeDecoration] })
-  @OneToMany(() => TreeDecoration, (treeDecoration) => treeDecoration.user, {
+  @ApiProperty({ type: () => Cart })
+  @OneToOne(() => Cart, (cart) => cart.user, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  cart: Cart;
+
+  @ApiProperty({ type: () => Wishlist })
+  @OneToOne(() => Wishlist, (wishlist) => wishlist.user, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  wishlist: Wishlist;
+
+  @ApiProperty({ type: () => [Order] })
+  @OneToMany(() => Order, (orders) => orders.user, {
     cascade: true,
     nullable: true,
     onDelete: 'CASCADE',
   })
-  treeDecorations: TreeDecoration[];
-
-  cart: Cart;
-
-  wishlist: Wishlist;
-
   orders: Order[];
 
+  @ApiProperty({ type: () => [Product] })
+  @OneToMany(() => Product, (products) => products.user, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   products: Product[];
 
+  @ApiProperty({ type: () => [Review] })
+  @OneToMany(() => Review, (reviews) => reviews.user, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   reviews: Review[];
 }

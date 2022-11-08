@@ -1,40 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  Column,
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
+  Column,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
-import { TreeFlatFrequency } from '..';
+import { Tree, TreePipeline } from '..';
 
 @Entity()
-export class TreeMinMax {
+export class TreeGrowth {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty()
   @Column({
-    nullable: false,
-    comment: '요소 빈도 최소',
+    comment: '나무 성장일',
   })
-  min: number;
-
-  @ApiProperty()
-  @Column({
-    nullable: false,
-    comment: '요소 빈도 최대',
-  })
-  max: number;
+  treeDay: number;
 
   @ApiProperty()
   @Column({ nullable: false })
-  treeFlatFrequencyId: number;
+  treeId: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -48,10 +41,18 @@ export class TreeMinMax {
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => TreeFlatFrequency })
-  @ManyToOne(() => TreeFlatFrequency, (treeFlatFrequency) => treeFlatFrequency.treeMinMaxes, {
+  @ApiProperty({ type: () => TreePipeline })
+  @OneToOne(() => TreePipeline, (treePipeline) => treePipeline.treeGrowth, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  treePipeline: TreePipeline;
+
+  @ApiProperty({ type: () => Tree })
+  @ManyToOne(() => Tree, (tree) => tree.treeGrowths, {
     nullable: false,
   })
-  @JoinColumn({ name: 'treeFlatFrequencyId' })
-  treeFlatFrequency: TreeFlatFrequency;
+  @JoinColumn({ name: 'treeId' })
+  tree: Tree;
 }

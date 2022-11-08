@@ -10,14 +10,13 @@ import * as S from '../../services';
 @Module({
   imports: [
     TypeOrmModule.forFeature([E.Tree]),
-    TypeOrmModule.forFeature([E.TreeDecoration]),
-    TypeOrmModule.forFeature([E.TreeFlatFrequency]),
-    TypeOrmModule.forFeature([E.TreeMinMax]),
+    TypeOrmModule.forFeature([E.TreeGrowth]),
+    TypeOrmModule.forFeature([E.TreePipeline]),
     forwardRef(() => M.UserModule),
     forwardRef(() => M.UtilModule),
   ],
-  exports: [TypeOrmModule, S.TreeService, S.TreeDecorationService, S.TreeFlatFrequencyService, S.TreeMinMaxService],
-  providers: [S.TreeService, S.TreeDecorationService, S.TreeFlatFrequencyService, S.TreeMinMaxService],
+  exports: [TypeOrmModule, S.TreeService],
+  providers: [S.TreeService],
   controllers: [C.TreeController],
 })
 export class TreeModule implements NestModule {

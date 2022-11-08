@@ -20,8 +20,6 @@ export class TreeService {
     const tree = new E.Tree();
     const { name, treeDay } = body;
 
-    tree.name = name;
-    tree.treeDay = treeDay;
     tree.userId = req.user.id;
 
     return this.tree.save(tree).catch((err) => {
@@ -44,7 +42,7 @@ export class TreeService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
-        relations: ['treeDecorations', 'treeFlatFrequency', 'treeFlatFrequency.treeMinMaxes'],
+        relations: [],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -56,7 +54,7 @@ export class TreeService {
     return this.tree
       .findOne({
         where: { id, userId: req.user.id, deletedAt: null },
-        relations: ['treeDecorations', 'treeFlatFrequency', 'treeFlatFrequency.treeMinMaxes'],
+        relations: [],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -70,9 +68,6 @@ export class TreeService {
 
     const tree = new E.Tree();
     const { name, treeDay } = body;
-
-    name && (tree.name = name);
-    treeDay && (tree.treeDay = treeDay);
 
     await this.tree.update(id, tree);
   }

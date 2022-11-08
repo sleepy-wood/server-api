@@ -8,11 +8,10 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
-  OneToOne,
   JoinColumn,
 } from 'typeorm';
 
-import { Land, TreeDecoration, TreeFlatFrequency, User } from '..';
+import { Land, TreeGrowth, User } from '..';
 
 @Entity()
 export class Tree {
@@ -24,13 +23,19 @@ export class Tree {
   @Column({
     comment: '나무 이름',
   })
-  name: string;
+  treeName: string;
 
   @ApiProperty()
   @Column({
-    comment: '나무 성장일',
+    comment: 'seed 번호',
   })
-  treeDay: number;
+  seedNumber: number;
+
+  @ApiProperty()
+  @Column({
+    comment: '나무 종류',
+  })
+  seedType: string;
 
   @ApiProperty()
   @Column({ nullable: false })
@@ -52,20 +57,6 @@ export class Tree {
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => TreeFlatFrequency })
-  @OneToOne(() => TreeFlatFrequency, (treeFlatFrequency) => treeFlatFrequency.tree, {
-    nullable: false,
-  })
-  treeFlatFrequency: TreeFlatFrequency;
-
-  @ApiProperty({ type: () => [TreeDecoration] })
-  @OneToMany(() => TreeDecoration, (treeDecoration) => treeDecoration.tree, {
-    cascade: true,
-    nullable: true,
-    onDelete: 'CASCADE',
-  })
-  treeDecorations: TreeDecoration[];
-
   @ApiProperty({ type: () => Land })
   @ManyToOne(() => Land, (land) => land.trees, {
     nullable: false,
@@ -79,4 +70,12 @@ export class Tree {
   })
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @ApiProperty({ type: () => TreeGrowth })
+  @OneToMany(() => TreeGrowth, (treeGrowth) => treeGrowth.tree, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  treeGrowths: TreeGrowth[];
 }
