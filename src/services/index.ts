@@ -17,6 +17,6 @@ export * from './common/jwt.service';
 export * from './common/user.service';
 export * from './shop/cart.service';
 export * from './shop/order.service';
-export * from './shop/product.module';
+export * from './shop/product.service';
 export * from './shop/review.service';
 export * from './shop/wishlist.service';

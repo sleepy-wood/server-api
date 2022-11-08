@@ -7,9 +7,10 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   Column,
-  JoinColumn,
 } from 'typeorm';
 
+import * as I from '../../interfaces';
+import * as U from '../../utils';
 import { CartItem, OrderDetail, ProductImage, Review, WishlistItem } from '..';
 
 @Entity()
@@ -47,6 +48,16 @@ export class Product {
     comment: '재고',
   })
   stock: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'enum',
+    enum: [...U.getObjectKeys(I.ProductType)],
+    default: I.ProductType.Emoticon,
+    nullable: false,
+    comment: '상품 타입(Emoticon | Prop)',
+  })
+  type: keyof typeof I.ProductType;
 
   @ApiProperty()
   @Column({

@@ -11,6 +11,7 @@ import * as S from '../../services';
   imports: [
     TypeOrmModule.forFeature([E.Product]),
     TypeOrmModule.forFeature([E.ProductImage]),
+    forwardRef(() => M.FileModule),
     forwardRef(() => M.UserModule),
     forwardRef(() => M.UtilModule),
   ],

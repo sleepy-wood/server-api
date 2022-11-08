@@ -25,7 +25,7 @@ export class FileService {
     private readonly productImage: Repository<E.ProductImage>,
   ) {}
 
-  async upload(req: I.RequestWithUser, files: Array<Express.Multer.File>, query: D.FileUploadQuery) {
+  async upload(req: I.RequestWithUser, files: Array<Express.Multer.File>) {
     const fileList: Partial<E.AttachFile>[] = files.map((file) => ({
       filename: file.filename,
       originalName: file.originalname,
@@ -33,6 +33,7 @@ export class FileService {
       mimeType: file.mimetype,
       size: file.size,
       userId: req.user.id,
+      type: I.AttachFileType.Temp,
     }));
 
     const { identifiers } = await this.attachFile.insert(fileList);

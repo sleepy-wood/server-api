@@ -4,6 +4,11 @@ export enum AttachFileType {
   Secure = 'Secure',
 }
 
+export enum ProductType {
+  Emoticon = 'Emoticon',
+  Prop = 'Prop',
+}
+
 export enum ContextType {
   Request = 'Request',
   WebSocket = 'WebSocket',

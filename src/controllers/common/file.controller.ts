@@ -66,12 +66,8 @@ export class FileController {
   )
   @HttpCode(StatusCodes.OK)
   @Post('temp/upload')
-  async uploadFile(
-    @Req() req: I.RequestWithUser,
-    @UploadedFiles() files: Array<Express.Multer.File>,
-    @Query() query: D.FileUploadQuery,
-  ) {
+  async uploadFile(@Req() req: I.RequestWithUser, @UploadedFiles() files: Array<Express.Multer.File>) {
     if (!req.user) throw new HttpException('COMMON_ERROR');
-    return await this.fileService.upload(req, files, query);
+    return await this.fileService.upload(req, files);
   }
 }
