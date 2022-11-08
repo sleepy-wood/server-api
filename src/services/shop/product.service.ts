@@ -62,7 +62,7 @@ export class ProductService {
         if (result.type === I.ProductType.Emoticon) {
           const source = join(path, 'uploads', serverTo);
           let i = 1;
-          for (const left of [0, 480, 960]) {
+          for (const left of [0, 480, 960, 1440]) {
             for (const top of [0, 480, 960]) {
               const serverPath = source.replace('.png', `_${i}.png`);
               const clientPath = clientTo.replace('.png', `_${i}.png`);
