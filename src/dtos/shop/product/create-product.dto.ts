@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
+
+import * as I from '../../../interfaces';
 
 export class CreateProductDto {
   @ApiProperty({
@@ -25,6 +27,17 @@ export class CreateProductDto {
   )
   @IsNotEmpty({ message: '상품 가격은 필수 입력 항목이에요.' })
   readonly price: number;
+
+  @ApiProperty({
+    enum: ['Emoticon', 'Prop'],
+    example: 0,
+    default: I.ProductType.Emoticon,
+    required: true,
+    description: '상품 유형',
+  })
+  @IsEnum(I.ProductType, { message: '상품 유형이 올바르지 않아요.' })
+  @IsNotEmpty({ message: '상품 유형은 필수 입력 항목이에요.' })
+  readonly type: keyof typeof I.ProductType;
 
   @ApiProperty({
     example: '테스트 상품이름',

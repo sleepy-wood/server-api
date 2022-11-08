@@ -22,10 +22,11 @@ export class ProductService {
 
   async create(req: I.RequestWithUser, body: D.CreateProductDto): Promise<E.Product> {
     const product = new E.Product();
-    const { name, price, detail, attachFileIds } = body;
+    const { name, price, type, detail, attachFileIds } = body;
 
     product.name = name;
     product.price = price;
+    product.type = type;
     product.detail = detail;
 
     const result = await this.product.save(product).catch((err) => {
