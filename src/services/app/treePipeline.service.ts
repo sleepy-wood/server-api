@@ -16,7 +16,11 @@ export class TreePipelineService {
     private readonly treePipeline: Repository<E.TreePipeline>,
   ) {}
 
-  async create(queryRunner: QueryRunner, treeGrowthId: number, body: D.CreateTreeDto): Promise<E.TreePipeline> {
+  async create(
+    queryRunner: QueryRunner,
+    treeGrowthId: number,
+    body: D.CreateTreeDto | D.CreateTreeGrowthDto,
+  ): Promise<E.TreePipeline> {
     const treePipeline = new E.TreePipeline();
     const {
       scale,

@@ -9,8 +9,6 @@ import {
   Query,
   Get,
   Param,
-  Put,
-  Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
@@ -42,12 +40,34 @@ export class TreeController {
     };
   }
 
-  @ApiOperation({ summary: '나무 목록 조회' })
+  @ApiOperation({ summary: '다른 사용자 나무 목록 조회' })
+  @ApiParam({
+    name: 'id',
+    description: '사용자 아이디',
+    required: true,
+    schema: {
+      type: 'string',
+      example: '1',
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  @Get('/:userId')
+  async findAllOther(@Req() req: I.RequestWithUser, @Param('userId') userId: string, @Query() query: D.ListQuery) {
+    if (!req.user) throw new HttpException('NO_USER');
+    const [rows, count] = await this.treeService.findAllOther(req, query, +userId);
+    return <I.RowResponse<E.Tree>>{
+      result: true,
+      count,
+      data: rows,
+    };
+  }
+
+  @ApiOperation({ summary: '내 나무 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()
-  async findAll(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
+  async findAllMine(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
     if (!req.user) throw new HttpException('NO_USER');
-    const [rows, count] = await this.treeService.findAll(req, query);
+    const [rows, count] = await this.treeService.findAllMine(req, query);
     return <I.RowResponse<E.Tree>>{
       result: true,
       count,
@@ -72,46 +92,6 @@ export class TreeController {
     return <I.BasicResponse<E.Tree>>{
       result: true,
       data: await this.treeService.findOne(req, +id),
-    };
-  }
-
-  @ApiOperation({ summary: '나무 수정' })
-  @ApiParam({
-    name: 'id',
-    description: '나무 아이디',
-    required: true,
-    schema: {
-      type: 'string',
-      example: '1',
-    },
-  })
-  @HttpCode(StatusCodes.OK)
-  @Put(':id')
-  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: D.UpdateTreeDto) {
-    if (!req.user) throw new HttpException('NO_USER');
-    await this.treeService.update(req, +id, body);
-    return <I.BasicResponse<boolean>>{
-      result: true,
-    };
-  }
-
-  @ApiOperation({ summary: '나무 삭제' })
-  @ApiParam({
-    name: 'id',
-    description: '나무 아이디',
-    required: true,
-    schema: {
-      type: 'string',
-      example: '1',
-    },
-  })
-  @HttpCode(StatusCodes.OK)
-  @Delete(':id')
-  async remove(@Req() req: I.RequestWithUser, @Param('id') id: string) {
-    if (!req.user) throw new HttpException('NO_USER');
-    await this.treeService.remove(req, +id);
-    return <I.BasicResponse<boolean>>{
-      result: true,
     };
   }
 }

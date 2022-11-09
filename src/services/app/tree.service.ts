@@ -51,7 +51,29 @@ export class TreeService {
     }
   }
 
-  async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Tree[], number]> {
+  async findAllOther(req: I.RequestWithUser, query: D.ListQuery, userId: number): Promise<[E.Tree[], number]> {
+    let { page, count, sort, dir, q } = query;
+
+    page = Number(page) || 1;
+    count = Number(count) || 30;
+    sort = sort || 'createdAt';
+    dir = dir || 'DESC';
+
+    return this.tree
+      .findAndCount({
+        where: { userId, deletedAt: null },
+        order: { [sort]: dir },
+        skip: (page - 1) * count,
+        take: count,
+        relations: ['treeGrowths', 'treeGrowths.treePipeline'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async findAllMine(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Tree[], number]> {
     let { page, count, sort, dir, q } = query;
 
     page = Number(page) || 1;
@@ -65,7 +87,7 @@ export class TreeService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
-        relations: [],
+        relations: ['treeGrowths', 'treeGrowths.treePipeline'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -76,31 +98,12 @@ export class TreeService {
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Tree> {
     return this.tree
       .findOne({
-        where: { id, userId: req.user.id, deletedAt: null },
-        relations: [],
+        where: { id, deletedAt: null },
+        relations: ['treeGrowths', 'treeGrowths.treePipeline'],
       })
       .catch((err) => {
         U.logger.error(err);
         throw new HttpException('COMMON_ERROR');
       });
-  }
-
-  async update(req: I.RequestWithUser, id: number, body: D.UpdateTreeDto): Promise<void> {
-    const data = await this.findOne(req, id);
-    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
-
-    const tree = new E.Tree();
-    const { name, treeDay } = body;
-
-    await this.tree.update(id, tree);
-  }
-
-  async remove(req: I.RequestWithUser, id: number): Promise<void> {
-    const data = await this.findOne(req, id);
-    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
-    await this.tree.softDelete(id).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
   }
 }

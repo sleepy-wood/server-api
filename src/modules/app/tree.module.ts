@@ -17,12 +17,12 @@ import * as S from '../../services';
   ],
   exports: [TypeOrmModule, S.TreeService, S.TreeGrowthService, S.TreePipelineService],
   providers: [S.TreeService, S.TreeGrowthService, S.TreePipelineService],
-  controllers: [C.TreeController],
+  controllers: [C.TreeController, C.TreeGrowthController],
 })
 export class TreeModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(MW.AuthMiddleware).forRoutes({
-      path: 'v1/trees*',
+      path: 'v1/tree*',
       method: RequestMethod.ALL,
     });
   }

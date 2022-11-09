@@ -12,6 +12,7 @@ export * from './app/land/update-landDecoration.dto';
 export * from './app/sleep/create-sleep.dto';
 export * from './app/sleep/update-sleep.dto';
 export * from './app/tree/create-tree.dto';
+export * from './app/tree/create-treeGrowth.dto';
 export * from './app/tree/update-tree.dto';
 export * from './common/listQuery.dto';
 export * from './common/user/create-user.dto';

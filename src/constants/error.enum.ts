@@ -85,4 +85,8 @@ export const ErrorCodes = <const>{
     message: '파일 처리에 실패했어요.',
     status: StatusCodes.INTERNAL_SERVER_ERROR,
   },
+  TREE_GROWTH_NOT_FOUND: {
+    message: '나무 정보를 찾을 수 없어요.',
+    status: StatusCodes.NOT_FOUND,
+  },
 };
