@@ -63,6 +63,7 @@ export class Product {
 
   @ApiProperty()
   @Column({
+    type: 'text',
     nullable: false,
     comment: '상세정보',
   })
