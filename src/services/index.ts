@@ -7,6 +7,8 @@ export * from './app/land.service';
 export * from './app/landDecoration.service';
 export * from './app/sleep.service';
 export * from './app/tree.service';
+export * from './app/treeGrowth.service';
+export * from './app/treePipeline.service';
 export * from './common/attachFile.service';
 export * from './common/cluster.service';
 export * from './common/file.service';

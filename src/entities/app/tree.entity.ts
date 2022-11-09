@@ -21,24 +21,27 @@ export class Tree {
 
   @ApiProperty()
   @Column({
+    nullable: false,
     comment: '나무 이름',
   })
   treeName: string;
 
   @ApiProperty()
   @Column({
+    nullable: false,
     comment: 'seed 번호',
   })
   seedNumber: number;
 
   @ApiProperty()
   @Column({
+    nullable: false,
     comment: '나무 종류',
   })
   seedType: string;
 
   @ApiProperty()
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   landId: number;
 
   @ApiProperty()

@@ -108,6 +108,7 @@ export class TreePipeline {
 
   @ApiProperty()
   @Column({
+    nullable: false,
     comment: '나무가지 텍스처 이름',
   })
   barkTexture: string;

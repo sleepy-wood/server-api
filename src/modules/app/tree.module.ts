@@ -15,8 +15,8 @@ import * as S from '../../services';
     forwardRef(() => M.UserModule),
     forwardRef(() => M.UtilModule),
   ],
-  exports: [TypeOrmModule, S.TreeService],
-  providers: [S.TreeService],
+  exports: [TypeOrmModule, S.TreeService, S.TreeGrowthService, S.TreePipelineService],
+  providers: [S.TreeService, S.TreeGrowthService, S.TreePipelineService],
   controllers: [C.TreeController],
 })
 export class TreeModule implements NestModule {

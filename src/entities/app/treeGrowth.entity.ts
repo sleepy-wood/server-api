@@ -21,6 +21,7 @@ export class TreeGrowth {
 
   @ApiProperty()
   @Column({
+    nullable: false,
     comment: '나무 성장일',
   })
   treeDay: number;
