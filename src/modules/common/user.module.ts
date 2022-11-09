@@ -15,7 +15,7 @@ import * as S from '../../services';
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(MW.AuthMiddleware).forRoutes({
+    consumer.apply(MW.AuthMiddleware).exclude('v1/users/trending-ten', 'v1/users/top-ten').forRoutes({
       path: 'v1/users*',
       method: RequestMethod.ALL,
     });

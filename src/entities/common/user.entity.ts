@@ -75,6 +75,14 @@ export class User {
 
   @ApiProperty()
   @Column({
+    nullable: false,
+    default: 0,
+    comment: '에셋 판매 등록 카운트',
+  })
+  productCount: number;
+
+  @ApiProperty()
+  @Column({
     unique: true,
     nullable: false,
     comment: '전화번호',

@@ -26,4 +26,34 @@ export class UserService {
         throw new HttpException('COMMON_ERROR');
       });
   }
+
+  async trendingTen(): Promise<[E.User[], number]> {
+    return this.user
+      .findAndCount({
+        where: { deletedAt: null },
+        order: {
+          products: { hit: 'desc' },
+        },
+        take: 10,
+        relations: ['products'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async topTen(): Promise<[E.User[], number]> {
+    return this.user
+      .findAndCount({
+        where: { deletedAt: null },
+        order: { productCount: 'desc' },
+        take: 10,
+        relations: ['products'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
 }
