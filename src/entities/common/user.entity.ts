@@ -24,6 +24,8 @@ import {
   Order,
   Product,
   Review,
+  Room,
+  RoomMember,
   Wishlist,
 } from '..';
 
@@ -176,6 +178,22 @@ export class User {
     onDelete: 'CASCADE',
   })
   wishlist: Wishlist;
+
+  @ApiProperty({ type: () => Room })
+  @OneToOne(() => Room, (room) => room.user, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  room: Room;
+
+  @ApiProperty({ type: () => [RoomMember] })
+  @OneToMany(() => RoomMember, (roomMembers) => roomMembers.user, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  roomMembers: RoomMember[];
 
   @ApiProperty({ type: () => [Order] })
   @OneToMany(() => Order, (orders) => orders.user, {

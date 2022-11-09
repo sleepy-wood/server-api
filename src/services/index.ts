@@ -5,6 +5,7 @@ export * from './app/item.service';
 export * from './app/itemType.service';
 export * from './app/land.service';
 export * from './app/landDecoration.service';
+export * from './app/room.service';
 export * from './app/sleep.service';
 export * from './app/tree.service';
 export * from './app/treeGrowth.service';

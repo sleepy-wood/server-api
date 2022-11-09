@@ -145,6 +145,7 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
     .addTag('lands', '랜드 REST APIs')
     .addTag('land-decorations', '랜드 데코레이션 REST APIs')
     .addTag('sleeps', '수면 REST APIs')
+    .addTag('rooms', '포톤 룸 REST APIs')
     .addTag('trees', '나무 REST APIs')
     .addTag('tree-growths', '나무 성장 REST APIs')
     // shop

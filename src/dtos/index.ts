@@ -9,6 +9,7 @@ export * from './app/land/create-land.dto';
 export * from './app/land/create-landDecoration.dto';
 export * from './app/land/update-land.dto';
 export * from './app/land/update-landDecoration.dto';
+export * from './app/room/create-roomMember.dto';
 export * from './app/sleep/create-sleep.dto';
 export * from './app/sleep/update-sleep.dto';
 export * from './app/tree/create-tree.dto';

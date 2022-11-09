@@ -5,6 +5,8 @@ export * from './app/item.entity';
 export * from './app/itemType.entity';
 export * from './app/land.entity';
 export * from './app/landDecoration';
+export * from './app/room.entity';
+export * from './app/roomMember.entity';
 export * from './app/sleep.entity';
 export * from './app/tree.entity';
 export * from './app/treeGrowth.entity';

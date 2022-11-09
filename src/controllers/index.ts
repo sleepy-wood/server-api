@@ -3,6 +3,7 @@ export * from './app/bridge.controller';
 export * from './app/item.controller';
 export * from './app/land.controller';
 export * from './app/landDecoration.controller';
+export * from './app/room.controller';
 export * from './app/sleep.controller';
 export * from './app/tree.controller';
 export * from './app/treeGrowth.controller';

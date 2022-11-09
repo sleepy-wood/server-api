@@ -87,6 +87,7 @@ import { HttpExceptionFilter } from '../../exceptions';
             await U.saveLandDecoration(manager, user, lands);
             const bridges = await U.saveBridge(manager, user);
             await U.saveBridgeInfo(manager, bridges, lands);
+            await U.saveRoom(manager, user);
           }
         }
 

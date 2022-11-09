@@ -17,10 +17,10 @@ export const saveLand = async (manager: EntityManager, user: E.User): Promise<E.
   land1.landPositionX = 0.0;
   land1.landPositionY = 0.0;
   land1.landPositionZ = 0.0;
-  land1.landScaleX = 2.5;
-  land1.landScaleY = 2.499999523162842;
-  land1.landScaleZ = 2.499999523162842;
-  land1.landEulerAngleX = 0.5799999833106995;
+  land1.landScaleX = 0.5799999833106995;
+  land1.landScaleY = 0.5799999833106995;
+  land1.landScaleZ = 0.5799999833106995;
+  land1.landEulerAngleX = 270.0;
   land1.landEulerAngleY = 0.5799999833106995;
   land1.landEulerAngleZ = 0.5799999833106995;
   land1.userId = user.id;
@@ -228,4 +228,20 @@ export const saveBridgeInfo = async (
   bridgeInfo4.toLandId = lands[4].id;
 
   return manager.save([bridgeInfo1, bridgeInfo2, bridgeInfo3, bridgeInfo4]);
+};
+
+export const saveRoom = async (manager: EntityManager, user: E.User): Promise<E.Room> => {
+  const room = new E.Room();
+  const roomMember = new E.RoomMember();
+
+  room.userId = user.id;
+
+  const result = await manager.save(room);
+
+  roomMember.roomId = result.id;
+  roomMember.userId = user.id;
+
+  await manager.save(roomMember);
+
+  return result;
 };

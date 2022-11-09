@@ -2,6 +2,7 @@
 export * from './app/bridge.module';
 export * from './app/item.module';
 export * from './app/land.module';
+export * from './app/room.module';
 export * from './app/sleep.module';
 export * from './app/tree.module';
 export * from './common/app.module';
