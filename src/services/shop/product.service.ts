@@ -99,6 +99,8 @@ export class ProductService {
         productCount: req.user.productCount + 1,
       });
 
+      await queryRunner.commitTransaction();
+
       return result;
     } catch (err) {
       await queryRunner.rollbackTransaction();

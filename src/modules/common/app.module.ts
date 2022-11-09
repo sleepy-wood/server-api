@@ -41,6 +41,7 @@ import { HttpExceptionFilter } from '../../exceptions';
               password: configService.get<string>('MYSQL_PASSWORD'),
               dbname: configService.get<string>('MYSQL_DATABASE'),
             };
+
         return {
           type: 'mysql',
           host,
@@ -50,7 +51,7 @@ import { HttpExceptionFilter } from '../../exceptions';
           database,
           entities: [...Object.entries(E).map(([name, entity]) => entity)],
           logger: new U.TypeOrmLogger(),
-          timezone: '+09:00',
+          timezone: 'Asia/Seoul', // 'Z', // '+09:00',
           charset: 'utf8mb4_unicode_ci',
           autoLoadEntities: true,
           synchronize: false, // never use this in production
