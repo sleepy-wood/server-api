@@ -40,10 +40,7 @@ export class ProductService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const result = await this.product.save(product).catch((err) => {
-        U.logger.error(err);
-        throw new HttpException('COMMON_ERROR');
-      });
+      const result = await queryRunner.manager.save(E.Product, product);
 
       const attachFiles = await this.attachFile.find({ where: { id: In(attachFileIds) } }).catch((err) => {
         U.logger.error(err);
@@ -95,13 +92,10 @@ export class ProductService {
           saveData.push(productImage);
         }
 
-        await this.productImage.save(saveData).catch((err) => {
-          U.logger.error(err);
-          throw new HttpException('COMMON_ERROR');
-        });
+        await queryRunner.manager.save(E.ProductImage, saveData);
       }
 
-      await this.user.update(req.user.id, {
+      await queryRunner.manager.update(E.User, req.user.id, {
         productCount: req.user.productCount + 1,
       });
 

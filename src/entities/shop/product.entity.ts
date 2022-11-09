@@ -30,6 +30,9 @@ export class Product {
 
   @ApiProperty()
   @Column({
+    type: 'decimal',
+    scale: 16,
+    precision: 22,
     nullable: false,
     comment: '가격',
   })
