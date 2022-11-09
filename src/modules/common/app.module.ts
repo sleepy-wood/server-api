@@ -68,6 +68,7 @@ import { HttpExceptionFilter } from '../../exceptions';
           const saveUser: E.User[] = [];
           for (let i = 0; i < 10; i++) {
             const tempUser = new E.User();
+            tempUser.profileImg = `/resources/20221027193030_default_profile${i + 1}.png`;
             tempUser.nickname = `현지현_${i}`;
             tempUser.password = U.generateHash('1234');
             tempUser.avatar = 'Julia';
