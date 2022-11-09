@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { Controller, Post, HttpCode, Body, UseInterceptors, CacheInterceptor, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Post, HttpCode, Body, UseInterceptors, CacheInterceptor, Req, Param } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { Repository } from 'typeorm';
@@ -28,10 +28,19 @@ export class AuthController {
   ) {}
 
   @ApiOperation({ summary: '로그인(임시)' })
+  @ApiParam({
+    name: 'id',
+    description: '유저 아이디',
+    required: true,
+    schema: {
+      type: 'string',
+      example: '1',
+    },
+  })
   @HttpCode(StatusCodes.OK)
-  @Post('login/temp')
-  async loginTemp(): Promise<any> {
-    const user = await this.user.findOne({ where: { id: 1 } });
+  @Post('login/temp/:id')
+  async loginTemp(@Param('id') id: string): Promise<any> {
+    const user = await this.user.findOne({ where: { id: +id } });
     if (!user) throw new HttpException('USER_VALIDATION');
     const [token, error] = this.jwtService.getJWTToken(user);
     if (error) throw error;

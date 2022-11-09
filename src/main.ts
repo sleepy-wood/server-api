@@ -111,7 +111,27 @@ else ClusterService.init(bootstrap);
 function generateSwagger(app: NestExpressApplication, localIp: string, port: number) {
   const config = new DocumentBuilder()
     .setTitle('메타버스 슬리피우드 어플리케이션')
-    .setDescription('<h4>슬리피우드 REST APIs</h4><h5>nestJS</h5><h5>written by PIYoung</h5>')
+    .setDescription(
+      '<h4>슬리피우드 REST APIs</h4><h5>nestJS</h5><h5>written by PIYoung</h5>' +
+        '<div id="token-table-div">' +
+        '<div>' +
+        '<h4>사용자 토큰 선택 <span>펼치기/접기</span></h4>' +
+        '<table border="1px solid black">' +
+        '<tr><th>아이디</th><th>토큰</th></tr>' +
+        '<tr><td>현지현_0</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY3OTU2MDMxLCJleHAiOjMzMjI1NTU2MDMxfQ.t9odr3sxIAGNI75l6NFzg4Pm3YKyll0sECYQ_WoV4vg</a></td></tr>' +
+        '<tr><td>현지현_1</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjY3OTU2MDUxLCJleHAiOjMzMjI1NTU2MDUxfQ.53nskwqJO7etEsQ0GJKEWDJzCfbkhI0CRtZ8hE4JNwQ</a></td></tr>' +
+        '<tr><td>현지현_2</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjY3OTU2MDYzLCJleHAiOjMzMjI1NTU2MDYzfQ.f3EHkluagJCPz5Pi5a7fkBGWnopWTkWZwFOUTo_L_kg</a></td></tr>' +
+        '<tr><td>현지현_3</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjY3OTU2MDc3LCJleHAiOjMzMjI1NTU2MDc3fQ.bvIBhieQ4p0cjRz9Yv0Y-fgfOst9bGvSP9ozzkaUAjA</a></td></tr>' +
+        '<tr><td>현지현_4</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjY3OTU2MDkwLCJleHAiOjMzMjI1NTU2MDkwfQ.cUpFp3VOQ7uWFDPRa3VHkmkCuQRpYpGOxdEgUT4jk_Q</a></td></tr>' +
+        '<tr><td>현지현_5</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNjY3OTU2MTAzLCJleHAiOjMzMjI1NTU2MTAzfQ.JFn1BNt_4uSC-Z63W2xVHiukt7ZYkeXJ1FLg0llmfjQ</a></td></tr>' +
+        '<tr><td>현지현_6</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjY3OTU2MTM4LCJleHAiOjMzMjI1NTU2MTM4fQ.6sqMKewK_jQOSorNfNZR8qQUHIBb_dat3P4v-6inMgE</a></td></tr>' +
+        '<tr><td>현지현_7</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNjY3OTU2MTYxLCJleHAiOjMzMjI1NTU2MTYxfQ.GIU54JYVdoTgcMhD9cG98W387MlXe142H3KO7mTBpk8</a></td></tr>' +
+        '<tr><td>현지현_8</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNjY3OTU2MTcyLCJleHAiOjMzMjI1NTU2MTcyfQ.EijITOOKYNREmumrS-vwVKxEsLTnvlQWc0q4VsXAcz8</a></td></tr>' +
+        '<tr><td>현지현_9</td><td><a>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTY2Nzk1NjE4MSwiZXhwIjozMzIyNTU1NjE4MX0.FMOJKJZSsqtxjrVfnFZSseLyBcLA3MlcYl9RU7tUCMA</a></td></tr>' +
+        '</table>' +
+        '</div>' +
+        '</div>',
+    )
     .setVersion('1.0.0')
     .addServer(isDev ? `http://${localIp}:${port}` : 'https://team-buildup.shop')
     // common
