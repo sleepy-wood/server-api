@@ -60,7 +60,6 @@ export class User {
 
   @ApiProperty()
   @Column({
-    unique: true,
     nullable: true,
     comment: '유저 아바타',
   })
