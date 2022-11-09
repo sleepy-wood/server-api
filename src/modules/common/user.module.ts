@@ -14,10 +14,17 @@ import * as S from '../../services';
   controllers: [C.UserController],
 })
 export class UserModule implements NestModule {
+  // exclude 쓰면 wildcard 금지
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(MW.AuthMiddleware).exclude('v1/users/trending-ten', 'v1/users/top-ten').forRoutes({
-      path: 'v1/users*',
-      method: RequestMethod.ALL,
-    });
+    consumer
+      .apply(MW.AuthMiddleware)
+      .exclude(
+        { path: 'v1/users/trending-ten', method: RequestMethod.GET },
+        { path: 'v1/users/top-ten', method: RequestMethod.GET },
+      )
+      .forRoutes({
+        path: 'v1/users',
+        method: RequestMethod.ALL,
+      });
   }
 }
