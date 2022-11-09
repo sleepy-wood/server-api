@@ -65,19 +65,28 @@ import { HttpExceptionFilter } from '../../exceptions';
         });
 
         if (users.length === 0) {
-          const tempUser = new E.User();
-          tempUser.nickname = 'sampleUser';
-          tempUser.password = U.generateHash('1234');
-          tempUser.avatar = 'Julia';
-          tempUser.badgeCount = 0;
-          tempUser.hp = '010-2717-2868';
-          tempUser.type = I.UserType.Kakao;
+          const saveUser: E.User[] = [];
+          for (let i = 0; i < 10; i++) {
+            const tempUser = new E.User();
+            tempUser.nickname = `현지현_${i}`;
+            tempUser.password = U.generateHash('1234');
+            tempUser.avatar = 'Julia';
+            tempUser.badgeCount = 0;
+            tempUser.hp = `010-1234-567${i}`;
+            tempUser.type = I.UserType.Kakao;
 
-          const [user] = await manager.save([tempUser]);
-          await U.saveCartAndWishList(manager, user);
-          await U.saveLand(manager, user);
-          await U.saveBridge(manager, user);
-          await U.saveBridgeInfo(manager);
+            saveUser.push(tempUser);
+          }
+
+          const users = await manager.save(saveUser);
+
+          for (const user of users) {
+            await U.saveCartAndWishList(manager, user);
+            const lands = await U.saveLand(manager, user);
+            await U.saveLandDecoration(manager, user, lands);
+            const bridges = await U.saveBridge(manager, user);
+            await U.saveBridgeInfo(manager, bridges, lands);
+          }
         }
 
         return dataSource;
