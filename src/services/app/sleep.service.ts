@@ -70,7 +70,10 @@ export class SleepService {
     endDate && (sleep.endDate = endDate);
     type && (sleep.type = type);
 
-    await this.sleep.update(id, sleep);
+    await this.sleep.update(id, sleep).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {

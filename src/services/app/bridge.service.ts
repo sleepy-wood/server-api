@@ -117,7 +117,10 @@ export class BridgeService {
     bridgeRotationY && (bridge.bridgeRotationY = bridgeRotationY);
     bridgeRotationZ && (bridge.bridgeRotationZ = bridgeRotationZ);
 
-    await this.bridge.update(id, bridge);
+    await this.bridge.update(id, bridge).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {

@@ -119,7 +119,10 @@ export class TreeService {
     seedType && (tree.seedType = seedType);
     landId && (tree.landId = landId);
 
-    await this.tree.update(id, tree);
+    await this.tree.update(id, tree).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {

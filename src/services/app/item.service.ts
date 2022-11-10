@@ -58,7 +58,10 @@ export class ItemService {
     const item = new E.Item();
     const {} = body;
 
-    await this.item.update(id, item);
+    await this.item.update(id, item).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {

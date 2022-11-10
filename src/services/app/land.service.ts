@@ -112,7 +112,10 @@ export class LandService {
     landEulerAngleY && (land.landEulerAngleY = landEulerAngleY);
     landEulerAngleZ && (land.landEulerAngleZ = landEulerAngleZ);
 
-    await this.land.update(id, land);
+    await this.land.update(id, land).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {

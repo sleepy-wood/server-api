@@ -60,16 +60,21 @@ export class TreePipelineService {
   }
 
   async findOne(req: I.RequestWithUser, treeId: number, pipelineId: number): Promise<E.Tree> {
-    return this.tree.findOne({
-      where: {
-        id: treeId,
-        userId: req.user.id,
-        treeGrowths: {
-          treePipeline: { id: pipelineId },
+    return this.tree
+      .findOne({
+        where: {
+          id: treeId,
+          userId: req.user.id,
+          treeGrowths: {
+            treePipeline: { id: pipelineId },
+          },
         },
-      },
-      relations: ['treeGrowths', 'treeGrowths.treePipeline'],
-    });
+        relations: ['treeGrowths', 'treeGrowths.treePipeline'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async update(
@@ -110,6 +115,9 @@ export class TreePipelineService {
     barkTexture && (treePipeline.barkTexture = barkTexture);
     sproutIndex && (treePipeline.sproutIndex = sproutIndex);
 
-    await this.treePipeline.update(pipelineId, treePipeline);
+    await this.treePipeline.update(pipelineId, treePipeline).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 }

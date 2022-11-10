@@ -111,7 +111,10 @@ export class LandDecorationService {
     localEulerAngleZ && (landDecoration.localEulerAngleZ = localEulerAngleZ);
     landId && (landDecoration.landId = landId);
 
-    await this.landDecoration.update(id, landDecoration);
+    await this.landDecoration.update(id, landDecoration).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {

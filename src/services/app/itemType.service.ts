@@ -56,7 +56,10 @@ export class ItemTypeService {
   async update(req: I.RequestWithUser, id: number, body: D.UpdateItemDto): Promise<void> {
     const itemType = new E.ItemType();
 
-    await this.itemType.update(id, itemType);
+    await this.itemType.update(id, itemType).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {
