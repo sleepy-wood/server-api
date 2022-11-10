@@ -18,6 +18,7 @@ import {
   DeviceToken,
   Land,
   LandDecoration,
+  Activity,
   Sleep,
   Tree,
   Cart,
@@ -153,6 +154,14 @@ export class User {
     onDelete: 'CASCADE',
   })
   landDecorations: LandDecoration[];
+
+  @ApiProperty({ type: () => [Activity] })
+  @OneToMany(() => Activity, (activity) => activity.user, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  activities: Activity[];
 
   @ApiProperty({ type: () => [Sleep] })
   @OneToMany(() => Sleep, (sleep) => sleep.user, {
