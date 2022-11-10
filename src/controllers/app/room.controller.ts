@@ -99,4 +99,24 @@ export class RoomController {
       data: await this.roomService.findOne(req, +id),
     };
   }
+
+  @ApiOperation({ summary: '포톤 방 상세조회 by 유저 닉네임' })
+  @ApiParam({
+    name: 'nickname',
+    description: '유저 닉네임',
+    required: true,
+    schema: {
+      type: 'string',
+      example: '고현서',
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  @Get('/users/:nickname')
+  async findOneByUserNickname(@Req() req: I.RequestWithUser, @Param('nickname') nickname: string) {
+    if (!req.user) throw new HttpException('NO_USER');
+    return <I.BasicResponse<E.Room>>{
+      result: true,
+      data: await this.roomService.findOneByUserNickname(req, nickname),
+    };
+  }
 }

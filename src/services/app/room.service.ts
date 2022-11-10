@@ -16,6 +16,8 @@ export class RoomService {
     private readonly room: Repository<E.Room>,
     @InjectRepository(E.RoomMember)
     private readonly roomMember: Repository<E.RoomMember>,
+    @InjectRepository(E.User)
+    private readonly user: Repository<E.User>,
   ) {}
 
   async enterRoom(req: I.RequestWithUser, roomId: number, body: D.CreateRoomMemberDto): Promise<E.RoomMember> {
@@ -39,6 +41,30 @@ export class RoomService {
   }
 
   async findOne(req: I.RequestWithUser, roomId: number): Promise<E.Room> {
+    return this.room
+      .findOne({
+        where: { id: roomId, deletedAt: null },
+        relations: ['roomMembers', 'roomMembers.user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async findOneByUserNickname(req: I.RequestWithUser, nickname: string): Promise<E.Room> {
+    const user = await this.user
+      .findOne({
+        where: { nickname: nickname, deletedAt: null },
+        relations: ['room'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    const roomId = user.room.id;
+
     return this.room
       .findOne({
         where: { id: roomId, deletedAt: null },
