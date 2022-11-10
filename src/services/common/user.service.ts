@@ -56,4 +56,18 @@ export class UserService {
         throw new HttpException('COMMON_ERROR');
       });
   }
+
+  async update(req: I.RequestWithUser, body: D.UpdateUserDto): Promise<void> {
+    const user = new E.User();
+    const { avatar, profileImg, currentLandId } = body;
+
+    avatar && (user.avatar = avatar);
+    profileImg && (user.profileImg = profileImg);
+    currentLandId && (user.currentLandId = currentLandId);
+
+    await this.user.update(req.user.id, user).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
+  }
 }

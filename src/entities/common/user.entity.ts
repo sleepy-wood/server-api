@@ -96,6 +96,13 @@ export class User {
   password: string;
 
   @ApiProperty()
+  @Column({
+    nullable: true,
+    comment: '현재 사용자가 위치 해있는 랜드 아이디',
+  })
+  currentLandId: number;
+
+  @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 

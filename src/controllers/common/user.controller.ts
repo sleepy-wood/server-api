@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, UseInterceptors, CacheInterceptor, Req, Query } from '@nestjs/common';
+import { Controller, Get, HttpCode, UseInterceptors, CacheInterceptor, Req, Query, Body, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import * as D from '../../dtos';
@@ -50,6 +50,17 @@ export class UserController {
       result: true,
       count,
       data: rows,
+    };
+  }
+
+  @ApiOperation({ summary: '사용자 수정' })
+  @HttpCode(StatusCodes.OK)
+  @Put()
+  async update(@Req() req: I.RequestWithUser, @Body() body: D.UpdateUserDto) {
+    if (!req.user) throw new HttpException('NO_USER');
+    await this.userService.update(req, body);
+    return <I.BasicResponse<boolean>>{
+      result: true,
     };
   }
 }
