@@ -66,11 +66,23 @@ import { HttpExceptionFilter } from '../../exceptions';
         });
 
         if (users.length === 0) {
+          const nicknames = [
+            '고현서',
+            '강수현',
+            '조한나',
+            '박대렬',
+            '박인영',
+            '이재욱',
+            '현지현_6',
+            '현지현_7',
+            '현지현_8',
+            '현지현_9',
+          ];
           const saveUser: E.User[] = [];
           for (let i = 0; i < 10; i++) {
             const tempUser = new E.User();
             tempUser.profileImg = `/resources/20221027193030_default_profile${i + 1}.png`;
-            tempUser.nickname = `현지현_${i}`;
+            tempUser.nickname = nicknames[i];
             tempUser.password = U.generateHash('1234');
             tempUser.avatar = 'Julia';
             tempUser.badgeCount = 0;
@@ -89,6 +101,8 @@ import { HttpExceptionFilter } from '../../exceptions';
             const bridges = await U.saveBridge(manager, user);
             await U.saveBridgeInfo(manager, bridges, lands);
             await U.saveRoom(manager, user);
+            await U.saveActivity(manager, user);
+            await U.saveSleep(manager, user);
           }
         }
 

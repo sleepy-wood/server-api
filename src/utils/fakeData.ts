@@ -1,5 +1,8 @@
 import { EntityManager } from 'typeorm';
+
+import * as C from '../constants';
 import * as E from '../entities';
+import * as I from '../interfaces';
 
 export const saveCartAndWishList = async (manager: EntityManager, user: E.User): Promise<void> => {
   const cart = new E.Cart();
@@ -244,4 +247,50 @@ export const saveRoom = async (manager: EntityManager, user: E.User): Promise<E.
   await manager.save(roomMember);
 
   return result;
+};
+
+export const saveActivity = async (manager: EntityManager, user: E.User): Promise<void> => {
+  const saveData: E.Activity[] = [];
+  for (const activity of C.mockActivity) {
+    const temp = new E.Activity();
+    const {
+      dateInSeconds,
+      activeEnergyBurnedInKcal,
+      activeEnergyBurnedGoalInKcal,
+      exerciseTimeInMinutes,
+      exerciseTimeGoalInMinutes,
+      standHours,
+      standHoursGoal,
+    } = activity;
+
+    temp.date = new Date(dateInSeconds);
+    temp.activeEnergyBurnedInKcal = activeEnergyBurnedInKcal;
+    temp.activeEnergyBurnedGoalInKcal = activeEnergyBurnedGoalInKcal;
+    temp.exerciseTimeInMinutes = exerciseTimeInMinutes;
+    temp.exerciseTimeGoalInMinutes = exerciseTimeGoalInMinutes;
+    temp.standHours = standHours;
+    temp.standHoursGoal = standHoursGoal;
+    temp.userId = user.id;
+
+    saveData.push(temp);
+  }
+
+  await manager.save(saveData);
+};
+
+export const saveSleep = async (manager: EntityManager, user: E.User): Promise<void> => {
+  const saveData: E.Sleep[] = [];
+  for (const sleep of C.mockSleep) {
+    const temp = new E.Sleep();
+    const { startDateInSeconds, endDateInSeconds, value } = sleep;
+
+    temp.startDate = new Date(startDateInSeconds);
+    temp.endDate = new Date(endDateInSeconds);
+    temp.type = value;
+    temp.userId = user.id;
+
+    saveData.push(temp);
+  }
+
+  await manager.save(saveData);
 };

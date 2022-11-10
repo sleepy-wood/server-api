@@ -32,11 +32,11 @@ export class Sleep {
   @Column({
     default: I.SleepType.InBed,
     type: 'enum',
-    enum: [...U.getObjectValues(I.SleepType)],
+    enum: I.SleepType,
     nullable: false,
     comment: '유저 타입',
   })
-  type: keyof typeof I.SleepType;
+  type: I.SleepType;
 
   @ApiProperty()
   @Column({ nullable: false })

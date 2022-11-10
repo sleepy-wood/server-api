@@ -31,5 +31,5 @@ export class UpdateSleepDto {
   })
   @IsEnum(I.SleepType, { message: '수면 유형이 올바르지 않아요.' })
   @IsOptional()
-  readonly type?: keyof typeof I.SleepType;
+  readonly type?: I.SleepType;
 }

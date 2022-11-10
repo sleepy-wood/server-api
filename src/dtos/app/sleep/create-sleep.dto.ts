@@ -31,5 +31,5 @@ export class CreateSleepDto {
   })
   @IsEnum(I.SleepType, { message: '수면 유형이 올바르지 않아요.' })
   @IsNotEmpty({ message: '수면 유형은 필수 입력 항목이에요.' })
-  readonly type: keyof typeof I.SleepType;
+  readonly type: I.SleepType;
 }
