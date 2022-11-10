@@ -1,3 +1,4 @@
+import * as Redis from 'redis';
 import moment from 'moment';
 import qs from 'qs';
 import { HttpService } from '@nestjs/axios';
@@ -27,12 +28,22 @@ const weatherCategory = {
  */
 @Injectable()
 export class WeatherScheduler {
+  private redClient: Redis.RedisClientType<any>;
+  private redPrefix: string;
+
   constructor(
     @InjectRepository(E.Weather)
     private readonly weather: Repository<E.Weather>,
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
-  ) {}
+  ) {
+    this.redClient = Redis.createClient({});
+    this.redPrefix = 'weather_';
+  }
+
+  async onModuleInit() {
+    await this.redClient.connect();
+  }
 
   // @Cron('*/5 * * * * *')
   @Cron('50 * * * *')
