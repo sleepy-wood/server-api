@@ -263,7 +263,7 @@ export const saveActivity = async (manager: EntityManager, user: E.User): Promis
       standHoursGoal,
     } = activity;
 
-    temp.date = new Date(dateInSeconds);
+    temp.date = new Date(dateInSeconds * 1000);
     temp.activeEnergyBurnedInKcal = activeEnergyBurnedInKcal;
     temp.activeEnergyBurnedGoalInKcal = activeEnergyBurnedGoalInKcal;
     temp.exerciseTimeInMinutes = exerciseTimeInMinutes;
@@ -284,8 +284,8 @@ export const saveSleep = async (manager: EntityManager, user: E.User): Promise<v
     const temp = new E.Sleep();
     const { startDateInSeconds, endDateInSeconds, value } = sleep;
 
-    temp.startDate = new Date(startDateInSeconds);
-    temp.endDate = new Date(endDateInSeconds);
+    temp.startDate = new Date(startDateInSeconds * 1000);
+    temp.endDate = new Date(endDateInSeconds * 1000);
     temp.type = value;
     temp.userId = user.id;
 
