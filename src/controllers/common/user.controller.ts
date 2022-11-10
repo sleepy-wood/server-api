@@ -54,6 +54,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '사용자 수정' })
+  @ApiBearerAuth()
   @HttpCode(StatusCodes.OK)
   @Put()
   async update(@Req() req: I.RequestWithUser, @Body() body: D.UpdateUserDto) {

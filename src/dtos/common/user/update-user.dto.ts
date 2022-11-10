@@ -12,7 +12,7 @@ export class UpdateUserDto {
   readonly profileImg?: string;
 
   @ApiProperty({
-    example: '/resources/12312321.png',
+    example: 'Julia',
     required: true,
     description: '유저 아바타',
   })
