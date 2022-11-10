@@ -1,4 +1,6 @@
 //@index('./**/*.ts', f => f.path !== `./index` ? `export * from '${f.path}';` : "")
+export * from './app/activity/create-activity.dto';
+export * from './app/activity/update-activity.dto';
 export * from './app/bridge/create-bridge.dto';
 export * from './app/bridge/update-bridge.dto';
 export * from './app/item/create-item.dto';

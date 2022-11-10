@@ -140,6 +140,7 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
     .addTag('users', '사용자 REST APIs')
     .addTag('utils', '유틸 REST APIs')
     // app
+    .addTag('activities', '활동 REST APIs')
     .addTag('bridges', '다리 REST APIs')
     .addTag('items', '아이템 REST APIs')
     .addTag('lands', '랜드 REST APIs')

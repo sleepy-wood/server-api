@@ -70,7 +70,7 @@ export class Activity {
   @Column({
     type: 'date',
     nullable: false,
-    comment: '일어서기 목표',
+    comment: '날짜',
   })
   date: Date;
 

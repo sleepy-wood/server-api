@@ -1,4 +1,5 @@
 // @index(['./**/*.ts'], f => `export * from '${f.path}';`)
+export * from './app/activity.controller';
 export * from './app/bridge.controller';
 export * from './app/item.controller';
 export * from './app/land.controller';
