@@ -1,11 +1,11 @@
+import * as Redis from 'redis';
+import moment from 'moment';
+import qs from 'qs';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import moment from 'moment';
-import qs from 'qs';
-import * as Redis from 'redis';
 import { Repository } from 'typeorm';
 
 import * as E from '../entities';
@@ -41,7 +41,7 @@ export class WeatherScheduler {
       socket: {
         host: this.configService.get<string>('REDIS_HOST'),
         port: this.configService.get<number>('REDIS_PORT'),
-      }
+      },
     });
     this.redPrefix = 'weather_';
   }
@@ -56,7 +56,7 @@ export class WeatherScheduler {
     const baseDate = moment(new Date()).format('YYYYMMDD'); // '20220513',
     const baseTime = moment(new Date()).format('HH00'); // '0600',
 
-    if (await this.redClient.getSet(`${this.redPrefix}_time`, baseTime) == baseTime) return;
+    if ((await this.redClient.getSet(`${this.redPrefix}time`, baseTime)) === baseTime) return;
 
     U.logger.warn(`Execute Weather Scheduler ${moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}`);
 
