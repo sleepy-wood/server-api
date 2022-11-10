@@ -51,7 +51,7 @@ import { HttpExceptionFilter } from '../../exceptions';
           database,
           entities: [...Object.entries(E).map(([name, entity]) => entity)],
           logger: new U.TypeOrmLogger(),
-          timezone: 'Asia/Seoul', // 'Z', // '+09:00',
+          timezone: '+09:00', // 'Z', // '+09:00',
           charset: 'utf8mb4_unicode_ci',
           autoLoadEntities: true,
           synchronize: false, // never use this in production

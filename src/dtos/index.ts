@@ -15,6 +15,7 @@ export * from './app/sleep/update-sleep.dto';
 export * from './app/tree/create-tree.dto';
 export * from './app/tree/create-treeGrowth.dto';
 export * from './app/tree/update-tree.dto';
+export * from './app/tree/update-treePipeline.dto';
 export * from './common/listQuery.dto';
 export * from './common/user/create-user.dto';
 export * from './common/user/update-user.dto';

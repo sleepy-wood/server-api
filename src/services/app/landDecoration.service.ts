@@ -82,7 +82,7 @@ export class LandDecorationService {
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateLandDecorationDto): Promise<void> {
     const data = await this.findOne(req, id);
-    if (!data || data.userId !== req.user.id) throw new HttpException('INVALID_REQUEST');
+    if (!data) throw new HttpException('INVALID_REQUEST');
 
     const landDecoration = new E.LandDecoration();
     const {
