@@ -1,10 +1,9 @@
 // @index(['./**/*.ts'], f => `export * from '${f.path}';`)
-export * from './app/activity.module';
 export * from './app/bridge.module';
+export * from './app/health.module';
 export * from './app/item.module';
 export * from './app/land.module';
 export * from './app/room.module';
-export * from './app/sleep.module';
 export * from './app/tree.module';
 export * from './common/app.module';
 export * from './common/auth.module';
