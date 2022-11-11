@@ -53,18 +53,6 @@ export class UserController {
     };
   }
 
-  @ApiOperation({ summary: '마켓 카테고리별 사용자 5명씩 가져오기' })
-  @HttpCode(StatusCodes.OK)
-  @Get('/category')
-  async findFiveByCategory() {
-    const [rows, count] = await this.userService.findFiveByCategory();
-    return <I.RowResponse<E.User>>{
-      result: true,
-      count,
-      data: rows,
-    };
-  }
-
   @ApiOperation({ summary: '사용자 수정' })
   @ApiBearerAuth()
   @HttpCode(StatusCodes.OK)

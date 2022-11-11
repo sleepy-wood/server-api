@@ -131,6 +131,83 @@ export class ProductService {
         throw new HttpException('COMMON_ERROR');
       });
   }
+  async findFiveByCategory(): Promise<[E.User[], number][]> {
+    const _data = await Promise.all([
+      this.product
+        .createQueryBuilder('product')
+        .select('DISTINCT product.userId')
+        .where('product.category = :category', { category: I.ProductCategory.collection })
+        .orderBy({ 'product.createdAt': 'DESC' })
+        .take(5)
+        .getRawMany(),
+      this.product
+        .createQueryBuilder('product')
+        .select('DISTINCT product.userId')
+        .where('product.category = :category', { category: I.ProductCategory.emoticon })
+        .orderBy({ 'product.createdAt': 'DESC' })
+        .take(5)
+        .getRawMany(),
+      this.product
+        .createQueryBuilder('product')
+        .select('DISTINCT product.userId')
+        .where('product.category = :category', { category: I.ProductCategory.flower })
+        .orderBy({ 'product.createdAt': 'DESC' })
+        .take(5)
+        .getRawMany(),
+      this.product
+        .createQueryBuilder('product')
+        .select('DISTINCT product.userId')
+        .where('product.category = :category', { category: I.ProductCategory.plants })
+        .orderBy({ 'product.createdAt': 'DESC' })
+        .take(5)
+        .getRawMany(),
+      this.product
+        .createQueryBuilder('product')
+        .select('DISTINCT product.userId')
+        .where('product.category = :category', { category: I.ProductCategory.mushroom })
+        .orderBy({ 'product.createdAt': 'DESC' })
+        .take(5)
+        .getRawMany(),
+      this.product
+        .createQueryBuilder('product')
+        .select('DISTINCT product.userId')
+        .where('product.category = :category', { category: I.ProductCategory.rock })
+        .orderBy({ 'product.createdAt': 'DESC' })
+        .take(5)
+        .getRawMany(),
+      this.product
+        .createQueryBuilder('product')
+        .select('DISTINCT product.userId')
+        .where('product.category = :category', { category: I.ProductCategory.wooden })
+        .orderBy({ 'product.createdAt': 'DESC' })
+        .take(5)
+        .getRawMany(),
+      this.product
+        .createQueryBuilder('product')
+        .select('DISTINCT product.userId')
+        .where('product.category = :category', { category: I.ProductCategory.light })
+        .orderBy({ 'product.createdAt': 'DESC' })
+        .take(5)
+        .getRawMany(),
+    ]);
+
+    const option = [];
+    for (const __data of _data) {
+      const data = __data.map((d) => d.userId);
+      option.push({ where: { id: In(data) } });
+    }
+
+    return Promise.all([
+      this.user.findAndCount(option[0]),
+      this.user.findAndCount(option[1]),
+      this.user.findAndCount(option[2]),
+      this.user.findAndCount(option[3]),
+      this.user.findAndCount(option[4]),
+      this.user.findAndCount(option[5]),
+      this.user.findAndCount(option[6]),
+      this.user.findAndCount(option[7]),
+    ]);
+  }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Product> {
     return this.product.findOne({ where: { id, deletedAt: null } }).catch((err) => {

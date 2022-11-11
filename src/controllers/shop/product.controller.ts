@@ -55,6 +55,17 @@ export class ProductController {
     };
   }
 
+  @ApiOperation({ summary: '마켓 카테고리별 사용자 5명씩 가져오기' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/category')
+  async findFiveByCategory() {
+    const data = await this.productService.findFiveByCategory();
+    return <I.BasicResponse<[E.User[], number][]>>{
+      result: true,
+      data,
+    };
+  }
+
   @ApiOperation({ summary: '상품 상세조회' })
   @ApiParam({
     name: 'id',

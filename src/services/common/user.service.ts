@@ -57,20 +57,6 @@ export class UserService {
       });
   }
 
-  async findFiveByCategory(): Promise<[E.User[], number]> {
-    return this.user
-      .findAndCount({
-        where: { deletedAt: null },
-        order: { productCount: 'desc' },
-        take: 5,
-        relations: ['products'],
-      })
-      .catch((err) => {
-        U.logger.error(err);
-        throw new HttpException('COMMON_ERROR');
-      });
-  }
-
   async update(req: I.RequestWithUser, body: D.UpdateUserDto): Promise<void> {
     const user = new E.User();
     const { avatar, profileImg, currentLandId } = body;

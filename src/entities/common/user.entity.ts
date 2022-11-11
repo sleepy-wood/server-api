@@ -48,6 +48,13 @@ export class User {
 
   @ApiProperty()
   @Column({
+    nullable: true,
+    comment: '유저 배너 이미지',
+  })
+  bannerImg: string;
+
+  @ApiProperty()
+  @Column({
     default: I.UserType.None,
     type: 'enum',
     enum: I.UserType,
