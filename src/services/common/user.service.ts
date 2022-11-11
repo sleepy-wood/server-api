@@ -27,7 +27,7 @@ export class UserService {
       });
   }
 
-  async trendingTen(): Promise<[E.User[], number]> {
+  async findTrendingTen(): Promise<[E.User[], number]> {
     return this.user
       .findAndCount({
         where: { deletedAt: null },
@@ -43,12 +43,26 @@ export class UserService {
       });
   }
 
-  async topTen(): Promise<[E.User[], number]> {
+  async findTopTen(): Promise<[E.User[], number]> {
     return this.user
       .findAndCount({
         where: { deletedAt: null },
         order: { productCount: 'desc' },
         take: 10,
+        relations: ['products'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async findFiveByCategory(): Promise<[E.User[], number]> {
+    return this.user
+      .findAndCount({
+        where: { deletedAt: null },
+        order: { productCount: 'desc' },
+        take: 5,
         relations: ['products'],
       })
       .catch((err) => {

@@ -31,13 +31,13 @@ export class Order {
 
   @ApiProperty()
   @Column({
-    default: I.Payment.Cash,
     type: 'enum',
-    enum: [...U.getObjectValues(I.Payment)],
+    default: I.Payment.Cash,
+    enum: I.Payment,
     nullable: false,
     comment: '결제 유형',
   })
-  payment: number;
+  payment: I.Payment;
 
   @ApiProperty()
   @Column({ nullable: false })

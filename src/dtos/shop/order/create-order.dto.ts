@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
+
+import * as I from '../../../interfaces';
 
 export class CreateOrderDto {
   @ApiProperty({
@@ -18,19 +20,15 @@ export class CreateOrderDto {
   readonly amount: number;
 
   @ApiProperty({
+    enum: I.Payment,
     example: 0,
+    default: I.Payment.Cash,
     required: true,
     description: '결제 유형',
   })
-  @IsNumber(
-    {
-      allowInfinity: false,
-      allowNaN: false,
-    },
-    { message: '결제 유형은 숫자여야 해요.' },
-  )
+  @IsEnum(I.Payment, { message: '결제 유형이 올바르지 않아요.' })
   @IsNotEmpty({ message: '결제 유형은 필수 입력 항목이에요.' })
-  readonly payment: number;
+  readonly payment: I.Payment;
 
   @ApiProperty({
     example: [1, 2],

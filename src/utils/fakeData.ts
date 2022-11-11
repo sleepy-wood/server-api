@@ -2,7 +2,6 @@ import { EntityManager } from 'typeorm';
 
 import * as C from '../constants';
 import * as E from '../entities';
-import * as I from '../interfaces';
 
 export const saveCartAndWishList = async (manager: EntityManager, user: E.User): Promise<void> => {
   const cart = new E.Cart();
@@ -270,6 +269,54 @@ export const saveActivity = async (manager: EntityManager, user: E.User): Promis
     temp.exerciseTimeGoalInMinutes = exerciseTimeGoalInMinutes;
     temp.standHours = standHours;
     temp.standHoursGoal = standHoursGoal;
+    temp.userId = user.id;
+
+    saveData.push(temp);
+  }
+
+  await manager.save(saveData);
+};
+
+export const saveHeart = async (manager: EntityManager, user: E.User): Promise<void> => {
+  const saveData: E.Heart[] = [];
+  for (const heart of C.mockHeart) {
+    const temp = new E.Heart();
+    const { dateInSeconds, valueInCountPerMinute } = heart;
+
+    temp.date = new Date(dateInSeconds * 1000);
+    temp.valueInCountPerMinute = valueInCountPerMinute;
+    temp.userId = user.id;
+
+    saveData.push(temp);
+  }
+
+  await manager.save(saveData);
+};
+
+export const saveOxygen = async (manager: EntityManager, user: E.User): Promise<void> => {
+  const saveData: E.Oxygen[] = [];
+  for (const oxygen of C.mockOxygen) {
+    const temp = new E.Oxygen();
+    const { dateInSeconds, valueInRatio } = oxygen;
+
+    temp.date = new Date(dateInSeconds * 1000);
+    temp.valueInRatio = valueInRatio;
+    temp.userId = user.id;
+
+    saveData.push(temp);
+  }
+
+  await manager.save(saveData);
+};
+
+export const saveRespiratory = async (manager: EntityManager, user: E.User): Promise<void> => {
+  const saveData: E.Respiratory[] = [];
+  for (const respiratory of C.mockRespiratory) {
+    const temp = new E.Respiratory();
+    const { dateInSeconds, valueInCountPerMinute } = respiratory;
+
+    temp.date = new Date(dateInSeconds * 1000);
+    temp.valueInCountPerMinute = valueInCountPerMinute;
     temp.userId = user.id;
 
     saveData.push(temp);

@@ -27,11 +27,11 @@ export class ProductService {
 
   async create(req: I.RequestWithUser, body: D.CreateProductDto): Promise<E.Product> {
     const product = new E.Product();
-    const { name, price, type, detail, attachFileIds } = body;
+    const { name, price, category, detail, attachFileIds } = body;
 
     product.name = name;
     product.price = price;
-    product.type = type;
+    product.category = category;
     product.detail = detail;
     product.userId = req.user.id;
 
@@ -64,7 +64,7 @@ export class ProductService {
           productImage.size = size;
           productImage.productId = result.id;
 
-          if (result.type === I.ProductType.Emoticon) {
+          if (result.category === I.ProductCategory.emoticon) {
             const source = join(path, 'uploads', serverTo);
             let i = 1;
             for (const left of [0, 480, 960, 1440]) {

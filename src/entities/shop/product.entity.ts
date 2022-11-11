@@ -56,16 +56,6 @@ export class Product {
 
   @ApiProperty()
   @Column({
-    type: 'enum',
-    enum: [...U.getObjectKeys(I.ProductType)],
-    default: I.ProductType.Emoticon,
-    nullable: false,
-    comment: '상품 타입(Emoticon | Prop)',
-  })
-  type: keyof typeof I.ProductType;
-
-  @ApiProperty()
-  @Column({
     type: 'text',
     nullable: false,
     comment: '상세정보',
@@ -87,6 +77,16 @@ export class Product {
     comment: '판매수',
   })
   sell: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'enum',
+    enum: I.ProductCategory,
+    default: I.ProductCategory.emoticon,
+    nullable: false,
+    comment: '상품 카테고리',
+  })
+  category: I.ProductCategory;
 
   @ApiProperty()
   @Column({ nullable: false })

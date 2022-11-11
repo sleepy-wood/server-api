@@ -33,7 +33,7 @@ export class UserController {
   @HttpCode(StatusCodes.OK)
   @Get('/trending-ten')
   async trendingTen() {
-    const [rows, count] = await this.userService.trendingTen();
+    const [rows, count] = await this.userService.findTrendingTen();
     return <I.RowResponse<E.User>>{
       result: true,
       count,
@@ -45,7 +45,19 @@ export class UserController {
   @HttpCode(StatusCodes.OK)
   @Get('/top-ten')
   async topTen() {
-    const [rows, count] = await this.userService.topTen();
+    const [rows, count] = await this.userService.findTopTen();
+    return <I.RowResponse<E.User>>{
+      result: true,
+      count,
+      data: rows,
+    };
+  }
+
+  @ApiOperation({ summary: '마켓 카테고리별 사용자 5명씩 가져오기' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/category')
+  async findFiveByCategory() {
+    const [rows, count] = await this.userService.findFiveByCategory();
     return <I.RowResponse<E.User>>{
       result: true,
       count,

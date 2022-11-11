@@ -58,12 +58,12 @@ export class AttachFile {
   @ApiProperty()
   @Column({
     type: 'enum',
-    enum: [...U.getObjectKeys(I.AttachFileType)],
+    enum: I.AttachFileType,
     default: I.AttachFileType.Temp,
     nullable: false,
     comment: '파일 타입(Temp | Static | Secure)',
   })
-  type: keyof typeof I.AttachFileType;
+  type: I.AttachFileType;
 
   @ApiProperty()
   @Column({

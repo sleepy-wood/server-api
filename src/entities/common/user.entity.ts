@@ -19,6 +19,9 @@ import {
   Land,
   LandDecoration,
   Activity,
+  Heart,
+  Oxygen,
+  Respiratory,
   Sleep,
   Tree,
   Cart,
@@ -47,11 +50,11 @@ export class User {
   @Column({
     default: I.UserType.None,
     type: 'enum',
-    enum: [...U.getObjectValues(I.UserType)],
+    enum: I.UserType,
     nullable: false,
     comment: '유저 타입',
   })
-  type: keyof typeof I.UserType;
+  type: I.UserType;
 
   @ApiProperty()
   @Column({
@@ -162,6 +165,30 @@ export class User {
     onDelete: 'CASCADE',
   })
   activities: Activity[];
+
+  @ApiProperty({ type: () => [Heart] })
+  @OneToMany(() => Heart, (heart) => heart.user, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  heart: Heart[];
+
+  @ApiProperty({ type: () => [Oxygen] })
+  @OneToMany(() => Oxygen, (oxygen) => oxygen.user, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  oxygen: Oxygen[];
+
+  @ApiProperty({ type: () => [Respiratory] })
+  @OneToMany(() => Respiratory, (respiratory) => respiratory.user, {
+    cascade: true,
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  respiratory: Respiratory[];
 
   @ApiProperty({ type: () => [Sleep] })
   @OneToMany(() => Sleep, (sleep) => sleep.user, {

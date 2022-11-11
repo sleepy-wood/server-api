@@ -1,14 +1,17 @@
 // @index(['./**/*.ts'], f => `export * from '${f.path}';`)
-export * from './app/activity.entity';
 export * from './app/bridge.entity';
 export * from './app/bridgeInfo.entity';
+export * from './app/healthActivity.entity';
+export * from './app/healthHeart.entity';
+export * from './app/healthOxygen.entity';
+export * from './app/healthRespiratory.entity';
+export * from './app/healthSleep.entity';
 export * from './app/item.entity';
 export * from './app/itemType.entity';
 export * from './app/land.entity';
 export * from './app/landDecoration';
 export * from './app/room.entity';
 export * from './app/roomMember.entity';
-export * from './app/sleep.entity';
 export * from './app/tree.entity';
 export * from './app/treeGrowth.entity';
 export * from './app/treePipeline.entity';
@@ -20,7 +23,6 @@ export * from './common/user.entity';
 export * from './common/wallet.entity';
 export * from './shop/cart.entity';
 export * from './shop/cartItem.entity';
-export * from './shop/emoticon.entity';
 export * from './shop/order.entity';
 export * from './shop/orderDetail.entity';
 export * from './shop/product.entity';

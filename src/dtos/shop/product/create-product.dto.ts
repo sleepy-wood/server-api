@@ -29,18 +29,18 @@ export class CreateProductDto {
   readonly price: number;
 
   @ApiProperty({
-    enum: ['Emoticon', 'Prop'],
+    enum: I.ProductCategory,
     example: 0,
-    default: I.ProductType.Emoticon,
+    default: I.ProductCategory.emoticon,
     required: true,
     description: '상품 유형',
   })
-  @IsEnum(I.ProductType, { message: '상품 유형이 올바르지 않아요.' })
-  @IsNotEmpty({ message: '상품 유형은 필수 입력 항목이에요.' })
-  readonly type: keyof typeof I.ProductType;
+  @IsEnum(I.ProductCategory, { message: '상품 카테고리가 올바르지 않아요.' })
+  @IsNotEmpty({ message: '상품 카테고리는 필수 입력 항목이에요.' })
+  readonly category: I.ProductCategory;
 
   @ApiProperty({
-    example: '테스트 상품이름',
+    example: '테스트 상세정보',
     required: true,
     description: '상세정보',
   })

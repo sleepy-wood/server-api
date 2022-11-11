@@ -102,6 +102,9 @@ import { HttpExceptionFilter } from '../../exceptions';
             await U.saveBridgeInfo(manager, bridges, lands);
             await U.saveRoom(manager, user);
             await U.saveActivity(manager, user);
+            await U.saveHeart(manager, user);
+            await U.saveOxygen(manager, user);
+            await U.saveRespiratory(manager, user);
             await U.saveSleep(manager, user);
           }
         }

@@ -4,11 +4,6 @@ export enum AttachFileType {
   Secure = 'Secure',
 }
 
-export enum ProductType {
-  Emoticon = 'Emoticon',
-  Prop = 'Prop',
-}
-
 export enum ContextType {
   Request = 'Request',
   WebSocket = 'WebSocket',
@@ -21,7 +16,18 @@ export enum UserType {
   Kakao = 'Kakao',
 }
 
+export enum ProductCategory {
+  collection = 'collection',
+  emoticon = 'emoticon',
+  flower = 'flower',
+  plants = 'plants',
+  mushroom = 'mushroom',
+  rock = 'rock',
+  wooden = 'wooden',
+  light = 'light',
+}
+
 export enum Payment {
-  Cash,
-  Card,
+  Cash = 'Cash',
+  Card = 'Card',
 }
