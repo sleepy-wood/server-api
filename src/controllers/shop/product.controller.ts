@@ -60,7 +60,7 @@ export class ProductController {
   @Get('/category')
   async findFiveByCategory() {
     const data = await this.productService.findFiveByCategory();
-    return <I.BasicResponse<[E.User[], number][]>>{
+    return <I.BasicResponse<[E.User[], string][]>>{
       result: true,
       data,
     };

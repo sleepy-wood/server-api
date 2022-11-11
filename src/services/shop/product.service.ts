@@ -131,11 +131,12 @@ export class ProductService {
         throw new HttpException('COMMON_ERROR');
       });
   }
-  async findFiveByCategory(): Promise<[E.User[], number][]> {
+  async findFiveByCategory(): Promise<[E.User[], string][]> {
     const _data = await Promise.all([
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
+        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.collection })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -143,6 +144,7 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
+        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.emoticon })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -150,6 +152,7 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
+        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.flower })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -157,6 +160,7 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
+        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.plants })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -164,6 +168,7 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
+        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.mushroom })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -171,6 +176,7 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
+        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.rock })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -178,6 +184,7 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
+        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.wooden })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -185,6 +192,7 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
+        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.light })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -193,20 +201,30 @@ export class ProductService {
 
     const option = [];
     for (const __data of _data) {
-      const data = __data.map((d) => d.userId);
-      option.push({ where: { id: In(data) } });
+      option.push({ where: { id: In(__data.map((d) => d.userId)) } });
     }
 
-    return Promise.all([
-      this.user.findAndCount(option[0]),
-      this.user.findAndCount(option[1]),
-      this.user.findAndCount(option[2]),
-      this.user.findAndCount(option[3]),
-      this.user.findAndCount(option[4]),
-      this.user.findAndCount(option[5]),
-      this.user.findAndCount(option[6]),
-      this.user.findAndCount(option[7]),
+    const temp = await Promise.all([
+      this.user.find(option[0]),
+      this.user.find(option[1]),
+      this.user.find(option[2]),
+      this.user.find(option[3]),
+      this.user.find(option[4]),
+      this.user.find(option[5]),
+      this.user.find(option[6]),
+      this.user.find(option[7]),
     ]);
+
+    return [
+      [temp[0], _data[0][0]['count']],
+      [temp[1], _data[1][0]['count']],
+      [temp[2], _data[2][0]['count']],
+      [temp[3], _data[3][0]['count']],
+      [temp[4], _data[4][0]['count']],
+      [temp[5], _data[5][0]['count']],
+      [temp[6], _data[6][0]['count']],
+      [temp[7], _data[7][0]['count']],
+    ];
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Product> {
