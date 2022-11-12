@@ -42,7 +42,7 @@ export class UserController {
   @HttpCode(StatusCodes.OK)
   @Get('/profile/:id')
   async findById(@Req() req: I.RequestWithUser, @Param('id') id: string) {
-    return <I.BasicResponse<E.User[]>>{
+    return <I.BasicResponse<[E.User, [E.Product[], number]]>>{
       result: true,
       data: await this.userService.findById(req, +id),
     };
