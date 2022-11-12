@@ -129,6 +129,7 @@ export class ProductService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
+        relations: ['user'],
       })
       .catch((err) => {
         U.logger.error(err);
