@@ -129,7 +129,7 @@ export class ProductService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
-        relations: ['user'],
+        relations: ['productImages', 'user'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -233,10 +233,15 @@ export class ProductService {
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Product> {
-    return this.product.findOne({ where: { id, deletedAt: null } }).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+    return this.product
+      .findOne({
+        where: { id, deletedAt: null },
+        relations: ['productImages', 'user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateProductDto): Promise<void> {
