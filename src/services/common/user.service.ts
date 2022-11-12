@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
 import * as I from '../../interfaces';
+import * as S from '..';
 import * as U from '../../utils';
 import { HttpException } from '../../exceptions';
 
@@ -12,6 +13,8 @@ import { HttpException } from '../../exceptions';
 export class UserService {
   constructor(
     private readonly dataSource: DataSource,
+    @Inject(forwardRef(() => S.ProductService))
+    private readonly productService: S.ProductService,
     @InjectRepository(E.User)
     private readonly user: Repository<E.User>,
   ) {}
@@ -25,6 +28,15 @@ export class UserService {
         U.logger.error(err);
         throw new HttpException('COMMON_ERROR');
       });
+  }
+
+  async findById(req: I.RequestWithUser, id: number): Promise<[E.User, [E.Product[], number]]> {
+    return Promise.all([
+      this.user.findOne({
+        where: { id, deletedAt: null },
+      }),
+      this.productService.findAllByUserId(req, id),
+    ]);
   }
 
   async findTrendingTen(): Promise<[E.User[], number]> {

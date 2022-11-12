@@ -136,6 +136,29 @@ export class ProductService {
         throw new HttpException('COMMON_ERROR');
       });
   }
+
+  async findAllByUserId(req: I.RequestWithUser, userId: number): Promise<[E.Product[], number]> {
+    const page = 1;
+    const count = 30;
+    const sort = 'createdAt';
+    const dir = 'DESC';
+
+    return this.product
+      .findAndCount({
+        where: {
+          deletedAt: null,
+        },
+        order: { [sort]: dir },
+        skip: (page - 1) * count,
+        take: count,
+        relations: ['productImages'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
   async findFiveByCategory(): Promise<[E.User[], string][]> {
     const _data = await Promise.all([
       this.product

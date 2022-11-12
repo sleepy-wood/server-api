@@ -1,5 +1,5 @@
-import { Controller, Get, HttpCode, UseInterceptors, CacheInterceptor, Req, Query, Body, Put } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, HttpCode, UseInterceptors, CacheInterceptor, Req, Body, Put, Param } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -26,6 +26,25 @@ export class UserController {
     return <I.BasicResponse<E.User>>{
       result: true,
       data: await this.userService.findOne(req),
+    };
+  }
+
+  @ApiOperation({ summary: '사용자 상세조회 by userId' })
+  @ApiParam({
+    name: 'id',
+    description: '유저 아이디',
+    required: true,
+    schema: {
+      type: 'string',
+      example: '1',
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  @Get('/profile/:id')
+  async findById(@Req() req: I.RequestWithUser, @Param('id') id: string) {
+    return <I.BasicResponse<E.User[]>>{
+      result: true,
+      data: await this.userService.findById(req, +id),
     };
   }
 
