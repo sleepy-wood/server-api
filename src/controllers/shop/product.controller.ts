@@ -45,7 +45,7 @@ export class ProductController {
   @ApiOperation({ summary: '상품 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()
-  async findAll(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
+  async findAll(@Req() req: I.RequestWithUser, @Query() query: D.FindProductDto) {
     if (!req.user) throw new HttpException('NO_USER');
     const [rows, count] = await this.productService.findAll(req, query);
     return <I.RowResponse<E.Product>>{

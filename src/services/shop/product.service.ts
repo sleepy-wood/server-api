@@ -111,17 +111,21 @@ export class ProductService {
     }
   }
 
-  async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Product[], number]> {
-    let { page, count, sort, dir, q } = query;
+  async findAll(req: I.RequestWithUser, query: D.FindProductDto): Promise<[E.Product[], number]> {
+    let { page, count, sort, dir, q, category } = query;
 
     page = Number(page) || 1;
     count = Number(count) || 30;
     sort = sort || 'createdAt';
     dir = dir || 'DESC';
+    category = category || I.ProductCategory.emoticon;
 
     return this.product
       .findAndCount({
-        where: { deletedAt: null },
+        where: {
+          category,
+          deletedAt: null,
+        },
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
