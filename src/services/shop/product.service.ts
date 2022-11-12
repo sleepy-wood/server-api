@@ -146,6 +146,7 @@ export class ProductService {
     return this.product
       .findAndCount({
         where: {
+          userId,
           deletedAt: null,
         },
         order: { [sort]: dir },
