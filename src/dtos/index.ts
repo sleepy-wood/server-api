@@ -6,6 +6,7 @@ export * from './app/health/create-heart.dto';
 export * from './app/health/create-oxygen.dto';
 export * from './app/health/create-respiratory.dto';
 export * from './app/health/create-sleep.dto';
+export * from './app/health/find-activity.dto';
 export * from './app/health/update-activity.dto';
 export * from './app/health/update-heart.dto';
 export * from './app/health/update-oxygen.dto';

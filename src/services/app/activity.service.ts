@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, MoreThan } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -64,10 +64,16 @@ export class ActivityService {
       });
   }
 
-  async findWeekData(req: I.RequestWithUser): Promise<E.Activity[]> {
+  async findWeekData(req: I.RequestWithUser, query: D.FindWeekDataQuery): Promise<E.Activity[]> {
+    const { date } = query;
+
     return this.activity
       .find({
-        where: { userId: req.user.id, deletedAt: null },
+        where: {
+          date: MoreThan(date),
+          userId: req.user.id,
+          deletedAt: null,
+        },
         order: { date: 'DESC' },
         take: 7,
       })

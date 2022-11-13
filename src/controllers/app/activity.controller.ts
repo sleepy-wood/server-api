@@ -58,11 +58,11 @@ export class ActivityController {
   @ApiOperation({ summary: '일주일 활동 데이터 조회' })
   @HttpCode(StatusCodes.OK)
   @Get('week-data')
-  async findWeekData(@Req() req: I.RequestWithUser) {
+  async findWeekData(@Req() req: I.RequestWithUser, @Query() query: D.FindWeekDataQuery) {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Activity[]>>{
       result: true,
-      data: await this.sleepService.findWeekData(req),
+      data: await this.sleepService.findWeekData(req, query),
     };
   }
 
