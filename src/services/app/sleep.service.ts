@@ -36,7 +36,7 @@ export class SleepService {
 
     page = Number(page) || 1;
     count = Number(count) || 30;
-    sort = sort || 'startAt';
+    sort = sort || 'startDate';
     dir = dir || 'DESC';
 
     return this.sleep
