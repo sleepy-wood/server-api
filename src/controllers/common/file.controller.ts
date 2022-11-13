@@ -56,7 +56,7 @@ export class FileController {
         },
       }),
       limits: {
-        fileSize: 10 * 1024 * 1024, //10mb
+        fileSize: 40 * 1024 * 1024, //40mb
         fieldNameSize: 10 * 1024, // 10kb
       },
       fileFilter: (req: I.RequestWithUser, file, cb) => {
