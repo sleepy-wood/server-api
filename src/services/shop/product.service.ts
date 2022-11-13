@@ -288,7 +288,7 @@ export class ProductService {
         },
         order: { createdAt: 'DESC' },
         relations: ['productImages'],
-        take: 4,
+        take: 5,
       })
       .catch((err) => {
         U.logger.error(err);
@@ -317,7 +317,7 @@ export class ProductService {
         },
         order: { createdAt: 'DESC' },
         relations: ['productImages'],
-        take: 4,
+        take: 5,
       })
       .catch((err) => {
         U.logger.error(err);
