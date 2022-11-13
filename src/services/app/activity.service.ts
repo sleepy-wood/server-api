@@ -74,7 +74,7 @@ export class ActivityService {
           userId: req.user.id,
           deletedAt: null,
         },
-        order: { date: 'DESC' },
+        order: { date: 'ASC' },
         take: 7,
       })
       .catch((err) => {
