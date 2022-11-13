@@ -21,7 +21,6 @@ import { ProductService } from '../../services';
 import { StatusCodes } from '../../constants';
 import { HttpException } from '../../exceptions';
 
-@ApiBearerAuth()
 @ApiTags('products')
 @UseInterceptors(CacheInterceptor)
 @Controller({
@@ -32,6 +31,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @ApiOperation({ summary: '상품 생성' })
+  @ApiBearerAuth()
   @HttpCode(StatusCodes.OK)
   @Post()
   async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateProductDto) {
@@ -46,7 +46,6 @@ export class ProductController {
   @HttpCode(StatusCodes.OK)
   @Get()
   async findAll(@Req() req: I.RequestWithUser, @Query() query: D.FindProductDto) {
-    if (!req.user) throw new HttpException('NO_USER');
     const [rows, count] = await this.productService.findAll(req, query);
     return <I.RowResponse<E.Product>>{
       result: true,
@@ -79,7 +78,6 @@ export class ProductController {
   @HttpCode(StatusCodes.OK)
   @Get(':id')
   async findOne(@Req() req: I.RequestWithUser, @Param('id') id: string) {
-    if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.Product>>{
       result: true,
       data: await this.productService.findOne(req, +id),
@@ -87,6 +85,7 @@ export class ProductController {
   }
 
   @ApiOperation({ summary: '상품 수정' })
+  @ApiBearerAuth()
   @ApiParam({
     name: 'id',
     description: '상품 아이디',
@@ -107,6 +106,7 @@ export class ProductController {
   }
 
   @ApiOperation({ summary: '상품 삭제' })
+  @ApiBearerAuth()
   @ApiParam({
     name: 'id',
     description: '상품 아이디',

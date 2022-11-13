@@ -272,13 +272,24 @@ export class ProductService {
     const product = new E.Product();
     const {} = body;
 
-    await this.product.update(id, product);
+    await this.product.update(
+      {
+        id,
+        userId: req.user.id,
+      },
+      product,
+    );
   }
 
   async remove(req: I.RequestWithUser, id: number): Promise<void> {
-    await this.product.softDelete(id).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+    await this.product
+      .softDelete({
+        id,
+        userId: req.user.id,
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 }

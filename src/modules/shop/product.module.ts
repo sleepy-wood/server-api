@@ -20,10 +20,19 @@ import * as S from '../../services';
   controllers: [C.ProductController],
 })
 export class ProductModule implements NestModule {
+  // exclude 쓰면 wildcard 금지
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(MW.AuthMiddleware).forRoutes({
-      path: 'v1/products*',
-      method: RequestMethod.ALL,
-    });
+    consumer
+      .apply(MW.AuthMiddleware)
+      .exclude(
+        { path: 'v1/products', method: RequestMethod.GET },
+        { path: 'v1/products/:id', method: RequestMethod.GET },
+        { path: 'v1/products/category', method: RequestMethod.GET },
+      )
+      .forRoutes(
+        { path: 'v1/products', method: RequestMethod.POST },
+        { path: 'v1/products/:id', method: RequestMethod.PUT },
+        { path: 'v1/products/:id', method: RequestMethod.DELETE },
+      );
   }
 }
