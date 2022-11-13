@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, In } from 'typeorm';
+import { Repository, DataSource, In, Not } from 'typeorm';
 import { path } from 'app-root-path';
 import { join } from 'path';
 
@@ -261,6 +261,63 @@ export class ProductService {
       .findOne({
         where: { id, deletedAt: null },
         relations: ['productImages', 'user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async findFourExtraProducts(id: number): Promise<E.Product[]> {
+    const product = await this.product
+      .findOne({
+        where: { id, deletedAt: null },
+        relations: ['user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    return this.product
+      .find({
+        where: {
+          id: Not(id),
+          userId: product.user.id,
+          deletedAt: null,
+        },
+        order: { createdAt: 'DESC' },
+        relations: ['productImages'],
+        take: 4,
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async findFourRecommendProducts(id: number): Promise<E.Product[]> {
+    const product = await this.product
+      .findOne({
+        where: { id, deletedAt: null },
+        relations: ['user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    return this.product
+      .find({
+        where: {
+          id: Not(id),
+          userId: Not(product.user.id),
+          category: product.category,
+          deletedAt: null,
+        },
+        order: { createdAt: 'DESC' },
+        relations: ['productImages'],
+        take: 4,
       })
       .catch((err) => {
         U.logger.error(err);

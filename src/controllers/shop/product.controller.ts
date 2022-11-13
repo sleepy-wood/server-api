@@ -57,9 +57,49 @@ export class ProductController {
   @ApiOperation({ summary: '마켓 카테고리별 사용자 5명씩 가져오기' })
   @HttpCode(StatusCodes.OK)
   @Get('/category')
-  async findFiveByCategory() {
+  async findFiveByCategory(@Req() req: I.RequestWithUser) {
     const data = await this.productService.findFiveByCategory();
     return <I.BasicResponse<[E.User[], string][]>>{
+      result: true,
+      data,
+    };
+  }
+
+  @ApiOperation({ summary: '크리에이터 다른 상품 4개' })
+  @ApiParam({
+    name: 'id',
+    description: '상품 아이디',
+    required: true,
+    schema: {
+      type: 'string',
+      example: '1',
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  @Get('/extra/:id')
+  async findFourExtraProducts(@Req() req: I.RequestWithUser, @Param('id') id: string) {
+    const data = await this.productService.findFourExtraProducts(+id);
+    return <I.BasicResponse<E.Product[]>>{
+      result: true,
+      data,
+    };
+  }
+
+  @ApiOperation({ summary: '추천 상품 4개' })
+  @ApiParam({
+    name: 'id',
+    description: '상품 아이디',
+    required: true,
+    schema: {
+      type: 'string',
+      example: '1',
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  @Get('/recommend/:id')
+  async findFourRecommendProducts(@Req() req: I.RequestWithUser, @Param('id') id: string) {
+    const data = await this.productService.findFourRecommendProducts(+id);
+    return <I.BasicResponse<E.Product[]>>{
       result: true,
       data,
     };
