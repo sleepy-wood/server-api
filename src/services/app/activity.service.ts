@@ -64,6 +64,19 @@ export class ActivityService {
       });
   }
 
+  async findWeekData(req: I.RequestWithUser): Promise<E.Activity[]> {
+    return this.activity
+      .find({
+        where: { userId: req.user.id, deletedAt: null },
+        order: { date: 'DESC' },
+        take: 7,
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Activity> {
     return this.activity.findOne({ where: { id, userId: req.user.id, deletedAt: null } }).catch((err) => {
       U.logger.error(err);
