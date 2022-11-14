@@ -10,6 +10,8 @@ Parameters:
     Description: The name of the service, job, or workflow being deployed.
 
 Resources:
+  nullResource:
+    Type: AWS::CloudFormation::WaitConditionHandle
 
 Outputs:
   mysqlDatabase:
