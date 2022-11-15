@@ -20,6 +20,10 @@ Mappings:
   dbclusterEnvScalingConfigurationMap:
     test:
       "DBMinCapacity": 0.5 # AllowedValues: from 0.5 through 128
+      "DBMaxCapacity": 2   # AllowedValues: from 0.5 through 128
+
+    prod:
+      "DBMinCapacity": 1   # AllowedValues: from 0.5 through 128
       "DBMaxCapacity": 8   # AllowedValues: from 0.5 through 128
 
     All:
@@ -123,8 +127,8 @@ Resources:
         - !Ref dbclusterDBClusterSecurityGroup
       ServerlessV2ScalingConfiguration:
         # Replace "All" below with "!Ref Env" to set different autoscaling limits per environment.
-        MinCapacity: !FindInMap [dbclusterEnvScalingConfigurationMap, All, DBMinCapacity]
-        MaxCapacity: !FindInMap [dbclusterEnvScalingConfigurationMap, All, DBMaxCapacity]
+        MinCapacity: !FindInMap [dbclusterEnvScalingConfigurationMap, !Ref Env, DBMinCapacity]
+        MaxCapacity: !FindInMap [dbclusterEnvScalingConfigurationMap, !Ref Env, DBMaxCapacity]
   dbclusterDBWriterInstance:
     Metadata:
       'aws:copilot:description': 'The dbcluster Aurora Serverless v2 writer instance'
