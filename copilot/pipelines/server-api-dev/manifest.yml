@@ -1,9 +1,9 @@
-# The manifest for the "server-api-main" pipeline.
+# The manifest for the "server-api-dev" pipeline.
 # This YAML file defines your pipeline: the source repository it tracks and the order of the environments to deploy to.
 # For more info: https://aws.github.io/copilot-cli/docs/manifest/pipeline/
 
 # The name of the pipeline.
-name: server-api-main
+name: server-api-dev
 
 # The version of the schema used in this template.
 version: 1
@@ -15,7 +15,7 @@ source:
   provider: GitHub
   # Additional properties that further specify the location of the artifacts.
   properties:
-    branch: main
+    branch: dev
     repository: https://github.com/sleepy-wood/server-api
     # Optional: specify the name of an existing CodeStar Connections connection.
     # connection_name: a-connection
@@ -26,7 +26,7 @@ build:
 # This section defines the order of the environments your pipeline will deploy to.
 stages:
   - # The name of the environment.
-    name: prod
+    name: test
     # Optional: flag for manual approval action before deployment.
     # requires_approval: true
     # Optional: use test commands to validate this stage of your build.
