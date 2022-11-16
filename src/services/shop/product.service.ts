@@ -87,6 +87,7 @@ export class ProductService {
                 i++;
               }
             }
+          } else if (result.category === I.ProductCategory.collection) {
           }
 
           saveData.push(productImage);
@@ -160,12 +161,11 @@ export class ProductService {
       });
   }
 
-  async findFiveByCategory(): Promise<[E.User[], string][]> {
+  async findFiveByCategory(): Promise<[E.User[][], any[]]> {
     const _data = await Promise.all([
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
-        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.collection })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -173,7 +173,6 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
-        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.emoticon })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -181,7 +180,6 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
-        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.flower })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -189,7 +187,6 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
-        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.plants })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -197,7 +194,6 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
-        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.mushroom })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -205,7 +201,6 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
-        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.rock })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -213,7 +208,6 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
-        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.wooden })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
@@ -221,12 +215,17 @@ export class ProductService {
       this.product
         .createQueryBuilder('product')
         .select('DISTINCT product.userId')
-        .addSelect('COUNT(product.id)', 'count')
         .where('product.category = :category', { category: I.ProductCategory.light })
         .orderBy({ 'product.createdAt': 'DESC' })
         .take(5)
         .getRawMany(),
     ]);
+
+    const categoryCount = await this.product
+      .createQueryBuilder('product')
+      .select('product.category, COUNT(1) as categoryCount')
+      .groupBy('product.category')
+      .getRawMany();
 
     const option = [];
     for (const __data of _data) {
@@ -244,16 +243,7 @@ export class ProductService {
       this.user.find(option[7]),
     ]);
 
-    return [
-      [temp[0], _data[0][0]['count']],
-      [temp[1], _data[1][0]['count']],
-      [temp[2], _data[2][0]['count']],
-      [temp[3], _data[3][0]['count']],
-      [temp[4], _data[4][0]['count']],
-      [temp[5], _data[5][0]['count']],
-      [temp[6], _data[6][0]['count']],
-      [temp[7], _data[7][0]['count']],
-    ];
+    return [temp, categoryCount];
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Product> {

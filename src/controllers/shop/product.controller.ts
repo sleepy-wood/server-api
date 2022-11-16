@@ -59,7 +59,7 @@ export class ProductController {
   @Get('/category')
   async findFiveByCategory(@Req() req: I.RequestWithUser) {
     const data = await this.productService.findFiveByCategory();
-    return <I.BasicResponse<[E.User[], string][]>>{
+    return <I.BasicResponse<[E.User[][], any[]]>>{
       result: true,
       data,
     };
