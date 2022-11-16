@@ -65,6 +65,17 @@ export class ProductController {
     };
   }
 
+  @ApiOperation({ summary: '마켓 검색어에 맞는 상품 카테고리별 5개씩 가져오기' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/search')
+  async findFiveByQuery(@Req() req: I.RequestWithUser, @Query('query') query: string) {
+    const data = await this.productService.findFiveByQuery(query);
+    return <I.BasicResponse<[E.Product[], number][]>>{
+      result: true,
+      data,
+    };
+  }
+
   @ApiOperation({ summary: '크리에이터 다른 상품 4개' })
   @ApiParam({
     name: 'id',

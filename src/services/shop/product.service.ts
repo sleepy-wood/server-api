@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, In, Not } from 'typeorm';
+import { Repository, DataSource, In, Not, Like } from 'typeorm';
 import { path } from 'app-root-path';
 import { join } from 'path';
 
@@ -88,6 +88,9 @@ export class ProductService {
               }
             }
           } else if (result.category === I.ProductCategory.collection) {
+            // Save Video & Image
+          } else {
+            // Do Nothing
           }
 
           saveData.push(productImage);
@@ -244,6 +247,43 @@ export class ProductService {
     ]);
 
     return [temp, categoryCount];
+  }
+
+  async findFiveByQuery(query: string): Promise<[E.Product[], number][]> {
+    const result = await Promise.all([
+      this.product.findAndCount({
+        where: {
+          name: Like(`%${query}%`),
+          category: I.ProductCategory.collection,
+          deletedAt: null,
+        },
+        relations: ['productImages', 'user'],
+        order: { createdAt: 'DESC' },
+        take: 5,
+      }),
+      this.product.findAndCount({
+        where: {
+          name: Like(`%${query}%`),
+          category: I.ProductCategory.emoticon,
+          deletedAt: null,
+        },
+        relations: ['productImages', 'user'],
+        order: { createdAt: 'DESC' },
+        take: 5,
+      }),
+      this.product.findAndCount({
+        where: {
+          name: Like(`%${query}%`),
+          category: Not(In([I.ProductCategory.collection, I.ProductCategory.emoticon])),
+          deletedAt: null,
+        },
+        relations: ['productImages', 'user'],
+        order: { createdAt: 'DESC' },
+        take: 30,
+      }),
+    ]);
+
+    return result;
   }
 
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Product> {
