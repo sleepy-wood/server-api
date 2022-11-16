@@ -28,6 +28,7 @@ export class ProductModule implements NestModule {
         { path: 'v1/products', method: RequestMethod.GET },
         { path: 'v1/products/:id', method: RequestMethod.GET },
         { path: 'v1/products/category', method: RequestMethod.GET },
+        { path: 'v1/products/search', method: RequestMethod.GET },
         { path: 'v1/products/extra/:id', method: RequestMethod.GET },
         { path: 'v1/products/recommend/:id', method: RequestMethod.GET },
       )

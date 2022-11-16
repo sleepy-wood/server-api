@@ -94,7 +94,7 @@ export class WeatherScheduler {
         const weather = weatherCategory[obsrValue];
 
         await this.weather.save({
-          weather,
+          weather: weather || '맑음',
           time: baseTime,
         });
       }

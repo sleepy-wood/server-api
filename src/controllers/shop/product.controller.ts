@@ -59,7 +59,18 @@ export class ProductController {
   @Get('/category')
   async findFiveByCategory(@Req() req: I.RequestWithUser) {
     const data = await this.productService.findFiveByCategory();
-    return <I.BasicResponse<[E.User[], string][]>>{
+    return <I.BasicResponse<[E.User[][], any[]]>>{
+      result: true,
+      data,
+    };
+  }
+
+  @ApiOperation({ summary: '마켓 검색어에 맞는 상품 카테고리별 5개씩 가져오기' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/search')
+  async findFiveByQuery(@Req() req: I.RequestWithUser, @Query('query') query: string) {
+    const data = await this.productService.findFiveByQuery(query);
+    return <I.BasicResponse<[E.Product[], number][]>>{
       result: true,
       data,
     };
