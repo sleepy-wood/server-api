@@ -368,6 +368,12 @@ export class ProductService {
     );
   }
 
+  async updateHitPlusOne(req: I.RequestWithUser, id: number): Promise<void> {
+    const product = await this.product.findOne({ where: { id, deletedAt: null } });
+
+    await this.product.update({ id }, { hit: product.hit + 1 });
+  }
+
   async remove(req: I.RequestWithUser, id: number): Promise<void> {
     await this.product
       .softDelete({
