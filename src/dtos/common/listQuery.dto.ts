@@ -51,17 +51,17 @@ export class ListQuery {
 
   @ApiProperty({
     description: '차순',
-    example: 'desc',
+    example: 'DESC',
     required: false,
-    default: 'desc',
+    default: 'DESC',
     enum: {
-      DESC: 'desc',
-      ASC: 'asc',
+      DESC: 'DESC',
+      ASC: 'ASC',
     },
   })
   @IsString({ message: '차순은 문자만 입력 가능해요.' })
   @IsOptional()
-  readonly dir?: 'desc' | 'asc' | 'DESC' | 'ASC';
+  readonly dir?: 'DESC' | 'ASC';
 
   @ApiProperty({
     description: '검색',
