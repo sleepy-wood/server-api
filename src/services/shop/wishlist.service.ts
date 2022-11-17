@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
 import * as I from '../../interfaces';
+import * as S from '../../services';
 import * as U from '../../utils';
 import { HttpException } from '../../exceptions';
 
@@ -12,15 +13,34 @@ import { HttpException } from '../../exceptions';
 export class WishlistService {
   constructor(
     private readonly dataSource: DataSource,
+    @Inject(forwardRef(() => S.ProductService))
+    private readonly productService: S.ProductService,
     @InjectRepository(E.Wishlist)
     private readonly wishlist: Repository<E.Wishlist>,
+    @InjectRepository(E.WishlistItem)
+    private readonly wishlistItem: Repository<E.WishlistItem>,
   ) {}
 
-  async create(req: I.RequestWithUser, body: D.CreateWishlistDto): Promise<E.Wishlist> {
-    const wishlist = new E.Wishlist();
-    const {} = body;
+  async createWishlistItem(req: I.RequestWithUser, body: D.CreateWishlistItemDto): Promise<E.WishlistItem> {
+    const wishlistItem = new E.WishlistItem();
+    const { productId } = body;
 
-    return this.wishlist.save(wishlist).catch((err) => {
+    const [wishlist, product] = await Promise.all([
+      this.wishlist.findOne({ where: { userId: req.user.id, deletedAt: null } }),
+      this.productService.findOne(req, productId),
+    ]).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
+
+    if (!product) {
+      throw new HttpException('PRODUCT_NOT_FOUND');
+    }
+
+    wishlistItem.wishlistId = wishlist.id;
+    wishlistItem.productId = productId;
+
+    return this.wishlistItem.save(wishlistItem).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });
@@ -54,7 +74,7 @@ export class WishlistService {
     });
   }
 
-  async update(req: I.RequestWithUser, id: number, body: D.UpdateWishlistDto): Promise<void> {
+  async update(req: I.RequestWithUser, id: number, body: D.UpdateWishlistItemDto): Promise<void> {
     const wishlist = new E.Wishlist();
     const {} = body;
 

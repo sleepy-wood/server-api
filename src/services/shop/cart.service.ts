@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
 import * as I from '../../interfaces';
+import * as S from '../../services';
 import * as U from '../../utils';
 import { HttpException } from '../../exceptions';
 
@@ -12,15 +13,34 @@ import { HttpException } from '../../exceptions';
 export class CartService {
   constructor(
     private readonly dataSource: DataSource,
+    @Inject(forwardRef(() => S.ProductService))
+    private readonly productService: S.ProductService,
     @InjectRepository(E.Cart)
     private readonly cart: Repository<E.Cart>,
+    @InjectRepository(E.CartItem)
+    private readonly cartItem: Repository<E.CartItem>,
   ) {}
 
-  async create(req: I.RequestWithUser, body: D.CreateCartDto): Promise<E.Cart> {
-    const cart = new E.Cart();
-    const {} = body;
+  async createCartItem(req: I.RequestWithUser, body: D.CreateCartItemDto): Promise<E.CartItem> {
+    const cartItem = new E.CartItem();
+    const { productId } = body;
 
-    return this.cart.save(cart).catch((err) => {
+    const [cart, product] = await Promise.all([
+      this.cart.findOne({ where: { userId: req.user.id, deletedAt: null } }),
+      this.productService.findOne(req, productId),
+    ]).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
+
+    if (!product) {
+      throw new HttpException('PRODUCT_NOT_FOUND');
+    }
+
+    cartItem.cartId = cart.id;
+    cartItem.productId = productId;
+
+    return this.cartItem.save(cartItem).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
     });
@@ -54,7 +74,7 @@ export class CartService {
     });
   }
 
-  async update(req: I.RequestWithUser, id: number, body: D.UpdateCartDto): Promise<void> {
+  async update(req: I.RequestWithUser, id: number, body: D.UpdateCartItemDto): Promise<void> {
     const cart = new E.Cart();
     const {} = body;
 

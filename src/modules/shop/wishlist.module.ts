@@ -8,7 +8,13 @@ import * as MW from '../../middlewares';
 import * as S from '../../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.Wishlist]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
+  imports: [
+    TypeOrmModule.forFeature([E.Wishlist]),
+    TypeOrmModule.forFeature([E.WishlistItem]),
+    forwardRef(() => M.ProductModule),
+    forwardRef(() => M.UserModule),
+    forwardRef(() => M.UtilModule),
+  ],
   exports: [TypeOrmModule, S.WishlistService],
   providers: [S.WishlistService],
   controllers: [C.WishlistController],

@@ -31,14 +31,14 @@ import { HttpException } from '../../exceptions';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @ApiOperation({ summary: '장바구니 생성' })
+  @ApiOperation({ summary: '장바구니 아이탬 생성' })
   @HttpCode(StatusCodes.OK)
-  @Post()
-  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateCartDto) {
+  @Post('/items')
+  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateCartItemDto) {
     if (!req.user) throw new HttpException('NO_USER');
-    return <I.BasicResponse<E.Cart>>{
+    return <I.BasicResponse<E.CartItem>>{
       result: true,
-      data: await this.cartService.create(req, body),
+      data: await this.cartService.createCartItem(req, body),
     };
   }
 
@@ -87,7 +87,7 @@ export class CartController {
   })
   @HttpCode(StatusCodes.OK)
   @Put(':id')
-  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: D.UpdateCartDto) {
+  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: D.UpdateCartItemDto) {
     if (!req.user) throw new HttpException('NO_USER');
     await this.cartService.update(req, +id, body);
     return <I.BasicResponse<boolean>>{
