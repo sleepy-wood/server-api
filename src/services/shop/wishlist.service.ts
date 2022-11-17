@@ -40,9 +40,14 @@ export class WishlistService {
     wishlistItem.wishlistId = wishlist.id;
     wishlistItem.productId = productId;
 
-    return this.wishlistItem.save(wishlistItem).catch((err) => {
+    const item = await this.wishlistItem.save(wishlistItem).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
+    });
+
+    return this.wishlistItem.findOne({
+      where: { id: item.id },
+      relations: ['product', 'product.productImages', 'product.user'],
     });
   }
 

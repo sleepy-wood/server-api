@@ -40,9 +40,14 @@ export class CartService {
     cartItem.cartId = cart.id;
     cartItem.productId = productId;
 
-    return this.cartItem.save(cartItem).catch((err) => {
+    const item = await this.cartItem.save(cartItem).catch((err) => {
       U.logger.error(err);
       throw new HttpException('COMMON_ERROR');
+    });
+
+    return this.cartItem.findOne({
+      where: { id: item.id },
+      relations: ['product', 'product.productImages', 'product.user'],
     });
   }
 
