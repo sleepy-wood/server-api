@@ -90,6 +90,14 @@ export class User {
   @Column({
     nullable: false,
     default: 0,
+    comment: '에셋 조회 카운트',
+  })
+  productHitCount: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    default: 0,
     comment: '에셋 판매 등록 카운트',
   })
   productCount: number;

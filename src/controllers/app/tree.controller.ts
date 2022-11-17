@@ -53,7 +53,7 @@ export class TreeController {
     },
   })
   @HttpCode(StatusCodes.OK)
-  @Get('/:userId')
+  @Get('/users/:userId')
   async findAllOther(@Req() req: I.RequestWithUser, @Param('userId') userId: string, @Query() query: D.ListQuery) {
     if (!req.user) throw new HttpException('NO_USER');
     const [rows, count] = await this.treeService.findAllOther(req, query, +userId);

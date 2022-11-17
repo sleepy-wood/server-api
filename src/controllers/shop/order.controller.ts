@@ -55,6 +55,17 @@ export class OrderController {
     };
   }
 
+  @ApiOperation({ summary: '월별 주문 목록 조회' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/monthly')
+  async findAllGroupByMonth(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
+    if (!req.user) throw new HttpException('NO_USER');
+    return <I.BasicResponse<E.Order[]>>{
+      result: true,
+      data: await this.orderService.findAllGroupByMonth(req, query),
+    };
+  }
+
   @ApiOperation({ summary: '주문 상세조회' })
   @ApiParam({
     name: 'id',

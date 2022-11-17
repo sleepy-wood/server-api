@@ -368,6 +368,42 @@ export class ProductService {
     );
   }
 
+  async updateHitPlusOne(req: I.RequestWithUser, id: number): Promise<void> {
+    const product = await this.product
+      .findOne({
+        where: { id, deletedAt: null },
+        relations: ['user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await Promise.all([
+        queryRunner.manager.update(E.User, product.user.id, {
+          productHitCount: product.user.productHitCount + 1,
+        }),
+        queryRunner.manager.update(E.Product, id, {
+          hit: product.hit + 1,
+        }),
+      ]);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      U.logger.error(err);
+      throw new HttpException('TRANSACTION_ERROR');
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
   async remove(req: I.RequestWithUser, id: number): Promise<void> {
     await this.product
       .softDelete({

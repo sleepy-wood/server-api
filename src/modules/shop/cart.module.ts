@@ -8,7 +8,13 @@ import * as MW from '../../middlewares';
 import * as S from '../../services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([E.Cart]), forwardRef(() => M.UserModule), forwardRef(() => M.UtilModule)],
+  imports: [
+    TypeOrmModule.forFeature([E.Cart]),
+    TypeOrmModule.forFeature([E.CartItem]),
+    forwardRef(() => M.ProductModule),
+    forwardRef(() => M.UserModule),
+    forwardRef(() => M.UtilModule),
+  ],
   exports: [TypeOrmModule, S.CartService],
   providers: [S.CartService],
   controllers: [C.CartController],

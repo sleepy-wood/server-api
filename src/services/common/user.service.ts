@@ -43,11 +43,8 @@ export class UserService {
     return this.user
       .findAndCount({
         where: { deletedAt: null },
-        order: {
-          products: { hit: 'desc' },
-        },
+        order: { productHitCount: 'desc' },
         take: 10,
-        relations: ['products'],
       })
       .catch((err) => {
         U.logger.error(err);
@@ -61,7 +58,6 @@ export class UserService {
         where: { deletedAt: null },
         order: { productCount: 'desc' },
         take: 10,
-        relations: ['products'],
       })
       .catch((err) => {
         U.logger.error(err);

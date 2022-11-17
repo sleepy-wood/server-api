@@ -156,6 +156,26 @@ export class ProductController {
     };
   }
 
+  @ApiOperation({ summary: '상품 조회수 1 올리기' })
+  @ApiBearerAuth()
+  @ApiParam({
+    name: 'id',
+    description: '상품 아이디',
+    required: true,
+    schema: {
+      type: 'string',
+      example: '1',
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  @Put('/hits/:id')
+  async updateHit(@Req() req: I.RequestWithUser, @Param('id') id: string) {
+    await this.productService.updateHitPlusOne(req, +id);
+    return <I.BasicResponse<boolean>>{
+      result: true,
+    };
+  }
+
   @ApiOperation({ summary: '상품 삭제' })
   @ApiBearerAuth()
   @ApiParam({

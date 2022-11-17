@@ -58,12 +58,39 @@ export class OrderService {
 
     return this.order
       .findAndCount({
-        where: { deletedAt: null },
+        where: {
+          userId: req.user.id,
+          deletedAt: null,
+        },
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
         relations: ['orderDetails', 'orderDetails.product', 'orderDetails.product.productImages'],
       })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async findAllGroupByMonth(req: I.RequestWithUser, query: D.ListQuery): Promise<E.Order[]> {
+    let { page, count, sort, dir, q } = query;
+
+    page = Number(page) || 1;
+    count = Number(count) || 30;
+    sort = sort || 'createdAt';
+    dir = dir || 'DESC';
+
+    return this.order
+      .createQueryBuilder()
+      .select('*')
+      .addSelect('COUNT(1) as orderCount')
+      .where('userId = :userId', { userId: req.user.id })
+      .orderBy(sort, dir)
+      .skip((page - 1) * count)
+      .take(count)
+      .groupBy('MONTH(createdAt)')
+      .getRawMany<E.Order>()
       .catch((err) => {
         U.logger.error(err);
         throw new HttpException('COMMON_ERROR');

@@ -89,4 +89,8 @@ export const ErrorCodes = <const>{
     message: '나무 정보를 찾을 수 없어요.',
     status: StatusCodes.NOT_FOUND,
   },
+  PRODUCT_NOT_FOUND: {
+    message: '상품 정보를 찾을 수 없어요.',
+    status: StatusCodes.NOT_FOUND,
+  },
 };

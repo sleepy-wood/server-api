@@ -33,12 +33,12 @@ export class WishlistController {
 
   @ApiOperation({ summary: '관심 상품 생성' })
   @HttpCode(StatusCodes.OK)
-  @Post()
-  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateWishlistDto) {
+  @Post('/items')
+  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateWishlistItemDto) {
     if (!req.user) throw new HttpException('NO_USER');
-    return <I.BasicResponse<E.Wishlist>>{
+    return <I.BasicResponse<E.WishlistItem>>{
       result: true,
-      data: await this.wishlistService.create(req, body),
+      data: await this.wishlistService.createWishlistItem(req, body),
     };
   }
 
@@ -87,7 +87,7 @@ export class WishlistController {
   })
   @HttpCode(StatusCodes.OK)
   @Put(':id')
-  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: D.UpdateWishlistDto) {
+  async update(@Req() req: I.RequestWithUser, @Param('id') id: string, @Body() body: D.UpdateWishlistItemDto) {
     if (!req.user) throw new HttpException('NO_USER');
     await this.wishlistService.update(req, +id, body);
     return <I.BasicResponse<boolean>>{
