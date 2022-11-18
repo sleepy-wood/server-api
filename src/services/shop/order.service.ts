@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, Raw } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -93,18 +93,27 @@ export class OrderService {
     const currMonth = new Date().getMonth() + 1;
 
     return this.order
-      .createQueryBuilder()
-      .select('*')
-      .where(
-        `userId = :userId AND MONTH(createdAt) IN (${currMonth}, ${currMonth - 1}, ${currMonth - 2}, ${
-          currMonth - 3
-        }, ${currMonth - 4}, ${currMonth - 5})`,
-        { userId: req.user.id },
-      )
-      .orderBy(sort, dir)
-      .skip((page - 1) * count)
-      .take(count)
-      .getRawMany<E.Order>()
+      .find({
+        where: {
+          createdAt: Raw(
+            (alias) =>
+              `MONTH(${alias}) IN (${currMonth}, ${currMonth - 1}, ${currMonth - 2}, ${currMonth - 3}, ${
+                currMonth - 4
+              }, ${currMonth - 5})`,
+          ),
+          userId: req.user.id,
+          deletedAt: null,
+        },
+        order: { [sort]: dir },
+        skip: (page - 1) * count,
+        take: count,
+        relations: [
+          'orderDetails',
+          'orderDetails.product',
+          'orderDetails.product.productImages',
+          'orderDetails.product.user',
+        ],
+      })
       .catch((err) => {
         U.logger.error(err);
         throw new HttpException('COMMON_ERROR');
@@ -114,8 +123,17 @@ export class OrderService {
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Order> {
     return this.order
       .findOne({
-        where: { id, userId: req.user.id, deletedAt: null },
-        relations: ['orderDetails', 'orderDetails.product', 'orderDetails.product.productImages'],
+        where: {
+          id,
+          userId: req.user.id,
+          deletedAt: null,
+        },
+        relations: [
+          'orderDetails',
+          'orderDetails.product',
+          'orderDetails.product.productImages',
+          'orderDetails.product.user',
+        ],
       })
       .catch((err) => {
         U.logger.error(err);
