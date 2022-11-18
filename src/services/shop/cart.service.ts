@@ -51,6 +51,30 @@ export class CartService {
     });
   }
 
+  async getCartItems(req: I.RequestWithUser): Promise<E.CartItem[]> {
+    const cart = await this.cart
+      .findOne({
+        where: {
+          userId: req.user.id,
+          deletedAt: null,
+        },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    return this.cartItem
+      .find({
+        where: { cartId: cart.id, deletedAt: null },
+        relations: ['product', 'product.productImages', 'product.user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
   async removeCartItem(req: I.RequestWithUser, body: D.DeleteCartItemDto): Promise<void> {
     const { productIds } = body;
     const cart = await this.cart.findOne({ where: { userId: req.user.id, deletedAt: null } });

@@ -42,6 +42,17 @@ export class WishlistController {
     };
   }
 
+  @ApiOperation({ summary: '장바구니 아이템 전체 가져오기' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/items')
+  async getCartItems(@Req() req: I.RequestWithUser) {
+    if (!req.user) throw new HttpException('NO_USER');
+    return <I.BasicResponse<E.WishlistItem[]>>{
+      result: true,
+      data: await this.wishlistService.getWishlistItems(req),
+    };
+  }
+
   @ApiOperation({ summary: '관심 상품 삭제' })
   @HttpCode(StatusCodes.OK)
   @Delete('/items')

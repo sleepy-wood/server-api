@@ -51,6 +51,30 @@ export class WishlistService {
     });
   }
 
+  async getWishlistItems(req: I.RequestWithUser): Promise<E.WishlistItem[]> {
+    const wishlist = await this.wishlist
+      .findOne({
+        where: {
+          userId: req.user.id,
+          deletedAt: null,
+        },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    return this.wishlistItem
+      .find({
+        where: { wishlistId: wishlist.id, deletedAt: null },
+        relations: ['product', 'product.productImages', 'product.user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
   async removeWishlistItem(req: I.RequestWithUser, body: D.DeleteWishlistItemDto): Promise<void> {
     const { productIds } = body;
     const wishlist = await this.wishlist.findOne({ where: { userId: req.user.id, deletedAt: null } });
