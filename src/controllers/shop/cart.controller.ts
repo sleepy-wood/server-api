@@ -34,11 +34,22 @@ export class CartController {
   @ApiOperation({ summary: '장바구니 아이탬 생성' })
   @HttpCode(StatusCodes.OK)
   @Post('/items')
-  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateCartItemDto) {
+  async createCartItem(@Req() req: I.RequestWithUser, @Body() body: D.CreateCartItemDto) {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.CartItem>>{
       result: true,
       data: await this.cartService.createCartItem(req, body),
+    };
+  }
+
+  @ApiOperation({ summary: '장바구니 아이탬 삭제' })
+  @HttpCode(StatusCodes.OK)
+  @Delete('/items')
+  async removeCartItem(@Req() req: I.RequestWithUser, @Body() body: D.DeleteCartItemDto) {
+    if (!req.user) throw new HttpException('NO_USER');
+    await this.cartService.removeCartItem(req, body);
+    return <I.BasicResponse<boolean>>{
+      result: true,
     };
   }
 
