@@ -90,15 +90,20 @@ export class OrderService {
     sort = sort || 'createdAt';
     dir = dir || 'DESC';
 
+    const currMonth = new Date().getMonth() + 1;
+
     return this.order
       .createQueryBuilder()
       .select('*')
-      .addSelect('COUNT(1) as orderCount')
-      .where('userId = :userId', { userId: req.user.id })
+      .where(
+        `userId = :userId AND MONTH(createdAt) IN (${currMonth}, ${currMonth - 1}, ${currMonth - 2}, ${
+          currMonth - 3
+        }, ${currMonth - 4}, ${currMonth - 5})`,
+        { userId: req.user.id },
+      )
       .orderBy(sort, dir)
       .skip((page - 1) * count)
       .take(count)
-      .groupBy('MONTH(createdAt)')
       .getRawMany<E.Order>()
       .catch((err) => {
         U.logger.error(err);
