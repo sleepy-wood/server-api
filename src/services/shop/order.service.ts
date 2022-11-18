@@ -26,26 +26,35 @@ export class OrderService {
     order.payment = payment;
     order.userId = req.user.id;
 
-    const result = await this.order.save(order).catch((err) => {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const result = await queryRunner.manager.save(E.Order, order);
+
+      const saveData: E.OrderDetail[] = [];
+      for (const productId of productIds) {
+        const orderDetail = new E.OrderDetail();
+        orderDetail.orderId = result.id;
+        orderDetail.productId = productId;
+
+        saveData.push(orderDetail);
+      }
+
+      await queryRunner.manager.save(E.OrderDetail, saveData);
+
+      await queryRunner.commitTransaction();
+
+      return result;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
       U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
-
-    const saveData: E.OrderDetail[] = [];
-    for (const productId of productIds) {
-      const orderDetail = new E.OrderDetail();
-      orderDetail.orderId = result.id;
-      orderDetail.productId = productId;
-
-      saveData.push(orderDetail);
+      throw new HttpException('TRANSACTION_ERROR');
+    } finally {
+      await queryRunner.release();
     }
-
-    await this.orderDetail.save(saveData).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
-
-    return result;
   }
 
   async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Order[], number]> {
