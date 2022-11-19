@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, Raw } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -52,11 +52,51 @@ export class SleepService {
       });
   }
 
+  async findAllRecent(req: I.RequestWithUser): Promise<E.Sleep[]> {
+    const recentSleep = await this.sleep
+      .findOne({
+        where: { userId: req.user.id, deletedAt: null },
+        order: { createdAt: 'DESC' },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    const date = new Date(recentSleep.createdAt);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const format = `${year}-${month}-${day}`;
+
+    return this.sleep
+      .find({
+        where: {
+          userId: req.user.id,
+          createdAt: Raw((alias) => `DATE(${alias}) = "${format}"`),
+          deletedAt: null,
+        },
+        order: { createdAt: 'DESC' },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Sleep> {
-    return this.sleep.findOne({ where: { id, userId: req.user.id, deletedAt: null } }).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+    return this.sleep
+      .findOne({
+        where: {
+          id,
+          userId: req.user.id,
+          deletedAt: null,
+        },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async update(req: I.RequestWithUser, id: number, body: D.UpdateSleepDto): Promise<void> {

@@ -55,6 +55,17 @@ export class SleepController {
     };
   }
 
+  @ApiOperation({ summary: '최근 수면 목록 조회' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/recent')
+  async findAllRecent(@Req() req: I.RequestWithUser) {
+    if (!req.user) throw new HttpException('NO_USER');
+    return <I.BasicResponse<E.Sleep[]>>{
+      result: true,
+      data: await this.sleepService.findAllRecent(req),
+    };
+  }
+
   @ApiOperation({ summary: '수면 상세조회' })
   @ApiParam({
     name: 'id',
