@@ -32,6 +32,7 @@ export * from './shop/cart/create-cartItem.dto';
 export * from './shop/cart/delete-cartItem.dto';
 export * from './shop/cart/update-cartItem.dto';
 export * from './shop/order/create-order.dto';
+export * from './shop/order/read-order-dto';
 export * from './shop/order/update-order.dto';
 export * from './shop/product/create-product.dto';
 export * from './shop/product/read-product.dto';
