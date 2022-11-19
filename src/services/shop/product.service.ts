@@ -69,6 +69,7 @@ export class ProductService {
           productImage.productId = result.id;
 
           if (result.category === I.ProductCategory.emoticon) {
+            productImage.isThumbnail = true;
             const source = join(path, 'uploads', serverTo);
             let i = 1;
             for (const left of [0, 480, 960, 1440]) {
@@ -85,16 +86,17 @@ export class ProductService {
                 _productImage.mimeType = mimeType;
                 _productImage.size = size;
                 _productImage.productId = result.id;
+                _productImage.isThumbnail = false;
 
                 saveData.push(_productImage);
 
                 i++;
               }
             }
-          } else if (result.category === I.ProductCategory.collection) {
-            // Save Video & Image
           } else {
-            // Do Nothing
+            if (mimeType.includes('image')) {
+              productImage.isThumbnail = true;
+            }
           }
 
           saveData.push(productImage);
