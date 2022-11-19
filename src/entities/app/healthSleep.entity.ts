@@ -11,8 +11,7 @@ import {
 } from 'typeorm';
 
 import * as I from '../../interfaces';
-import * as U from '../../utils';
-import { User } from '..';
+import { User, TreeGrowth } from '..';
 
 @Entity()
 export class Sleep {
@@ -34,9 +33,13 @@ export class Sleep {
     type: 'enum',
     enum: I.SleepType,
     nullable: false,
-    comment: '유저 타입',
+    comment: '수면 타입',
   })
   type: I.SleepType;
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  treeGrowthId: number;
 
   @ApiProperty()
   @Column({ nullable: false })
@@ -53,6 +56,13 @@ export class Sleep {
   @ApiProperty()
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
+
+  @ApiProperty({ type: () => TreeGrowth })
+  @ManyToOne(() => TreeGrowth, (treeGrowth) => treeGrowth.sleeps, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'treeGrowthId' })
+  treeGrowth: TreeGrowth;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.sleeps, {
