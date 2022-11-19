@@ -18,6 +18,21 @@ export class CreateTreeGrowthDto {
   treeId: number;
 
   @ApiProperty({
+    example: [1, 2, 3, 4],
+    required: true,
+    description: '수면 아이디',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '수면 아이디는 숫자여야 해요.', each: true },
+  )
+  @IsNotEmpty({ message: '수면 아이디는 필수 입력 항목이에요.' })
+  readonly sleepIds: number[];
+
+  @ApiProperty({
     example: 1,
     required: true,
     description: '나무 scale',

@@ -12,6 +12,7 @@ import * as S from '../../services';
     TypeOrmModule.forFeature([E.Tree]),
     TypeOrmModule.forFeature([E.TreeGrowth]),
     TypeOrmModule.forFeature([E.TreePipeline]),
+    forwardRef(() => M.HealthModule),
     forwardRef(() => M.UserModule),
     forwardRef(() => M.UtilModule),
   ],

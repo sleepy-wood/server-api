@@ -17,6 +17,8 @@ export class TreeGrowthService {
     private readonly treeService: S.TreeService,
     @Inject(forwardRef(() => S.TreePipelineService))
     private readonly treePipelineService: S.TreePipelineService,
+    @Inject(forwardRef(() => S.SleepService))
+    private readonly sleepService: S.SleepService,
     @InjectRepository(E.TreeGrowth)
     private readonly treeGrowth: Repository<E.TreeGrowth>,
   ) {}
@@ -34,13 +36,17 @@ export class TreeGrowthService {
   }
 
   async grow(req: I.RequestWithUser, body: D.CreateTreeGrowthDto): Promise<E.TreeGrowth> {
-    const { treeId } = body;
+    const { treeId, sleepIds } = body;
     const treeGrowth = new E.TreeGrowth();
 
     const tree = await this.treeService.findOne(req, treeId);
-
     if (!tree) {
       throw new HttpException('TREE_GROWTH_NOT_FOUND');
+    }
+
+    const sleeps = await Promise.all(sleepIds.map((sleepId) => this.sleepService.findOne(req, sleepId)));
+    if (sleepIds.length !== sleeps.length) {
+      throw new HttpException('INVALID_REQUEST');
     }
 
     treeGrowth.treeDay = tree.treeGrowths[tree.treeGrowths.length - 1].treeDay + 1;
@@ -54,6 +60,9 @@ export class TreeGrowthService {
     try {
       const result = await queryRunner.manager.save(E.TreeGrowth, treeGrowth);
       const treePipeline = await this.treePipelineService.create(queryRunner, result.id, body);
+
+      await queryRunner.manager.update(E.Sleep, sleepIds, { treeGrowthId: treeGrowth.id });
+
       await queryRunner.commitTransaction();
       return result;
     } catch (err) {
