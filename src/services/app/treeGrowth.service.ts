@@ -36,7 +36,7 @@ export class TreeGrowthService {
   }
 
   async grow(req: I.RequestWithUser, body: D.CreateTreeGrowthDto): Promise<E.TreeGrowth> {
-    const { treeId, sleepIds } = body;
+    const { treeId } = body;
     const treeGrowth = new E.TreeGrowth();
 
     const tree = await this.treeService.findOne(req, treeId);
@@ -44,10 +44,8 @@ export class TreeGrowthService {
       throw new HttpException('TREE_GROWTH_NOT_FOUND');
     }
 
-    const sleeps = await Promise.all(sleepIds.map((sleepId) => this.sleepService.findOne(req, sleepId)));
-    if (sleepIds.length !== sleeps.length) {
-      throw new HttpException('INVALID_REQUEST');
-    }
+    const sleeps = await this.sleepService.findAllRecent(req);
+    const sleepIds = sleeps.map((e) => e.id);
 
     treeGrowth.treeDay = tree.treeGrowths[tree.treeGrowths.length - 1].treeDay + 1;
     treeGrowth.treeId = treeId;
