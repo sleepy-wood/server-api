@@ -55,6 +55,14 @@ export class ProductImage {
   size: number;
 
   @ApiProperty()
+  @Column({
+    nullable: false,
+    default: false,
+    comment: '대표 이미지 여부',
+  })
+  isThumbnail: boolean;
+
+  @ApiProperty()
   @Column({ nullable: false })
   productId: number;
 
