@@ -42,6 +42,10 @@ export class ProductService {
     try {
       const result = await queryRunner.manager.save(E.Product, product);
 
+      if (result.price < req.user.productMinPrice) {
+        await queryRunner.manager.update(E.User, req.user.id, { productMinPrice: result.price });
+      }
+
       const attachFiles = await this.attachFile.find({ where: { id: In(attachFileIds) } }).catch((err) => {
         U.logger.error(err);
         throw new HttpException('COMMON_ERROR');
