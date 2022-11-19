@@ -1,6 +1,6 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, In } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -49,6 +49,60 @@ export class WishlistService {
       where: { id: item.id },
       relations: ['product', 'product.productImages', 'product.user'],
     });
+  }
+
+  async getWishlistItems(req: I.RequestWithUser): Promise<E.WishlistItem[]> {
+    const wishlist = await this.wishlist
+      .findOne({
+        where: {
+          userId: req.user.id,
+          deletedAt: null,
+        },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    return this.wishlistItem
+      .find({
+        where: { wishlistId: wishlist.id, deletedAt: null },
+        relations: ['product', 'product.productImages', 'product.user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async removeWishlistItem(req: I.RequestWithUser, body: D.DeleteWishlistItemDto): Promise<void> {
+    const { productIds } = body;
+    const wishlist = await this.wishlist.findOne({ where: { userId: req.user.id, deletedAt: null } });
+    const wishlistItems = await this.wishlistItem
+      .find({
+        where: {
+          productId: In(productIds),
+          wishlistId: wishlist.id,
+          deletedAt: null,
+        },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    if (productIds.length !== wishlistItems.length) {
+      throw new HttpException('COMMON_ERROR');
+    }
+
+    await this.wishlistItem
+      .softDelete({
+        productId: In(productIds),
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Wishlist[], number]> {

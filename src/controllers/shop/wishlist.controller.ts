@@ -34,11 +34,33 @@ export class WishlistController {
   @ApiOperation({ summary: '관심 상품 생성' })
   @HttpCode(StatusCodes.OK)
   @Post('/items')
-  async create(@Req() req: I.RequestWithUser, @Body() body: D.CreateWishlistItemDto) {
+  async createWishlistItem(@Req() req: I.RequestWithUser, @Body() body: D.CreateWishlistItemDto) {
     if (!req.user) throw new HttpException('NO_USER');
     return <I.BasicResponse<E.WishlistItem>>{
       result: true,
       data: await this.wishlistService.createWishlistItem(req, body),
+    };
+  }
+
+  @ApiOperation({ summary: '장바구니 아이템 전체 가져오기' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/items')
+  async getCartItems(@Req() req: I.RequestWithUser) {
+    if (!req.user) throw new HttpException('NO_USER');
+    return <I.BasicResponse<E.WishlistItem[]>>{
+      result: true,
+      data: await this.wishlistService.getWishlistItems(req),
+    };
+  }
+
+  @ApiOperation({ summary: '관심 상품 삭제' })
+  @HttpCode(StatusCodes.OK)
+  @Delete('/items')
+  async removeCartItem(@Req() req: I.RequestWithUser, @Body() body: D.DeleteWishlistItemDto) {
+    if (!req.user) throw new HttpException('NO_USER');
+    await this.wishlistService.removeWishlistItem(req, body);
+    return <I.BasicResponse<boolean>>{
+      result: true,
     };
   }
 

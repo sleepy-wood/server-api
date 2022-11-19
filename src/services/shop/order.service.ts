@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, Raw } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -26,26 +26,35 @@ export class OrderService {
     order.payment = payment;
     order.userId = req.user.id;
 
-    const result = await this.order.save(order).catch((err) => {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const result = await queryRunner.manager.save(E.Order, order);
+
+      const saveData: E.OrderDetail[] = [];
+      for (const productId of productIds) {
+        const orderDetail = new E.OrderDetail();
+        orderDetail.orderId = result.id;
+        orderDetail.productId = productId;
+
+        saveData.push(orderDetail);
+      }
+
+      await queryRunner.manager.save(E.OrderDetail, saveData);
+
+      await queryRunner.commitTransaction();
+
+      return result;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
       U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
-
-    const saveData: E.OrderDetail[] = [];
-    for (const productId of productIds) {
-      const orderDetail = new E.OrderDetail();
-      orderDetail.orderId = result.id;
-      orderDetail.productId = productId;
-
-      saveData.push(orderDetail);
+      throw new HttpException('TRANSACTION_ERROR');
+    } finally {
+      await queryRunner.release();
     }
-
-    await this.orderDetail.save(saveData).catch((err) => {
-      U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
-
-    return result;
   }
 
   async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Order[], number]> {
@@ -81,16 +90,30 @@ export class OrderService {
     sort = sort || 'createdAt';
     dir = dir || 'DESC';
 
+    const currMonth = new Date().getMonth() + 1;
+
     return this.order
-      .createQueryBuilder()
-      .select('*')
-      .addSelect('COUNT(1) as orderCount')
-      .where('userId = :userId', { userId: req.user.id })
-      .orderBy(sort, dir)
-      .skip((page - 1) * count)
-      .take(count)
-      .groupBy('MONTH(createdAt)')
-      .getRawMany<E.Order>()
+      .find({
+        where: {
+          createdAt: Raw(
+            (alias) =>
+              `MONTH(${alias}) IN (${currMonth}, ${currMonth - 1}, ${currMonth - 2}, ${currMonth - 3}, ${
+                currMonth - 4
+              }, ${currMonth - 5})`,
+          ),
+          userId: req.user.id,
+          deletedAt: null,
+        },
+        order: { [sort]: dir },
+        skip: (page - 1) * count,
+        take: count,
+        relations: [
+          'orderDetails',
+          'orderDetails.product',
+          'orderDetails.product.productImages',
+          'orderDetails.product.user',
+        ],
+      })
       .catch((err) => {
         U.logger.error(err);
         throw new HttpException('COMMON_ERROR');
@@ -100,8 +123,17 @@ export class OrderService {
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Order> {
     return this.order
       .findOne({
-        where: { id, userId: req.user.id, deletedAt: null },
-        relations: ['orderDetails', 'orderDetails.product', 'orderDetails.product.productImages'],
+        where: {
+          id,
+          userId: req.user.id,
+          deletedAt: null,
+        },
+        relations: [
+          'orderDetails',
+          'orderDetails.product',
+          'orderDetails.product.productImages',
+          'orderDetails.product.user',
+        ],
       })
       .catch((err) => {
         U.logger.error(err);

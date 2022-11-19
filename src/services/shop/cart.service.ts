@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, In } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -49,6 +49,60 @@ export class CartService {
       where: { id: item.id },
       relations: ['product', 'product.productImages', 'product.user'],
     });
+  }
+
+  async getCartItems(req: I.RequestWithUser): Promise<E.CartItem[]> {
+    const cart = await this.cart
+      .findOne({
+        where: {
+          userId: req.user.id,
+          deletedAt: null,
+        },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    return this.cartItem
+      .find({
+        where: { cartId: cart.id, deletedAt: null },
+        relations: ['product', 'product.productImages', 'product.user'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
+  async removeCartItem(req: I.RequestWithUser, body: D.DeleteCartItemDto): Promise<void> {
+    const { productIds } = body;
+    const cart = await this.cart.findOne({ where: { userId: req.user.id, deletedAt: null } });
+    const cartItems = await this.cartItem
+      .find({
+        where: {
+          productId: In(productIds),
+          cartId: cart.id,
+          deletedAt: null,
+        },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+    if (productIds.length !== cartItems.length) {
+      throw new HttpException('COMMON_ERROR');
+    }
+
+    await this.cartItem
+      .softDelete({
+        productId: In(productIds),
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
   }
 
   async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Cart[], number]> {
