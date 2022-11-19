@@ -23,11 +23,28 @@ export class TreeService {
 
   async create(req: I.RequestWithUser, body: D.CreateTreeDto): Promise<E.Tree> {
     const tree = new E.Tree();
-    const { treeName, seedNumber, seedType, landId } = body;
+    const {
+      treeName,
+      seedNumber,
+      treePipeName,
+      barkMaterial,
+      sproutColor1,
+      sproutColor2,
+      sproutColor3,
+      sproutColor4,
+      sproutColor5,
+      landId,
+    } = body;
 
     tree.treeName = treeName;
     tree.seedNumber = seedNumber;
-    tree.seedType = seedType;
+    tree.treePipeName = treePipeName;
+    tree.barkMaterial = barkMaterial;
+    tree.sproutColor1 = sproutColor1;
+    tree.sproutColor2 = sproutColor2;
+    tree.sproutColor3 = sproutColor3;
+    tree.sproutColor4 = sproutColor4;
+    tree.sproutColor5 = sproutColor5;
     tree.landId = landId;
     tree.userId = req.user.id;
 
@@ -112,11 +129,28 @@ export class TreeService {
     if (!data) throw new HttpException('INVALID_REQUEST');
 
     const tree = new E.Tree();
-    const { treeName, seedNumber, seedType, landId } = body;
+    const {
+      treeName,
+      seedNumber,
+      treePipeName,
+      barkMaterial,
+      sproutColor1,
+      sproutColor2,
+      sproutColor3,
+      sproutColor4,
+      sproutColor5,
+      landId,
+    } = body;
 
     treeName && (tree.treeName = treeName);
     seedNumber && (tree.seedNumber = seedNumber);
-    seedType && (tree.seedType = seedType);
+    treePipeName && (tree.treePipeName = treePipeName);
+    barkMaterial && (tree.barkMaterial = barkMaterial);
+    sproutColor1 && (tree.sproutColor1 = sproutColor1);
+    sproutColor2 && (tree.sproutColor2 = sproutColor2);
+    sproutColor3 && (tree.sproutColor3 = sproutColor3);
+    sproutColor4 && (tree.sproutColor4 = sproutColor4);
+    sproutColor5 && (tree.sproutColor5 = sproutColor5);
     landId && (tree.landId = landId);
 
     await this.tree.update(id, tree).catch((err) => {

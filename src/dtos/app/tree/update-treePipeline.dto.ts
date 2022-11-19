@@ -1,7 +1,37 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsNumber } from 'class-validator';
+import { IsOptional, IsNumber } from 'class-validator';
 
 export class UpdateTreePipelineDto {
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나무 아이디',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나무 아이디는 숫자여야 해요.' },
+  )
+  @IsOptional()
+  readonly treeId?: number;
+
+  @ApiProperty({
+    example: [1, 2, 3, 4],
+    required: true,
+    description: '수면 아이디',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '수면 아이디는 숫자여야 해요.', each: true },
+  )
+  @IsOptional()
+  readonly sleepIds?: number[];
+
   @ApiProperty({
     example: 1,
     required: true,
@@ -80,21 +110,6 @@ export class UpdateTreePipelineDto {
   @ApiProperty({
     example: 1,
     required: true,
-    description: '나무 기둥 길이',
-  })
-  @IsNumber(
-    {
-      allowInfinity: false,
-      allowNaN: false,
-    },
-    { message: '나무 기둥 길이는 숫자여야 해요.' },
-  )
-  @IsOptional()
-  readonly trunkLength?: number;
-
-  @ApiProperty({
-    example: 1,
-    required: true,
     description: '나뭇잎 개수',
   })
   @IsNumber(
@@ -125,6 +140,21 @@ export class UpdateTreePipelineDto {
   @ApiProperty({
     example: 1,
     required: true,
+    description: '나뭇잎 너비',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 너비는 숫자여야 해요.' },
+  )
+  @IsOptional()
+  readonly sproutWidth?: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
     description: '중력',
   })
   @IsNumber(
@@ -136,43 +166,4 @@ export class UpdateTreePipelineDto {
   )
   @IsOptional()
   readonly gravity?: number;
-
-  @ApiProperty({
-    example: 1,
-    required: true,
-    description: '뿌리 개수',
-  })
-  @IsNumber(
-    {
-      allowInfinity: false,
-      allowNaN: false,
-    },
-    { message: '뿌리 개수는 숫자여야 해요.' },
-  )
-  @IsOptional()
-  readonly rootNum?: number;
-
-  @ApiProperty({
-    example: 'Tree',
-    required: true,
-    description: '나무가지 텍스처 이름',
-  })
-  @IsString({ message: '나무가지 텍스처 이름은 문자열이어야 해요.' })
-  @IsOptional()
-  readonly barkTexture?: string;
-
-  @ApiProperty({
-    example: 1,
-    required: true,
-    description: '나뭇잎 enabled 상태',
-  })
-  @IsNumber(
-    {
-      allowInfinity: false,
-      allowNaN: false,
-    },
-    { message: '나뭇잎 enabled 상태는 숫자여야 해요.' },
-  )
-  @IsOptional()
-  readonly sproutIndex?: number;
 }

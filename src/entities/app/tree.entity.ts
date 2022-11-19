@@ -36,9 +36,51 @@ export class Tree {
   @ApiProperty()
   @Column({
     nullable: false,
-    comment: '나무 종류',
+    comment: '나무 파이프라인 이름',
   })
-  seedType: string;
+  treePipeName: string;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나무가지 Material 이름',
+  })
+  barkMaterial: string;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor1: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor2: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor3: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor4: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor5: number;
 
   @ApiProperty()
   @Column({ nullable: true })

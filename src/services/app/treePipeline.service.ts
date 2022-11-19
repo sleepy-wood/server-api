@@ -24,34 +24,17 @@ export class TreePipelineService {
     body: D.CreateTreeDto | D.CreateTreeGrowthDto,
   ): Promise<E.TreePipeline> {
     const treePipeline = new E.TreePipeline();
-    const {
-      scale,
-      branch1,
-      branch2,
-      branch3,
-      branch4,
-      trunkLength,
-      sproutNum,
-      rottenRate,
-      gravity,
-      rootNum,
-      barkTexture,
-      sproutIndex,
-    } = body;
+    const { scale, branch1, branch2, branch3, branch4, sproutNum, rottenRate, sproutWidth, gravity } = body;
 
     treePipeline.scale = scale;
     treePipeline.branch1 = branch1;
     treePipeline.branch2 = branch2;
     treePipeline.branch3 = branch3;
     treePipeline.branch4 = branch4;
-    treePipeline.trunkLength = trunkLength;
     treePipeline.sproutNum = sproutNum;
     treePipeline.rottenRate = rottenRate;
+    treePipeline.sproutWidth = sproutWidth;
     treePipeline.gravity = gravity;
-    treePipeline.rootNum = rootNum;
-    treePipeline.barkTexture = barkTexture;
-    treePipeline.sproutIndex = sproutIndex;
-    treePipeline.treeGrowthId = treeGrowthId;
 
     return queryRunner.manager.save(E.TreePipeline, treePipeline).catch((err) => {
       U.logger.error(err);
@@ -84,20 +67,7 @@ export class TreePipelineService {
     body: D.UpdateTreePipelineDto,
   ): Promise<void> {
     const treePipeline = new E.TreePipeline();
-    const {
-      scale,
-      branch1,
-      branch2,
-      branch3,
-      branch4,
-      trunkLength,
-      sproutNum,
-      rottenRate,
-      gravity,
-      rootNum,
-      barkTexture,
-      sproutIndex,
-    } = body;
+    const { scale, branch1, branch2, branch3, branch4, sproutNum, rottenRate, sproutWidth, gravity } = body;
 
     const data = await this.findOne(req, treeId, pipelineId);
     if (!data) throw new HttpException('INVALID_REQUEST');
@@ -107,13 +77,10 @@ export class TreePipelineService {
     branch2 && (treePipeline.branch2 = branch2);
     branch3 && (treePipeline.branch3 = branch3);
     branch4 && (treePipeline.branch4 = branch4);
-    trunkLength && (treePipeline.trunkLength = trunkLength);
     sproutNum && (treePipeline.sproutNum = sproutNum);
     rottenRate && (treePipeline.rottenRate = rottenRate);
+    sproutWidth && (treePipeline.sproutWidth = sproutWidth);
     gravity && (treePipeline.gravity = gravity);
-    rootNum && (treePipeline.rootNum = rootNum);
-    barkTexture && (treePipeline.barkTexture = barkTexture);
-    sproutIndex && (treePipeline.sproutIndex = sproutIndex);
 
     await this.treePipeline.update(pipelineId, treePipeline).catch((err) => {
       U.logger.error(err);
