@@ -238,7 +238,10 @@ export class ProductService {
 
     const option = [];
     for (const __data of _data) {
-      option.push({ where: { id: In(__data.map((d) => d.userId)) } });
+      option.push({
+        where: { id: In(__data.map((d) => d.userId)) },
+        order: { updatedAt: 'DESC' },
+      });
     }
 
     const temp = await Promise.all([
