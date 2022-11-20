@@ -11,7 +11,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Land, TreeGrowth, User } from '..';
+import { Land, TreeAttachment, TreeGrowth, User } from '..';
 
 @Entity()
 export class Tree {
@@ -123,4 +123,10 @@ export class Tree {
     onDelete: 'CASCADE',
   })
   treeGrowths: TreeGrowth[];
+
+  @ApiProperty({ type: () => [TreeAttachment] })
+  @OneToMany(() => TreeAttachment, (treeAttachments) => treeAttachments.tree, {
+    nullable: true,
+  })
+  treeAttachments: TreeAttachment[];
 }

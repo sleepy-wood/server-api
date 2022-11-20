@@ -1,6 +1,6 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, In } from 'typeorm';
 
 import * as D from '../../dtos';
 import * as E from '../../entities';
@@ -13,6 +13,10 @@ import { HttpException } from '../../exceptions';
 export class TreeService {
   constructor(
     private readonly dataSource: DataSource,
+    @InjectRepository(E.AttachFile)
+    private readonly attachFile: Repository<E.AttachFile>,
+    @InjectRepository(E.TreeAttachment)
+    private readonly treeAttachment: Repository<E.TreeAttachment>,
     @InjectRepository(E.Tree)
     private readonly tree: Repository<E.Tree>,
     @Inject(forwardRef(() => S.TreeGrowthService))
@@ -66,6 +70,47 @@ export class TreeService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async createTreeAttachments(req: I.RequestWithUser, body: D.CreateTreeAttachmentDto): Promise<E.TreeAttachment[]> {
+    const { treeId, attachFileIds } = body;
+
+    const tree = await this.findOne(req, treeId);
+    if (!tree || tree.treeGrowths.filter((e) => e.treeDay === 5).length === 0)
+      throw new HttpException('INVALID_REQUEST');
+
+    const attachFiles = await this.attachFile.find({ where: { id: In(attachFileIds) } }).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
+
+    const saveData: E.TreeAttachment[] = [];
+    for (const _attachFile of attachFiles) {
+      const treeAttachment = new E.TreeAttachment();
+      const { filename, originalName, path: from, mimeType, size, type } = _attachFile;
+      const serverTo = from.replace('/temp/', '/static/');
+      const clientTo = from.replace('/temp/', '/resources/');
+
+      U.moveFile(from, serverTo);
+
+      treeAttachment.filename = filename;
+      treeAttachment.originalName = originalName;
+      treeAttachment.path = clientTo;
+      treeAttachment.mimeType = mimeType;
+      treeAttachment.size = size;
+      treeAttachment.treeId = treeId;
+
+      if (mimeType.includes('image')) {
+        treeAttachment.isThumbnail = true;
+      }
+
+      saveData.push(treeAttachment);
+    }
+
+    return this.treeAttachment.save(saveData).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async findAllOther(req: I.RequestWithUser, query: D.ListQuery, userId: number): Promise<[E.Tree[], number]> {

@@ -10,8 +10,10 @@ import * as S from '../../services';
 @Module({
   imports: [
     TypeOrmModule.forFeature([E.Tree]),
+    TypeOrmModule.forFeature([E.TreeAttachment]),
     TypeOrmModule.forFeature([E.TreeGrowth]),
     TypeOrmModule.forFeature([E.TreePipeline]),
+    forwardRef(() => M.FileModule),
     forwardRef(() => M.HealthModule),
     forwardRef(() => M.UserModule),
     forwardRef(() => M.UtilModule),

@@ -22,6 +22,7 @@ export * from './app/land/update-land.dto';
 export * from './app/land/update-landDecoration.dto';
 export * from './app/room/create-roomMember.dto';
 export * from './app/tree/create-tree.dto';
+export * from './app/tree/create-treeAttachment.dto';
 export * from './app/tree/create-treeGrowth.dto';
 export * from './app/tree/update-tree.dto';
 export * from './app/tree/update-treePipeline.dto';

@@ -13,6 +13,7 @@ export * from './app/landDecoration';
 export * from './app/room.entity';
 export * from './app/roomMember.entity';
 export * from './app/tree.entity';
+export * from './app/treeAttachment.entity';
 export * from './app/treeGrowth.entity';
 export * from './app/treePipeline.entity';
 export * from './common/admin.entity';
