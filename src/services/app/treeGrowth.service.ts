@@ -36,7 +36,7 @@ export class TreeGrowthService {
   }
 
   async grow(req: I.RequestWithUser, body: D.CreateTreeGrowthDto): Promise<E.TreeGrowth> {
-    const { treeId } = body;
+    const { treeId, rarity, vitality } = body;
     const treeGrowth = new E.TreeGrowth();
 
     const tree = await this.treeService.findOne(req, treeId);
@@ -60,6 +60,12 @@ export class TreeGrowthService {
       const treePipeline = await this.treePipelineService.create(queryRunner, result.id, body);
 
       await queryRunner.manager.update(E.Sleep, sleepIds, { treeGrowthId: treeGrowth.id });
+      if (result.treeDay === 5) {
+        await queryRunner.manager.update(E.Tree, treeId, {
+          rarity,
+          vitality,
+        });
+      }
 
       await queryRunner.commitTransaction();
       return result;

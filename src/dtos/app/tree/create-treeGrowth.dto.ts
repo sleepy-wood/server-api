@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateTreeGrowthDto {
   @ApiProperty({
@@ -151,4 +151,34 @@ export class CreateTreeGrowthDto {
   )
   @IsNotEmpty({ message: '중력은 필수 입력 항목이에요.' })
   readonly gravity: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나무 희귀도',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나무 희귀도는 숫자여야 해요.' },
+  )
+  @IsOptional()
+  readonly rarity?: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나무 생명력',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나무 생명력은 숫자여야 해요.' },
+  )
+  @IsOptional()
+  readonly vitality?: number;
 }
