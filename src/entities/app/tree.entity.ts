@@ -83,6 +83,22 @@ export class Tree {
   sproutColor5: number;
 
   @ApiProperty()
+  @Column({
+    default: 0,
+    nullable: false,
+    comment: '희귀도',
+  })
+  rarity: number;
+
+  @ApiProperty()
+  @Column({
+    default: 0,
+    nullable: false,
+    comment: '생명력',
+  })
+  vitality: number;
+
+  @ApiProperty()
   @Column({ nullable: true })
   landId: number;
 

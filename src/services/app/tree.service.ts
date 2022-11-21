@@ -157,6 +157,34 @@ export class TreeService {
       });
   }
 
+  async findAllCollection(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Tree[], number]> {
+    let { page, count, sort, dir, q } = query;
+
+    page = Number(page) || 1;
+    count = Number(count) || 30;
+    sort = sort || 'createdAt';
+    dir = dir || 'DESC';
+
+    return this.tree
+      .findAndCount({
+        where: {
+          userId: req.user.id,
+          treeGrowths: {
+            treeDay: 5,
+          },
+          deletedAt: null,
+        },
+        order: { [sort]: dir },
+        skip: (page - 1) * count,
+        take: count,
+        relations: ['treeGrowths', 'treeGrowths.treePipeline', 'treeAttachments'],
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
   async findOne(req: I.RequestWithUser, id: number): Promise<E.Tree> {
     return this.tree
       .findOne({
