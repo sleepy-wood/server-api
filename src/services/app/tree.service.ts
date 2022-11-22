@@ -32,6 +32,7 @@ export class TreeService {
       seedNumber,
       treePipeName,
       barkMaterial,
+      sproutGroupId,
       sproutColor1,
       sproutColor2,
       sproutColor3,
@@ -44,6 +45,7 @@ export class TreeService {
     tree.seedNumber = seedNumber;
     tree.treePipeName = treePipeName;
     tree.barkMaterial = barkMaterial;
+    tree.sproutGroupId = sproutGroupId;
     tree.sproutColor1 = sproutColor1;
     tree.sproutColor2 = sproutColor2;
     tree.sproutColor3 = sproutColor3;
@@ -207,6 +209,7 @@ export class TreeService {
       seedNumber,
       treePipeName,
       barkMaterial,
+      sproutGroupId,
       sproutColor1,
       sproutColor2,
       sproutColor3,
@@ -219,6 +222,7 @@ export class TreeService {
     seedNumber && (tree.seedNumber = seedNumber);
     treePipeName && (tree.treePipeName = treePipeName);
     barkMaterial && (tree.barkMaterial = barkMaterial);
+    sproutGroupId && (tree.sproutGroupId = sproutGroupId);
     sproutColor1 && (tree.sproutColor1 = sproutColor1);
     sproutColor2 && (tree.sproutColor2 = sproutColor2);
     sproutColor3 && (tree.sproutColor3 = sproutColor3);

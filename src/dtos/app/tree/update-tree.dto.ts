@@ -47,6 +47,21 @@ export class UpdateTreeDto {
   @ApiProperty({
     example: 1,
     required: true,
+    description: '나뭇잎 종류 그룹 id',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 종류 그룹 id는 숫자여야 해요.' },
+  )
+  @IsOptional()
+  sproutGroupId?: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
     description: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
   })
   @IsNumber(

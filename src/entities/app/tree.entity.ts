@@ -50,6 +50,13 @@ export class Tree {
   @ApiProperty()
   @Column({
     nullable: false,
+    comment: '나뭇잎 종류 그룹 id',
+  })
+  sproutGroupId: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
     comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
   })
   sproutColor1: number;
