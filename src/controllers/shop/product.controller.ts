@@ -42,6 +42,18 @@ export class ProductController {
     };
   }
 
+  @ApiOperation({ summary: '상품 스마트 컨트랙트 생성' })
+  @ApiBearerAuth()
+  @HttpCode(StatusCodes.OK)
+  @Post('/smart-contract')
+  async createSmartContract(@Req() req: I.RequestWithUser, @Body() body: D.CreateProductSmartContractDto) {
+    if (!req.user) throw new HttpException('NO_USER');
+    return <I.BasicResponse<E.ProductSmartContract>>{
+      result: true,
+      data: await this.productService.createSmartContract(req, body),
+    };
+  }
+
   @ApiOperation({ summary: '상품 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get()

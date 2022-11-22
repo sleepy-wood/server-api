@@ -9,11 +9,11 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 import * as I from '../../interfaces';
-import * as U from '../../utils';
-import { CartItem, OrderDetail, ProductImage, Review, User, WishlistItem } from '..';
+import { CartItem, OrderDetail, ProductImage, ProductSmartContract, Review, User, WishlistItem } from '..';
 
 @Entity()
 export class Product {
@@ -103,6 +103,12 @@ export class Product {
   @ApiProperty()
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
+
+  @ApiProperty({ type: () => ProductSmartContract })
+  @OneToOne(() => ProductSmartContract, (productSmartContract) => productSmartContract.product, {
+    nullable: true,
+  })
+  productSmartContract: ProductSmartContract[];
 
   @ApiProperty({ type: () => [OrderDetail] })
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.product, {

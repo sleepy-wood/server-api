@@ -11,6 +11,7 @@ import * as S from '../../services';
   imports: [
     TypeOrmModule.forFeature([E.Product]),
     TypeOrmModule.forFeature([E.ProductImage]),
+    TypeOrmModule.forFeature([E.ProductSmartContract]),
     forwardRef(() => M.FileModule),
     forwardRef(() => M.UserModule),
     forwardRef(() => M.UtilModule),
@@ -35,6 +36,7 @@ export class ProductModule implements NestModule {
       )
       .forRoutes(
         { path: 'v1/products', method: RequestMethod.POST },
+        { path: 'v1/products/smart-contract', method: RequestMethod.POST },
         { path: 'v1/products/:id', method: RequestMethod.PUT },
         { path: 'v1/products/:id', method: RequestMethod.DELETE },
       );

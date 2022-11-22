@@ -19,6 +19,8 @@ export class ProductService {
     private readonly product: Repository<E.Product>,
     @InjectRepository(E.ProductImage)
     private readonly productImage: Repository<E.ProductImage>,
+    @InjectRepository(E.ProductSmartContract)
+    private readonly productSmartContract: Repository<E.ProductSmartContract>,
     @InjectRepository(E.AttachFile)
     private readonly attachFile: Repository<E.AttachFile>,
     @InjectRepository(E.User)
@@ -119,6 +121,23 @@ export class ProductService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async createSmartContract(
+    req: I.RequestWithUser,
+    body: D.CreateProductSmartContractDto,
+  ): Promise<E.ProductSmartContract> {
+    const productSmartContract = new E.ProductSmartContract();
+    const { productId, address, abi } = body;
+
+    productSmartContract.productId = productId;
+    productSmartContract.address = address;
+    productSmartContract.abi = JSON.stringify(abi);
+
+    return this.productSmartContract.save(productSmartContract).catch((err) => {
+      U.logger.error(err);
+      throw new HttpException('COMMON_ERROR');
+    });
   }
 
   async findAll(req: I.RequestWithUser, query: D.FindProductDto): Promise<[E.Product[], number]> {

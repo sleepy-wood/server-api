@@ -28,6 +28,7 @@ export * from './shop/order.entity';
 export * from './shop/orderDetail.entity';
 export * from './shop/product.entity';
 export * from './shop/productImage.entity';
+export * from './shop/productSmartContract.entity';
 export * from './shop/review.entity';
 export * from './shop/wishlist.entity';
 export * from './shop/wishlistItem.entity';
