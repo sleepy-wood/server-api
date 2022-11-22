@@ -283,4 +283,34 @@ export class CreateTreeDto {
   )
   @IsNotEmpty({ message: '중력은 필수 입력 항목이에요.' })
   readonly gravity: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나무 희귀도',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나무 희귀도는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나무 희귀도는 필수 입력 항목이에요.' })
+  readonly rarity: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나무 생명력',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나무 생명력은 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나무 생명력은 필수 입력 항목이에요.' })
+  readonly vitality: number;
 }

@@ -38,6 +38,8 @@ export class TreeService {
       sproutColor3,
       sproutColor4,
       sproutColor5,
+      rarity,
+      vitality,
       landId,
     } = body;
 
@@ -51,6 +53,8 @@ export class TreeService {
     tree.sproutColor3 = sproutColor3;
     tree.sproutColor4 = sproutColor4;
     tree.sproutColor5 = sproutColor5;
+    tree.rarity = rarity;
+    tree.vitality = vitality;
     tree.landId = landId;
     tree.userId = req.user.id;
 
