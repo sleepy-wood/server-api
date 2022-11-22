@@ -128,16 +128,30 @@ export class ProductService {
     body: D.CreateProductSmartContractDto,
   ): Promise<E.ProductSmartContract> {
     const productSmartContract = new E.ProductSmartContract();
-    const { productId, address, abi } = body;
+    const { productId, tokenId, address, abi } = body;
 
-    productSmartContract.productId = productId;
-    productSmartContract.address = address;
-    productSmartContract.abi = JSON.stringify(abi);
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    return this.productSmartContract.save(productSmartContract).catch((err) => {
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      productSmartContract.productId = productId;
+      productSmartContract.address = address;
+      productSmartContract.abi = JSON.stringify(abi);
+
+      const result = await queryRunner.manager.save(E.ProductSmartContract, productSmartContract);
+      await queryRunner.manager.update(E.Product, productId, { tokenId });
+      await queryRunner.commitTransaction();
+
+      return result;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
       U.logger.error(err);
-      throw new HttpException('COMMON_ERROR');
-    });
+      throw new HttpException('TRANSACTION_ERROR');
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async findAll(req: I.RequestWithUser, query: D.FindProductDto): Promise<[E.Product[], number]> {

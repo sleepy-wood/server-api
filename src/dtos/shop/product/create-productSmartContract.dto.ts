@@ -32,4 +32,19 @@ export class CreateProductSmartContractDto {
   )
   @IsNotEmpty({ message: '상품 아이디는 필수 입력 항목이에요.' })
   readonly productId: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: 'nft token id',
+  })
+  @IsNumber(
+    {
+      allowNaN: false,
+      allowInfinity: false,
+    },
+    { message: 'nft token id는 숫자만 입력 가능해요.' },
+  )
+  @IsNotEmpty({ message: 'nft token id는 필수 입력 항목이에요.' })
+  readonly tokenId: number;
 }

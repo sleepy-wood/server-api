@@ -89,6 +89,14 @@ export class Product {
   category: I.ProductCategory;
 
   @ApiProperty()
+  @Column({
+    default: 0,
+    nullable: false,
+    comment: 'nft token id',
+  })
+  tokenId: number;
+
+  @ApiProperty()
   @Column({ nullable: false })
   userId: number;
 
