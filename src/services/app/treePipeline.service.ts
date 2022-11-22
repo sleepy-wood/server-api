@@ -35,6 +35,7 @@ export class TreePipelineService {
     treePipeline.rottenRate = rottenRate;
     treePipeline.sproutWidth = sproutWidth;
     treePipeline.gravity = gravity;
+    treePipeline.treeGrowthId = treeGrowthId;
 
     return queryRunner.manager.save(E.TreePipeline, treePipeline).catch((err) => {
       U.logger.error(err);
