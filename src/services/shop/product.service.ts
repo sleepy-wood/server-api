@@ -104,7 +104,8 @@ export class ProductService {
           saveData.push(productImage);
         }
 
-        await queryRunner.manager.save(E.ProductImage, saveData);
+        const productImages = await queryRunner.manager.save(E.ProductImage, saveData);
+        result.productImages = productImages;
       }
 
       await queryRunner.manager.update(E.User, req.user.id, {
