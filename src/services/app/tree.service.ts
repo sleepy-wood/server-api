@@ -183,7 +183,7 @@ export class TreeService {
         order: { [sort]: dir },
         skip: (page - 1) * count,
         take: count,
-        relations: ['treeGrowths', 'treeGrowths.treePipeline', 'treeAttachments'],
+        relations: ['treeGrowths', 'treeGrowths.treePipeline', 'treeAttachments', 'product'],
       })
       .catch((err) => {
         U.logger.error(err);
