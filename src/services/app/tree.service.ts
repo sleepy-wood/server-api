@@ -195,7 +195,7 @@ export class TreeService {
     return this.tree
       .findOne({
         where: { id, deletedAt: null },
-        relations: ['treeGrowths', 'treeGrowths.treePipeline'],
+        relations: ['treeGrowths', 'treeGrowths.treePipeline', 'treeAttachments', 'product'],
       })
       .catch((err) => {
         U.logger.error(err);

@@ -9,9 +9,10 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
-import { Land, TreeAttachment, TreeGrowth, User } from '..';
+import { Land, Product, TreeAttachment, TreeGrowth, User } from '..';
 
 @Entity()
 export class Tree {
@@ -138,6 +139,12 @@ export class Tree {
   })
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @ApiProperty({ type: () => Product })
+  @OneToOne(() => Product, (product) => product.tree, {
+    nullable: true,
+  })
+  product: Product;
 
   @ApiProperty({ type: () => TreeGrowth })
   @OneToMany(() => TreeGrowth, (treeGrowth) => treeGrowth.tree, {

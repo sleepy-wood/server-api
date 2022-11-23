@@ -13,7 +13,7 @@ import {
 } from 'typeorm';
 
 import * as I from '../../interfaces';
-import { CartItem, OrderDetail, ProductImage, ProductSmartContract, Review, User, WishlistItem } from '..';
+import { CartItem, OrderDetail, ProductImage, ProductSmartContract, Review, Tree, User, WishlistItem } from '..';
 
 @Entity()
 export class Product {
@@ -97,6 +97,10 @@ export class Product {
   tokenId: number;
 
   @ApiProperty()
+  @Column({ nullable: true })
+  treeId: number;
+
+  @ApiProperty()
   @Column({ nullable: false })
   userId: number;
 
@@ -112,11 +116,18 @@ export class Product {
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 
+  @ApiProperty({ type: () => Tree })
+  @OneToOne(() => Tree, (tree) => tree.product, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'treeId' })
+  tree: Tree;
+
   @ApiProperty({ type: () => ProductSmartContract })
   @OneToOne(() => ProductSmartContract, (productSmartContract) => productSmartContract.product, {
     nullable: true,
   })
-  productSmartContract: ProductSmartContract[];
+  productSmartContract: ProductSmartContract;
 
   @ApiProperty({ type: () => [OrderDetail] })
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.product, {
