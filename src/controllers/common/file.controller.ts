@@ -24,7 +24,7 @@ export class FileController {
 
   @ApiOperation({
     summary: '파일 업로드',
-    description: `<p><font color="red"><strong>*** temp파일 ***</strong></font></p><p>최대 업로드 개수: 10</p><p>최대 용량(개당): 10mb</p>`,
+    description: `<p><font color="red"><strong>*** temp파일 ***</strong></font></p><p>최대 업로드 개수: 10</p><p>최대 용량(개당): 40mb</p>`,
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -69,5 +69,54 @@ export class FileController {
   async uploadFile(@Req() req: I.RequestWithUser, @UploadedFiles() files: Array<Express.Multer.File>) {
     if (!req.user) throw new HttpException('COMMON_ERROR');
     return await this.fileService.upload(req, files);
+  }
+
+  @ApiOperation({
+    summary: '이미지 압축 파일 비디오로 변환',
+    description: `<p><font color="red"><strong>*** temp파일 ***</strong></font></p><p>최대 업로드 개수: 10</p><p>최대 용량(개당): 50mb</p>`,
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+    },
+  })
+  @UseInterceptors(
+    FilesInterceptor('files', 1, {
+      storage: diskStorage({
+        destination: (req: Request, file: Express.Multer.File, cb) => {
+          cb(null, join(path, 'uploads/temp'));
+        },
+        filename: (req: Request, file: Express.Multer.File, cb) => {
+          const ran = `sleepywood_${randomBytes(16).toString('hex')}`;
+          const arr = file.originalname.split('.');
+          const ext = arr.length === 1 ? '' : '.' + arr[arr.length - 1];
+          const fileName = Date.now() + '_' + ran + ext;
+          cb(null, fileName);
+        },
+      }),
+      limits: {
+        fileSize: 50 * 1024 * 1024, //40mb
+        fieldNameSize: 10 * 1024, // 10kb
+      },
+      fileFilter: (req: I.RequestWithUser, file, cb) => {
+        cb(null, true);
+      },
+    }),
+  )
+  @HttpCode(StatusCodes.OK)
+  @Post('temp/image-to-video')
+  async uploadImageZipToVideo(@Req() req: I.RequestWithUser, @UploadedFiles() files: Array<Express.Multer.File>) {
+    if (!req.user) throw new HttpException('COMMON_ERROR');
+    return await this.fileService.imageToVideo(req, files);
   }
 }
