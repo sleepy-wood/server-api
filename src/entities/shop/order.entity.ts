@@ -24,6 +24,9 @@ export class Order {
   @ApiProperty()
   @Column({
     default: 0,
+    type: 'decimal',
+    scale: 16,
+    precision: 22,
     nullable: false,
     comment: '구매 금액',
   })

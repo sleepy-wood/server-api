@@ -6,14 +6,14 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  OneToOne,
   JoinColumn,
 } from 'typeorm';
 
 import { Product } from '..';
 
 @Entity()
-export class ProductImage {
+export class ProductSmartContract {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -21,46 +21,17 @@ export class ProductImage {
   @ApiProperty()
   @Column({
     nullable: false,
-    comment: '생성된 파일이름',
+    comment: 'contract address',
   })
-  filename: string;
+  address: string;
 
   @ApiProperty()
   @Column({
+    type: 'longtext',
     nullable: false,
-    comment: '원래 파일이름',
+    comment: 'contract abi',
   })
-  originalName: string;
-
-  @ApiProperty()
-  @Column({
-    unique: true,
-    nullable: false,
-    comment: '경로',
-  })
-  path: string;
-
-  @ApiProperty()
-  @Column({
-    nullable: false,
-    comment: '마임 타입',
-  })
-  mimeType: string;
-
-  @ApiProperty()
-  @Column({
-    nullable: false,
-    comment: '파일 사이즈',
-  })
-  size: number;
-
-  @ApiProperty()
-  @Column({
-    nullable: false,
-    default: false,
-    comment: '대표 이미지 여부',
-  })
-  isThumbnail: boolean;
+  abi: string;
 
   @ApiProperty()
   @Column({ nullable: false })
@@ -79,7 +50,7 @@ export class ProductImage {
   deletedAt: Date;
 
   @ApiProperty({ type: () => Product })
-  @ManyToOne(() => Product, (product) => product.productImages, {
+  @OneToOne(() => Product, (product) => product.productSmartContract, {
     nullable: false,
   })
   @JoinColumn({ name: 'productId' })

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InsertResult, ObjectLiteral, Repository } from 'typeorm';
+import { ObjectLiteral, Repository } from 'typeorm';
 
-import * as D from '../../dtos';
 import * as E from '../../entities';
 import * as I from '../../interfaces';
+import * as U from '../../utils';
 
 export interface File {
   fieldname: string;
@@ -21,8 +21,6 @@ export class FileService {
   constructor(
     @InjectRepository(E.AttachFile)
     private readonly attachFile: Repository<E.AttachFile>,
-    @InjectRepository(E.ProductImage)
-    private readonly productImage: Repository<E.ProductImage>,
   ) {}
 
   async upload(req: I.RequestWithUser, files: Array<Express.Multer.File>) {
@@ -41,6 +39,14 @@ export class FileService {
     return <I.BasicResponse<ObjectLiteral[]>>{
       result: true,
       data: identifiers,
+    };
+  }
+
+  async imageToVideo(req: I.RequestWithUser, files: Array<Express.Multer.File>) {
+    const file = files[0];
+    const result = await U.unzip(file);
+    return {
+      result: true,
     };
   }
 }

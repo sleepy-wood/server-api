@@ -57,8 +57,8 @@ export class OrderService {
     }
   }
 
-  async findAll(req: I.RequestWithUser, query: D.ListQuery): Promise<[E.Order[], number]> {
-    let { page, count, sort, dir, q } = query;
+  async findAll(req: I.RequestWithUser, query: D.FindOrderDto): Promise<[E.Order[], number]> {
+    let { page, count, sort, dir, category, q } = query;
 
     page = Number(page) || 1;
     count = Number(count) || 30;
@@ -70,6 +70,11 @@ export class OrderService {
         where: {
           userId: req.user.id,
           deletedAt: null,
+          orderDetails: {
+            product: {
+              ...(category ? { category } : {}),
+            },
+          },
         },
         order: { [sort]: dir },
         skip: (page - 1) * count,

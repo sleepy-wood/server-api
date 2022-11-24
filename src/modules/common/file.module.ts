@@ -20,9 +20,15 @@ import * as S from '../../services';
 })
 export class FileModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(MW.AuthMiddleware).forRoutes({
-      path: 'v1/files/temp/upload',
-      method: RequestMethod.ALL,
-    });
+    consumer.apply(MW.AuthMiddleware).forRoutes(
+      {
+        path: 'v1/files/temp/upload',
+        method: RequestMethod.ALL,
+      },
+      {
+        path: 'v1/files/temp/image-to-video',
+        method: RequestMethod.ALL,
+      },
+    );
   }
 }

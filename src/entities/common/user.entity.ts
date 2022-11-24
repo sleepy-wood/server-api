@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 
 import * as I from '../../interfaces';
-import * as U from '../../utils';
 import {
   AttachFile,
   Bridge,
@@ -101,6 +100,17 @@ export class User {
     comment: '에셋 판매 등록 카운트',
   })
   productCount: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'decimal',
+    scale: 16,
+    precision: 22,
+    nullable: false,
+    comment: '에셋 판매 최저가',
+    default: 12.01,
+  })
+  productMinPrice: number;
 
   @ApiProperty()
   @Column({

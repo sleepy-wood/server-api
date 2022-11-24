@@ -10,10 +10,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Product } from '..';
+import { Tree } from '..';
 
 @Entity()
-export class ProductImage {
+export class TreeAttachment {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -64,7 +64,7 @@ export class ProductImage {
 
   @ApiProperty()
   @Column({ nullable: false })
-  productId: number;
+  treeId: number;
 
   @ApiProperty()
   @CreateDateColumn({ type: 'timestamp' })
@@ -78,10 +78,10 @@ export class ProductImage {
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
 
-  @ApiProperty({ type: () => Product })
-  @ManyToOne(() => Product, (product) => product.productImages, {
+  @ApiProperty({ type: () => Tree })
+  @ManyToOne(() => Tree, (tree) => tree.treeAttachments, {
     nullable: false,
   })
-  @JoinColumn({ name: 'productId' })
-  product: Product;
+  @JoinColumn({ name: 'treeId' })
+  tree: Tree;
 }

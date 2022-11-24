@@ -19,6 +19,8 @@ export class ProductService {
     private readonly product: Repository<E.Product>,
     @InjectRepository(E.ProductImage)
     private readonly productImage: Repository<E.ProductImage>,
+    @InjectRepository(E.ProductSmartContract)
+    private readonly productSmartContract: Repository<E.ProductSmartContract>,
     @InjectRepository(E.AttachFile)
     private readonly attachFile: Repository<E.AttachFile>,
     @InjectRepository(E.User)
@@ -41,6 +43,10 @@ export class ProductService {
     await queryRunner.startTransaction();
     try {
       const result = await queryRunner.manager.save(E.Product, product);
+
+      if (result.price < req.user.productMinPrice) {
+        await queryRunner.manager.update(E.User, req.user.id, { productMinPrice: result.price });
+      }
 
       const attachFiles = await this.attachFile.find({ where: { id: In(attachFileIds) } }).catch((err) => {
         U.logger.error(err);
@@ -65,6 +71,7 @@ export class ProductService {
           productImage.productId = result.id;
 
           if (result.category === I.ProductCategory.emoticon) {
+            productImage.isThumbnail = true;
             const source = join(path, 'uploads', serverTo);
             let i = 1;
             for (const left of [0, 480, 960, 1440]) {
@@ -81,28 +88,61 @@ export class ProductService {
                 _productImage.mimeType = mimeType;
                 _productImage.size = size;
                 _productImage.productId = result.id;
+                _productImage.isThumbnail = false;
 
                 saveData.push(_productImage);
 
                 i++;
               }
             }
-          } else if (result.category === I.ProductCategory.collection) {
-            // Save Video & Image
           } else {
-            // Do Nothing
+            if (mimeType.includes('image')) {
+              productImage.isThumbnail = true;
+            }
           }
 
           saveData.push(productImage);
         }
 
-        await queryRunner.manager.save(E.ProductImage, saveData);
+        const productImages = await queryRunner.manager.save(E.ProductImage, saveData);
+        result.productImages = productImages;
       }
 
       await queryRunner.manager.update(E.User, req.user.id, {
         productCount: req.user.productCount + 1,
       });
 
+      await queryRunner.commitTransaction();
+
+      return result;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      U.logger.error(err);
+      throw new HttpException('TRANSACTION_ERROR');
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async createSmartContract(
+    req: I.RequestWithUser,
+    body: D.CreateProductSmartContractDto,
+  ): Promise<E.ProductSmartContract> {
+    const productSmartContract = new E.ProductSmartContract();
+    const { productId, tokenId, address, abi } = body;
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      productSmartContract.productId = productId;
+      productSmartContract.address = address;
+      productSmartContract.abi = JSON.stringify(abi);
+
+      const result = await queryRunner.manager.save(E.ProductSmartContract, productSmartContract);
+      await queryRunner.manager.update(E.Product, productId, { tokenId });
       await queryRunner.commitTransaction();
 
       return result;
@@ -232,7 +272,10 @@ export class ProductService {
 
     const option = [];
     for (const __data of _data) {
-      option.push({ where: { id: In(__data.map((d) => d.userId)) } });
+      option.push({
+        where: { id: In(__data.map((d) => d.userId)) },
+        order: { updatedAt: 'DESC' },
+      });
     }
 
     const temp = await Promise.all([

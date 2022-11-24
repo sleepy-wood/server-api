@@ -9,9 +9,10 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
-import { Land, TreeGrowth, User } from '..';
+import { Land, Product, TreeAttachment, TreeGrowth, User } from '..';
 
 @Entity()
 export class Tree {
@@ -36,9 +37,74 @@ export class Tree {
   @ApiProperty()
   @Column({
     nullable: false,
-    comment: '나무 종류',
+    comment: '나무 파이프라인 이름',
   })
-  seedType: string;
+  treePipeName: string;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나무가지 Material 이름',
+  })
+  barkMaterial: string;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류 그룹 id',
+  })
+  sproutGroupId: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor1: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor2: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor3: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor4: number;
+
+  @ApiProperty()
+  @Column({
+    nullable: false,
+    comment: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  sproutColor5: number;
+
+  @ApiProperty()
+  @Column({
+    default: 0,
+    nullable: false,
+    comment: '희귀도',
+  })
+  rarity: number;
+
+  @ApiProperty()
+  @Column({
+    default: 0,
+    nullable: false,
+    comment: '생명력',
+  })
+  vitality: number;
 
   @ApiProperty()
   @Column({ nullable: true })
@@ -74,6 +140,12 @@ export class Tree {
   @JoinColumn({ name: 'userId' })
   user: User;
 
+  @ApiProperty({ type: () => Product })
+  @OneToOne(() => Product, (product) => product.tree, {
+    nullable: true,
+  })
+  product: Product;
+
   @ApiProperty({ type: () => TreeGrowth })
   @OneToMany(() => TreeGrowth, (treeGrowth) => treeGrowth.tree, {
     cascade: true,
@@ -81,4 +153,10 @@ export class Tree {
     onDelete: 'CASCADE',
   })
   treeGrowths: TreeGrowth[];
+
+  @ApiProperty({ type: () => [TreeAttachment] })
+  @OneToMany(() => TreeAttachment, (treeAttachments) => treeAttachments.tree, {
+    nullable: true,
+  })
+  treeAttachments: TreeAttachment[];
 }

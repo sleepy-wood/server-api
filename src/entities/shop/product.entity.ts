@@ -9,11 +9,11 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 import * as I from '../../interfaces';
-import * as U from '../../utils';
-import { CartItem, OrderDetail, ProductImage, Review, User, WishlistItem } from '..';
+import { CartItem, OrderDetail, ProductImage, ProductSmartContract, Review, Tree, User, WishlistItem } from '..';
 
 @Entity()
 export class Product {
@@ -89,6 +89,18 @@ export class Product {
   category: I.ProductCategory;
 
   @ApiProperty()
+  @Column({
+    default: 0,
+    nullable: false,
+    comment: 'nft token id',
+  })
+  tokenId: number;
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  treeId: number;
+
+  @ApiProperty()
   @Column({ nullable: false })
   userId: number;
 
@@ -103,6 +115,19 @@ export class Product {
   @ApiProperty()
   @DeleteDateColumn({ type: 'timestamp', select: false })
   deletedAt: Date;
+
+  @ApiProperty({ type: () => Tree })
+  @OneToOne(() => Tree, (tree) => tree.product, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'treeId' })
+  tree: Tree;
+
+  @ApiProperty({ type: () => ProductSmartContract })
+  @OneToOne(() => ProductSmartContract, (productSmartContract) => productSmartContract.product, {
+    nullable: true,
+  })
+  productSmartContract: ProductSmartContract;
 
   @ApiProperty({ type: () => [OrderDetail] })
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.product, {

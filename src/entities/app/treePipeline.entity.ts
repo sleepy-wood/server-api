@@ -62,16 +62,6 @@ export class TreePipeline {
 
   @ApiProperty()
   @Column({
-    type: 'decimal',
-    scale: 16,
-    precision: 22,
-    nullable: false,
-    comment: '나무 기둥 길이',
-  })
-  trunkLength: number;
-
-  @ApiProperty()
-  @Column({
     nullable: false,
     default: 0,
     comment: '나뭇잎 개수',
@@ -94,32 +84,19 @@ export class TreePipeline {
     scale: 16,
     precision: 22,
     nullable: false,
+    comment: '나뭇잎 너비',
+  })
+  sproutWidth: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'decimal',
+    scale: 16,
+    precision: 22,
+    nullable: false,
     comment: '중력',
   })
   gravity: number;
-
-  @ApiProperty()
-  @Column({
-    nullable: false,
-    default: 0,
-    comment: '뿌리 개수',
-  })
-  rootNum: number;
-
-  @ApiProperty()
-  @Column({
-    nullable: false,
-    comment: '나무가지 텍스처 이름',
-  })
-  barkTexture: string;
-
-  @ApiProperty()
-  @Column({
-    nullable: false,
-    default: 0,
-    comment: '나뭇잎 enabled 상태',
-  })
-  sproutIndex: number;
 
   @ApiProperty()
   @Column({ nullable: false })

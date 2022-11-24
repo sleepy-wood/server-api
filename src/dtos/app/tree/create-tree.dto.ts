@@ -29,11 +29,110 @@ export class CreateTreeDto {
   @ApiProperty({
     example: 'Tree',
     required: true,
-    description: '나무 종류',
+    description: '나무 파이프라인 이름',
   })
   @IsString({ message: '나무 종류는 문자열이어야 해요.' })
   @IsNotEmpty({ message: '나무 종류는 필수 입력 항목이에요.' })
-  readonly seedType: string;
+  readonly treePipeName: string;
+
+  @ApiProperty({
+    example: 'Tree',
+    required: true,
+    description: '나무가지 Material 이름',
+  })
+  @IsString({ message: '나무가지 Material 이름은 문자열이어야 해요.' })
+  @IsNotEmpty({ message: '나무가지 Material 이름은 필수 입력 항목이에요.' })
+  readonly barkMaterial: string;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나뭇잎 종류 그룹 id',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 종류 그룹 id는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나뭇잎 종류 그룹 id는 필수 입력 항목이에요.' })
+  sproutGroupId: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 필수 입력 항목이에요.' })
+  readonly sproutColor1: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 필수 입력 항목이에요.' })
+  readonly sproutColor2: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 필수 입력 항목이에요.' })
+  readonly sproutColor3: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 필수 입력 항목이에요.' })
+  readonly sproutColor4: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    description: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나뭇잎 종류에 따른 색깔 5가지 활성화 여부는 필수 입력 항목이에요.' })
+  readonly sproutColor5: number;
 
   @ApiProperty({
     example: 1,
@@ -128,21 +227,6 @@ export class CreateTreeDto {
   @ApiProperty({
     example: 1,
     required: true,
-    description: '나무 기둥 길이',
-  })
-  @IsNumber(
-    {
-      allowInfinity: false,
-      allowNaN: false,
-    },
-    { message: '나무 기둥 길이는 숫자여야 해요.' },
-  )
-  @IsNotEmpty({ message: '나무 기둥 길이는 필수 입력 항목이에요.' })
-  readonly trunkLength: number;
-
-  @ApiProperty({
-    example: 1,
-    required: true,
     description: '나뭇잎 개수',
   })
   @IsNumber(
@@ -173,6 +257,21 @@ export class CreateTreeDto {
   @ApiProperty({
     example: 1,
     required: true,
+    description: '나뭇잎 너비',
+  })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '나뭇잎 너비는 숫자여야 해요.' },
+  )
+  @IsNotEmpty({ message: '나뭇잎 너비는 필수 입력 항목이에요.' })
+  readonly sproutWidth: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
     description: '중력',
   })
   @IsNumber(
@@ -188,39 +287,30 @@ export class CreateTreeDto {
   @ApiProperty({
     example: 1,
     required: true,
-    description: '뿌리 개수',
+    description: '나무 희귀도',
   })
   @IsNumber(
     {
       allowInfinity: false,
       allowNaN: false,
     },
-    { message: '뿌리 개수는 숫자여야 해요.' },
+    { message: '나무 희귀도는 숫자여야 해요.' },
   )
-  @IsNotEmpty({ message: '뿌리 개수는 필수 입력 항목이에요.' })
-  readonly rootNum: number;
-
-  @ApiProperty({
-    example: 'Tree',
-    required: true,
-    description: '나무가지 텍스처 이름',
-  })
-  @IsString({ message: '나무가지 텍스처 이름은 문자열이어야 해요.' })
-  @IsNotEmpty({ message: '나무가지 텍스처 이름은 필수 입력 항목이에요.' })
-  readonly barkTexture: string;
+  @IsNotEmpty({ message: '나무 희귀도는 필수 입력 항목이에요.' })
+  readonly rarity: number;
 
   @ApiProperty({
     example: 1,
     required: true,
-    description: '나뭇잎 enabled 상태',
+    description: '나무 생명력',
   })
   @IsNumber(
     {
       allowInfinity: false,
       allowNaN: false,
     },
-    { message: '나뭇잎 enabled 상태는 숫자여야 해요.' },
+    { message: '나무 생명력은 숫자여야 해요.' },
   )
-  @IsNotEmpty({ message: '나뭇잎 enabled 상태는 필수 입력 항목이에요.' })
-  readonly sproutIndex: number;
+  @IsNotEmpty({ message: '나무 생명력은 필수 입력 항목이에요.' })
+  readonly vitality: number;
 }

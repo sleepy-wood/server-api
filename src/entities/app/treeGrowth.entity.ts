@@ -9,9 +9,10 @@ import {
   ManyToOne,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 
-import { Tree, TreePipeline } from '..';
+import { Sleep, Tree, TreePipeline } from '..';
 
 @Entity()
 export class TreeGrowth {
@@ -56,4 +57,12 @@ export class TreeGrowth {
   })
   @JoinColumn({ name: 'treeId' })
   tree: Tree;
+
+  @ApiProperty({ type: () => [Sleep] })
+  @OneToMany(() => Sleep, (sleeps) => sleeps.treeGrowth, {
+    cascade: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  sleeps: Sleep[];
 }
