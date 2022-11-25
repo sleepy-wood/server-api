@@ -11,5 +11,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: ls ${{ github.workspace }}
-      - run: cp -r ~/uploads uploads.api
+      - run: cp -r ~/infra-tmp/uploads.api .
       - run: docker build -t ${{ github.repository }}-dev -f Dockerfile.local .
