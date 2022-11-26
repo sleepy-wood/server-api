@@ -28,6 +28,7 @@
 ## Requirements
 
 - redis-server
+- ffmpeg
 - env
 
 ## run app in dev mode
