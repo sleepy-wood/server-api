@@ -5,6 +5,7 @@ import { ObjectLiteral, Repository } from 'typeorm';
 import * as E from '../../entities';
 import * as I from '../../interfaces';
 import * as U from '../../utils';
+import { HttpException } from '../../exceptions';
 
 export interface File {
   fieldname: string;
@@ -43,10 +44,31 @@ export class FileService {
   }
 
   async imageToVideo(req: I.RequestWithUser, files: Array<Express.Multer.File>) {
-    const file = files[0];
-    const result = await U.unzip(file);
-    return {
-      result: true,
-    };
+    try {
+      const file = files[0];
+      const images = await U.unzip(file);
+      const videoFilename = await U.imageToVideo(images);
+
+      const attachFile = new E.AttachFile();
+      attachFile.filename = videoFilename;
+      attachFile.originalName = 'video.mp4';
+      attachFile.path = `/temp/${videoFilename}`;
+      attachFile.mimeType = 'video/mp4';
+      attachFile.size = 100;
+      attachFile.userId = req.user.id;
+      attachFile.type = I.AttachFileType.Temp;
+
+      const result = await this.attachFile.save(attachFile).catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+
+      return <I.BasicResponse<E.AttachFile>>{
+        result: true,
+        data: result,
+      };
+    } catch (err) {
+      throw err;
+    }
   }
 }
