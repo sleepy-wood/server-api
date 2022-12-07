@@ -32,12 +32,14 @@ export const unzip = (file: Express.Multer.File): Promise<string[]> => {
           const ext = arr.length === 1 ? '' : '.' + arr[arr.length - 1];
           const fileName = Date.now() + '_' + ran + ext;
 
-          const dest = join(path, `uploads/temp/${fileName}`);
-          const file = fs.createWriteStream(dest);
-          filenames.push(dest);
+          if (['.jpg', '.jpeg', '.png'].includes(ext)) {
+            const dest = join(path, `uploads/temp/${fileName}`);
+            const file = fs.createWriteStream(dest);
+            filenames.push(dest);
 
-          readStream.pipe(file);
-          readStream.on('end', () => {});
+            readStream.pipe(file);
+            readStream.on('end', () => {});
+          }
         });
       });
 

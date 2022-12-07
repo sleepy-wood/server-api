@@ -13,8 +13,8 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 
 const videoOption = {
-  fps: 30,
-  loop: 0.07,
+  fps: 25,
+  loop: 0.05,
   transition: false,
   videoBitrate: 1024,
   format: 'mp4',

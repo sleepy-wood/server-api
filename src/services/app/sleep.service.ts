@@ -52,6 +52,28 @@ export class SleepService {
       });
   }
 
+  async findAllMonthly(req: I.RequestWithUser, query: D.ListQuery): Promise<E.Sleep[]> {
+    let { page, count, sort, dir, q } = query;
+
+    page = Number(page) || 1;
+    count = Number(count) || 30;
+    sort = sort || 'startDate';
+    dir = dir || 'DESC';
+
+    return this.sleep
+      .find({
+        where: {
+          userId: req.user.id,
+          deletedAt: null,
+        },
+        order: { createdAt: 'DESC' },
+      })
+      .catch((err) => {
+        U.logger.error(err);
+        throw new HttpException('COMMON_ERROR');
+      });
+  }
+
   async findAllRecent(req: I.RequestWithUser): Promise<E.Sleep[]> {
     const recentSleep = await this.sleep
       .findOne({
@@ -68,6 +90,8 @@ export class SleepService {
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const format = `${year}-${month}-${day}`;
+
+    console.log({ format });
 
     return this.sleep
       .find({

@@ -55,6 +55,17 @@ export class SleepController {
     };
   }
 
+  @ApiOperation({ summary: '월별 수면 목록 조회' })
+  @HttpCode(StatusCodes.OK)
+  @Get('/monthly')
+  async findAllMonthly(@Req() req: I.RequestWithUser, @Query() query: D.ListQuery) {
+    if (!req.user) throw new HttpException('NO_USER');
+    return <I.BasicResponse<E.Sleep[]>>{
+      result: true,
+      data: await this.sleepService.findAllMonthly(req, query),
+    };
+  }
+
   @ApiOperation({ summary: '최근 수면 목록 조회' })
   @HttpCode(StatusCodes.OK)
   @Get('/recent')
