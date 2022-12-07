@@ -7,7 +7,6 @@ import { Request } from 'express';
 import { diskStorage } from 'multer';
 import { join } from 'path';
 
-import * as D from '../../dtos';
 import * as I from '../../interfaces';
 import { StatusCodes } from '../../constants';
 import { HttpException } from '../../exceptions';
@@ -56,7 +55,7 @@ export class FileController {
         },
       }),
       limits: {
-        fileSize: 40 * 1024 * 1024, //40mb
+        fileSize: 40 * 1024 * 1024, // 40mb
         fieldNameSize: 10 * 1024, // 10kb
       },
       fileFilter: (req: I.RequestWithUser, file, cb) => {
@@ -105,7 +104,7 @@ export class FileController {
         },
       }),
       limits: {
-        fileSize: 50 * 1024 * 1024, //40mb
+        fileSize: 100 * 1024 * 1024, // 100mb
         fieldNameSize: 10 * 1024, // 10kb
       },
       fileFilter: (req: I.RequestWithUser, file, cb) => {

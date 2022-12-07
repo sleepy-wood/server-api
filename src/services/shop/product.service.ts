@@ -333,7 +333,7 @@ export class ProductService {
     return this.product
       .findOne({
         where: { id, deletedAt: null },
-        relations: ['productImages', 'user'],
+        relations: ['productImages', 'productSmartContract', 'user'],
       })
       .catch((err) => {
         U.logger.error(err);

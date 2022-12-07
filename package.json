@@ -16,6 +16,8 @@
     "start:container": "nest build && tsc-alias && cross-env NODE_ENV='container' node dist/main.js"
   },
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@ffprobe-installer/ffprobe": "^1.4.1",
     "@nestjs/axios": "^0.1.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.2.0",
@@ -35,6 +37,7 @@
     "cookie-parser": "^1.4.6",
     "date-fns": "^2.29.3",
     "date-fns-tz": "^1.3.7",
+    "fluent-ffmpeg": "^2.1.2",
     "helmet": "^6.0.0",
     "ioredis": "^5.2.3",
     "json-stringify-safe": "^5.0.1",
@@ -53,6 +56,7 @@
     "tsc-alias": "^1.7.0",
     "typeorm": "^0.3.10",
     "uid2": "^1.0.0",
+    "videoshow": "^0.1.12",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
     "yauzl": "^2.10.0"

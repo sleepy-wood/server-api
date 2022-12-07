@@ -1,0 +1,15 @@
+name: Build (Dev)
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls ${{ github.workspace }}
+      - run: docker build -t ${{ github.repository }}-dev -f Dockerfile.local .
+      - run: docker compose -f ~/infra-tmp/docker-compose.yml up -d --remove-orphans

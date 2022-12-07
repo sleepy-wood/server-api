@@ -7,3 +7,4 @@ export * from './logger';
 export * from './loggerTypeorm';
 export * from './object';
 export * from './unzip';
+export * from './video';
