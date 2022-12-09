@@ -1,4 +1,4 @@
-<img src="https://github.com/sleepy-wood/server-api/blob/dev/server-api.png" alt="banner" />
+![banner](https://github.com/sleepy-wood/server-api/blob/dev/server-api.png)
 
 # server-api
 
