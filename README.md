@@ -38,7 +38,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-- 뭐라고 쓰지..
+- NestJS Framework API Server
 
 ### Built With
 
@@ -55,7 +55,9 @@
   ```
 2. redis-server
 3. ffmpeg
-4. .env
+4. mysql
+5. .env
+6. yarn
 
 ### Installation
 
