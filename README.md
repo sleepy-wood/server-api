@@ -38,6 +38,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+<div align="center">
+  <img src="https://github.com/sleepy-wood/server-api/blob/dev/server.drawio.png" alt="project" width=480 />
+</div>
+
 1) NestJS Server
    - NestJS는 NodeJS에서 새롭게 떠오르는 Server Application 구축용 프레임워크이다. 
    - Typescript의 적극적인 도입과 DI(Dependency Injection), IoC(Inversion of Control), Module을 통한 구조화 등의 기술을 통해 생산적인 개발에 용이하다. 
