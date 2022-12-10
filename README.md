@@ -38,7 +38,20 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-- NestJS Framework API Server
+1) NestJS Server
+   - NestJS는 NodeJS에서 새롭게 떠오르는 Server Application 구축용 프레임워크이다. 
+   - Typescript의 적극적인 도입과 DI(Dependency Injection), IoC(Inversion of Control), Module을 통한 구조화 등의 기술을 통해 생산적인 개발에 용이하다. 
+   - 효율성, 안정성, 확장성 등에서 용이한 모습을 보여주고 있기 때문에 본 프로젝트에 NestJS를 Server Framework로 활용하였다.
+
+2) 35개의 Database Table
+   - NestJS와 TypeORM을 활용해서 객체와 관계형 데이터베이스의 데이터를 자동으로 매핑해줬다. 
+   - TypeORM의 경우 모델의 정의를 올바르게 했을 경우에 데이터베이스 타입정의에 메리트를 최대한으로 얻을 수 있으며, 복잡한 모델간의 관계를 형성할 수 있는 장점이있다. 
+   - 이를 통하여서 우리의 총체적인 어플리케이션 구현을 위한 35개의 관계형 테이블을 설계하였다.
+
+3) 111개의 RESTful API 문서화
+   - 클라이언트 개발자와 원활한 의사소통을 위해서 API 명세서를 작성하는 것은 필수적인 작업 중 하나이다.
+   - 잘 정리되어 있는 문서는 팀의 생산성을 높여줄 수 있다.
+   - Swggaer를 사용해서 자동으로 우리의 RESTful API를 문서화 하였으며, 최종적으로 총 111개의 API를 문서화하였다.
 
 ### Built With
 
