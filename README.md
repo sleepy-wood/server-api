@@ -74,7 +74,7 @@
 3. ffmpeg
 4. mysql
 5. .env
-6. yarn
+6. yarn(Optional)
 
 ### Installation
 
