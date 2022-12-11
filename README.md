@@ -73,8 +73,41 @@
 2. redis-server
 3. ffmpeg
 4. mysql
-5. .env
-6. yarn(Optional)
+5. yarn(Optional)
+6. .env
+```bash
+# Path
+NODE_PATH="$(pwd)"
+
+# MySQL Information
+MYSQL_DATABASE=
+MYSQL_HOST="127.0.0.1"
+MYSQL_PORT="3306"
+MYSQL_USER=
+MYSQL_PASSWORD=
+
+# Redis
+REDIS_HOST="127.0.0.1"
+REDIS_PORT="6379"
+
+# Server Port
+PORT="4000"
+
+# JWT
+SECRET=
+SALT=
+
+# Throttling Options
+THROTTLE_TTL=60
+THROTTLE_LIMIT=100
+
+# timezone / locale
+TZ="Asia/Seoul"
+locale="ko-KR"
+
+# Weather APIs
+WEATHER_API_KEY=
+```
 
 ### Installation
 
