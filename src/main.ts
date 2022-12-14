@@ -141,6 +141,7 @@ function generateSwagger(app: NestExpressApplication, localIp: string, port: num
     .addServer('http://116.255.117.119:4000')
     .addServer('http://192.168.35.135:4000')
     .addServer('http://192.168.0.14:4000')
+    .addServer('http://192.168.0.20:4000')
     // common
     .addTag('auth', '권한 REST APIs')
     .addTag('files', '파일 업로드 REST APIs')
