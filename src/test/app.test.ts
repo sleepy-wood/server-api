@@ -1,21 +1,18 @@
-// import { CatsController } from './cats.controller';
-// import { CatsService } from './cats.service';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ClusterService } from '../services';
 
-// describe('CatsController', () => {
-//   let catsController: CatsController;
-//   let catsService: CatsService;
+describe('ApiService', () => {
+  let service: ClusterService;
 
-//   beforeEach(() => {
-//     catsService = new CatsService();
-//     catsController = new CatsController(catsService);
-//   });
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [ClusterService],
+    }).compile();
 
-//   describe('findAll', () => {
-//     it('should return an array of cats', async () => {
-//       const result = ['test'];
-//       jest.spyOn(catsService, 'findAll').mockImplementation(() => result);
+    service = module.get<ClusterService>(ClusterService);
+  });
 
-//       expect(await catsController.findAll()).toBe(result);
-//     });
-//   });
-// });
+  it('ApiService - should be defined', () => {
+    expect(service).toBeDefined();
+  });
+});
